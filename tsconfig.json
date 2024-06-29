@@ -3,8 +3,9 @@
 	"extends": ["@total-typescript/tsconfig/tsc/dom/library"],
 	"compilerOptions": {
 		"baseUrl": ".",
-		"types": ["vitest/importMeta"],
-		"outDir": "dist"
+		"rootDir": ".",
+		"outDir": "dist",
+		"types": ["vitest/importMeta"]
 	},
 	"include": ["src/"]
 }

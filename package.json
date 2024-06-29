@@ -39,7 +39,6 @@
 	},
 	"exports": {
 		".": "./src/mod.ts",
-		"./*": "./src/*.ts",
 		"./package.json": "./package.json"
 	},
 	"packageManager": "pnpm@9.5.0-beta.0+sha256.bd91cddc9b205c94b5bf0380cec8fc8e4b1dde7b8c5191732f3d4e73848e860e",
@@ -48,6 +47,7 @@
 		"build:doc": "typedoc",
 		"build:pkg": "tsc",
 		"clean": "pnpm run \"/^clean:.*/\"; del \"./**/node_modules\" ",
+		"clean:build": "del \".dist\" ",
 		"clean:cache": "del \"./node_modules/.cache\" ",
 		"clean:doc": "del \"./docs\" ",
 		"clean:test": "del \"./coverage\" ",
@@ -64,6 +64,7 @@
 		"lint:format": "biome format . --verbose",
 		"lint:js": "biome lint . --verbose",
 		"lint:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" ",
+		"lint:ts": "tsc --noEmit",
 		"lint:typos": "typos --verbose",
 		"release": "pnpm run build:pkg && auto shipit",
 		"serve:doc": "serve \"./docs\" ",
@@ -74,11 +75,15 @@
 		"magic-string": "0.30.10"
 	},
 	"devDependencies": {
+		"@total-typescript/ts-reset": "0.5.1",
 		"@total-typescript/tsconfig": "1.0.4",
+		"@types/estree": "1.0.5",
 		"@types/node": "20.14.9",
+		"locate-character": "3.0.0",
 		"svelte": "5.0.0-next.166",
 		"tslib": "2.6.3",
-		"typescript": "5.5.2"
+		"typescript": "5.5.2",
+		"zimmerframe": "1.1.2"
 	},
 	"peerDependencies": {
 		"svelte": "^5.0.0-next.166 || ^5.0.0"
