@@ -1,0 +1,106 @@
+{
+	"$schema": "https://json.schemastore.org/package",
+	"name": "svelte-ast-print",
+	"version": "0.0.0",
+	"type": "module",
+	"description": "Print Svelte AST nodes as string.",
+	"keywords": ["svelte", "ast", "print"],
+	"license": "MIT",
+	"author": {
+		"name": "Mateusz Kadlubowski",
+		"email": "xeho91@pm.me",
+		"url": "https://github.com/xeho91"
+	},
+	"homepage": "https://github.com/xeho91/svelte-ast-print",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/xeho91/svelte-ast-print.git"
+	},
+	"bugs": "https://github.com/xeho91/svelte-ast-print/issues",
+	"funding": [
+		{
+			"type": "github",
+			"url": "https://github.com/sponsors/xeho91"
+		},
+		{
+			"type": "opencollective",
+			"url": "https://opencollective.com/xeho91"
+		}
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"files": ["src/"],
+	"imports": {
+		"#*": "./src/*.ts"
+	},
+	"exports": {
+		".": "./src/mod.ts",
+		"./*": "./src/*.ts",
+		"./package.json": "./package.json"
+	},
+	"packageManager": "pnpm@9.5.0-beta.0+sha256.bd91cddc9b205c94b5bf0380cec8fc8e4b1dde7b8c5191732f3d4e73848e860e",
+	"scripts": {
+		"build": "pnpm run \"/^build:.*/\" ",
+		"build:doc": "typedoc",
+		"build:pkg": "tsc",
+		"clean": "pnpm run \"/^clean:.*/\"; del \"./**/node_modules\" ",
+		"clean:cache": "del \"./node_modules/.cache\" ",
+		"clean:doc": "del \"./docs\" ",
+		"clean:test": "del \"./coverage\" ",
+		"dev": "pnpm run \"/^dev:.*/\" ",
+		"dev:doc": "typedoc --watch",
+		"dev:pkg": "tsc --watch",
+		"dev:test": "pnpm vitest watch --passWithNoTests --ui",
+		"fix": "pnpm run \"/^fix:.*/\" ",
+		"fix:format": "biome format . --verbose --write",
+		"fix:js": "biome lint . --verbose --fix --unsafe",
+		"fix:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" --fix",
+		"fix:typos": "typos --verbose --write-changes",
+		"lint": "pnpm run \"/^lint:.*/\" ",
+		"lint:format": "biome format . --verbose",
+		"lint:js": "biome lint . --verbose",
+		"lint:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" ",
+		"lint:typos": "typos --verbose",
+		"release": "pnpm run build:pkg && auto shipit",
+		"serve:doc": "serve \"./docs\" ",
+		"test": "vitest run . --passWithNoTests"
+	},
+	"dependencies": {
+		"esrap": "1.2.2",
+		"magic-string": "0.30.10"
+	},
+	"devDependencies": {
+		"@total-typescript/tsconfig": "1.0.4",
+		"@types/node": "20.14.9",
+		"svelte": "5.0.0-next.166",
+		"tslib": "2.6.3",
+		"typescript": "5.5.2"
+	},
+	"peerDependencies": {
+		"svelte": "^5.0.0-next.166 || ^5.0.0"
+	},
+	"optionalDependencies": {
+		"@auto-it/all-contributors": "11.1.6",
+		"@auto-it/conventional-commits": "11.1.6",
+		"@auto-it/first-time-contributor": "11.1.6",
+		"@auto-it/npm": "11.1.6",
+		"@auto-it/released": "11.1.6",
+		"@biomejs/biome": "1.8.3",
+		"@vitest/coverage-v8": "1.6.0",
+		"@vitest/ui": "1.6.0",
+		"all-contributors-cli": "6.26.1",
+		"auto": "11.1.6",
+		"del-cli": "5.1.0",
+		"lefthook": "1.6.18",
+		"markdownlint-cli2": "0.13.0",
+		"serve": "14.2.3",
+		"typedoc": "0.26.3",
+		"typedoc-plugin-coverage": "3.3.0",
+		"typedoc-plugin-mdn-links": "3.2.1",
+		"vitest": "1.6.0"
+	}
+}

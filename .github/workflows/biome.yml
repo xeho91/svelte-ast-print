@@ -1,0 +1,39 @@
+name: Biome
+
+on:
+    workflow_call:
+    workflow_dispatch:
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    CI: true
+
+permissions:
+    contents: read
+    pull-requests: read
+
+jobs:
+    biome:
+        name: Biome
+        runs-on: macos-latest
+        timeout-minutes: 1
+        steps:
+            # https://github.com/actions/checkout
+            - uses: actions/checkout@v4
+
+            # https://github.com/biomejs/setup-biome
+            - name: Setup Biome
+              uses: biomejs/setup-biome@v2
+
+            - name: Run Biome
+              run: biome ci .
+
+            # TODO: Switch to this one
+            # https://github.com/mongolyy/reviewdog-action-biome
+            # - uses: mongolyy/reviewdog-action-biome@v1
+            #   with:
+            #       github_token: ${{ secrets.github_token }}
+            #       reporter: github-pr-check

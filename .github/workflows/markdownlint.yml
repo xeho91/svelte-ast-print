@@ -1,0 +1,51 @@
+name: markdownlint
+
+on:
+    workflow_call:
+    workflow_dispatch:
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    CI: true
+
+permissions:
+    contents: read
+    pull-requests: read
+
+jobs:
+    markdownlint:
+        name: markdownlint
+        runs-on: macos-latest
+        timeout-minutes: 1
+        steps:
+            # https://github.com/actions/checkout
+            - uses: actions/checkout@v4
+
+            # https://nodejs.org/api/corepack.html
+            - name: Enable corepack (for pnpm)
+              run: corepack enable
+
+            # https://github.com/actions/setup-node
+            - name: Setup the latest Node.js LTS version
+              uses: actions/setup-node@v4
+              with:
+                  cache: pnpm
+                  node-version-file: ".nvmrc"
+
+            # https://pnpm.io/cli/install
+            - name: Install Node.js dependencies with pnpm
+              run: >
+                  pnpm install
+                  --frozen-lockfile
+
+            # https://github.com/DavidAnson/markdownlint-cli2-action
+            - uses: DavidAnson/markdownlint-cli2-action@v16
+              with:
+                  globs: |
+                      ./**/*.md
+                      !./node_modules/**/*
+                      !**/node_modules/**/*
+                      !**/CHANGELOG.md

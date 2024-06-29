@@ -1,0 +1,65 @@
+name: CI & CD
+# NOTE: CI -> Continuous Integration
+# NOTE: CD -> Continuous Delivery
+
+on:
+    pull_request:
+        branches: [main]
+        types: [opened, ready_for_review, reopened, synchronize]
+    push:
+        branches: [main]
+    workflow_dispatch:
+        inputs:
+            reason:
+                description: Reason of re-running this workflow
+                required: false
+                type: string
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
+    cancel-in-progress: true
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    CI: true
+
+permissions:
+    contents: write
+    id-token: write
+    pages: write
+    pull-requests: write
+
+jobs:
+    lint_biome:
+        name: Lint
+        uses: ./.github/workflows/biome.yml
+
+    lint_markdownlint:
+        name: Lint
+        uses: ./.github/workflows/markdownlint.yml
+
+    lint_typos:
+        name: Lint
+        uses: ./.github/workflows/typos.yml
+
+    test_vitest:
+        name: Test
+        uses: ./.github/workflows/vitest.yml
+        secrets: inherit
+
+    release_typedoc:
+        name: Release
+        uses: ./.github/workflows/typedoc.yml
+        needs: [lint_biome, lint_markdownlint, lint_typos, test_vitest]
+        with:
+            type: ${{ github.event_name == 'pull_request' && contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action) && 'pr-preview' || 'deploy' }}
+
+    release_auto:
+        name: Release
+        uses: ./.github/workflows/auto.yml
+        if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+        needs: [lint_biome, lint_markdownlint, lint_typos, test_vitest]
+        secrets: inherit

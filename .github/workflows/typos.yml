@@ -1,0 +1,29 @@
+name: Typos
+
+on:
+    workflow_call:
+    workflow_dispatch:
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    CI: true
+    CARGO_TERM_COLOR: always
+
+permissions:
+    pull-requests: read
+
+jobs:
+    typos:
+        name: Typos
+        runs-on: macos-latest
+        steps:
+            # https://github.com/actions/checkout
+            - name: Checkout to the repository
+              uses: actions/checkout@v4
+
+            # https://github.com/crate-ci/typos
+            - name: Spell check with `typos`
+              uses: crate-ci/typos@v1.22.8

@@ -1,0 +1,7 @@
+#:schema https://json.schemastore.org/lefthook.json
+
+[pre-commit.commands]
+biome = { glob = "*.{ts,json,jsonc}", run = "pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}" }
+markdownlint = { glob = "*.md", run = "pnpm markdownlint-cli2 {staged_files}" }
+typos = { glob = "*", run = "typos --verbose" }
+vitest = { glob = "**/src/*.test.{ts}", run = "pnpm vitest related --run" }

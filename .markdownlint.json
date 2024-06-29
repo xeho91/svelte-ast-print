@@ -1,0 +1,21 @@
+{
+	"$schema": "./node_modules/markdownlint-cli2/schema/markdownlint-config-schema.json",
+	"default": true,
+	"first-line-heading": {
+		"front_matter_title": "^\\s*\"title\"\\s*|(patch|minor|major$)"
+	},
+	"line-length": {
+		"line_length": 120,
+		"stern": false,
+		"tables": false
+	},
+	"ul-indent": {
+		"indent": 4
+	},
+	"link-image-reference-definitions": false,
+	"list-marker-space": false,
+	"no-hard-tabs": {
+		"code_blocks": false
+	},
+	"no-inline-html": false
+}

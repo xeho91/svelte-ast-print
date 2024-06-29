@@ -1,0 +1,52 @@
+name: Auto
+
+on:
+    workflow_call:
+    workflow_dispatch:
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    CI: true
+
+permissions:
+    contents: read
+    pull-requests: read
+
+jobs:
+    auto:
+        name: Auto
+        runs-on: macos-latest
+        timeout-minutes: 2
+        steps:
+            # https://github.com/actions/checkout
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            # https://nodejs.org/api/corepack.html
+            - name: Enable corepack (for pnpm)
+              run: corepack enable
+
+            # https://github.com/actions/setup-node
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  cache: pnpm
+                  node-version-file: ".nvmrc"
+
+            # https://pnpm.io/cli/install
+            - name: Install Node.js dependencies with pnpm
+              run: >
+                  pnpm install
+                  --frozen-lockfile
+
+            # https://intuit.github.io/auto
+            - name: Create release with auto
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+              run: |
+                  pnpm run release

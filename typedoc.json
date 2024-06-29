@@ -1,0 +1,9 @@
+{
+	"$schema": "https://typedoc.org/schema.json",
+	"includeVersion": true,
+	"logLevel": "Verbose",
+	"plugin": ["typedoc-plugin-coverage", "typedoc-plugin-mdn-links"],
+	"entryPoints": ["src/**/*"],
+	"entryPointStrategy": "resolve",
+	"exclude": ["**/*.test.ts"]
+}

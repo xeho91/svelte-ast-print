@@ -1,0 +1,55 @@
+name: Vitest
+
+on:
+    workflow_call:
+    workflow_dispatch:
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    CI: true
+
+permissions:
+    contents: read
+    pull-requests: write
+
+jobs:
+    vitest:
+        name: Vitest
+        runs-on: macos-latest
+        timeout-minutes: 2
+        steps:
+            # https://github.com/actions/checkout
+            - uses: actions/checkout@v4
+
+            # https://nodejs.org/api/corepack.html
+            - name: Enable corepack (for pnpm)
+              run: corepack enable
+
+            # https://github.com/actions/setup-node
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  cache: pnpm
+                  node-version-file: ".nvmrc"
+
+            # https://pnpm.io/cli/install
+            - name: Install Node.js dependencies with pnpm
+              run: >
+                  pnpm install
+                  --frozen-lockfile
+
+            # https://vitest.dev/guide/cli.html
+            - name: Run tests with Vitest
+              run: >
+                  pnpm vitest run
+                  --coverage.enabled
+                  --coverage.provider=v8
+                  --coverage.reporter=json-summary
+                  --coverage.reporter=json
+
+            # https://github.com/davelosert/vitest-coverage-report-action
+            - name: Generate tests coverage report
+              uses: davelosert/vitest-coverage-report-action@v2

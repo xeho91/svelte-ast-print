@@ -1,0 +1,23 @@
+{
+	"plugins": [
+		[
+			"all-contributors",
+			{
+				"types": {
+					"plugin": "**/plugin/**/*",
+					"code": ["**/src/**/*", "**/package.json", "**/tsconfig.json"]
+				}
+			}
+		],
+		"conventional-commits",
+		"first-time-contributor",
+		[
+			"npm",
+			{
+				"exact": true
+			}
+		],
+		"released"
+	],
+	"onlyPublishWithReleaseLabel": true
+}

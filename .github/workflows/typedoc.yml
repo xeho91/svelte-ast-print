@@ -1,0 +1,74 @@
+name: TypeDoc
+on:
+    workflow_call:
+        inputs:
+            type:
+                description: Should it be a `pr-preview` or `deploy`?
+                required: true
+                type: string
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    CI: true
+    # Prevent possible memory leaks by setting limit
+    # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+    NODE_OPTIONS: --max-old-space-size=6144
+    BRANCH: gh-pages
+    OUTPUT_DIR: docs
+    UMBRELLA_DIR: docs/pr-preview
+
+permissions:
+    contents: write
+    id-token: write
+    pages: write
+    pull-requests: write
+
+jobs:
+    typedoc:
+        name: TypeDoc
+        runs-on: macos-latest
+        timeout-minutes: 2
+        steps:
+            # https://github.com/actions/checkout
+            - uses: actions/checkout@v4
+
+            # https://nodejs.org/api/corepack.html
+            - name: Enable corepack (for pnpm)
+              run: corepack enable
+
+            # https://github.com/actions/setup-node
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  cache: pnpm
+                  node-version-file: ".nvmrc"
+
+            - name: Install Node.js dependencies with pnpm
+              # https://pnpm.io/cli/install
+              run: >
+                  pnpm install
+                  --frozen-lockfile
+
+            - name: Build documentation
+              run: pnpm build:doc
+
+            # https://github.com/rossjrw/pr-preview-action
+            - name: Create PR preview on the GitHub Pages
+              uses: rossjrw/pr-preview-action@v1.4.7
+              if: ${{ inputs.type == 'pr-preview' }}
+              with:
+                  preview-branch: ${{ env.BRANCH }}
+                  source-dir: ${{ env.OUTPUT_DIR }}
+                  umbrella-dir: ${{ env.UMBRELLA_DIR }}
+
+            # https://github.com/JamesIves/github-pages-deploy-action
+            - name: Deploy TypeDoc to GitHub Pages
+              uses: JamesIves/github-pages-deploy-action@v4.6.1
+              if: ${{ inputs.type == 'deploy' }}
+              with:
+                  clean-exclude: ${{ env.UMBRELLA_DIR }}
+                  folder: ${{ env.OUTPUT_DIR }}
+                  branch: ${{ env.BRANCH }}
