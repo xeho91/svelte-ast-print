@@ -4,10 +4,10 @@ name: CI & CD
 
 on:
     pull_request:
-        branches: [main]
+        branches: [main, next]
         types: [opened, ready_for_review, reopened, synchronize]
     push:
-        branches: [main]
+        branches: [main, next]
     workflow_dispatch:
         inputs:
             reason:
