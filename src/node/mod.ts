@@ -6,7 +6,7 @@ import { print_fragment } from "#node/fragment";
 import { print_root } from "#node/root";
 import { print_script } from "#node/script";
 import { print_standard } from "#node/standard";
-import { print_tag } from "#node/tag";
+import { print_tag } from "#node/tag/mod";
 import type { Printer } from "#printer";
 import type { SupportedSvelteNode } from "#types";
 
