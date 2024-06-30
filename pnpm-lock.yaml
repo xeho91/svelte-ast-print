@@ -82,6 +82,9 @@ importers:
       '@types/node':
         specifier: 20.14.9
         version: 20.14.9
+      dedent:
+        specifier: 1.5.3
+        version: 1.5.3
       locate-character:
         specifier: 3.0.0
         version: 3.0.0

@@ -35,8 +35,11 @@
 	},
 	"files": ["dist/"],
 	"imports": {
+		"#test/*": {
+			"development": "./test/*.ts"
+		},
 		"#*": {
-			"source": "./src/*.ts",
+			"development": "./src/*.ts",
 			"default": "./dist/*.js"
 		}
 	},

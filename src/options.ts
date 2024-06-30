@@ -63,7 +63,7 @@ export interface PrintOptions {
 	tag: TagOptions;
 }
 
-const DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = {
 	format: {
 		indent: "tab",
 	},

@@ -2,10 +2,10 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": ["@total-typescript/tsconfig/tsc/dom/library"],
 	"compilerOptions": {
-		"customConditions": ["source"],
-		"rootDir": "src/",
+		"customConditions": ["development"],
+		"rootDir": ".",
 		"outDir": "dist",
 		"types": ["vitest/importMeta"]
 	},
-	"include": ["src/"]
+	"include": ["src/", "test/"]
 }

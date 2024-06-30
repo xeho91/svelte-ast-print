@@ -141,6 +141,7 @@ export const TAG_NODE_NAMES = new Set([
 	"DebugTag",
 	"RenderTag",
 ] as const);
+export type TagNodeName = IterableElement<typeof TAG_NODE_NAMES>;
 export const is_tag_node = (node: SvelteNode): node is Tag => TAG_NODE_NAMES.has(node.type);
 
 export const is_template_node = (node: SvelteNode): node is TemplateNode =>
@@ -153,5 +154,14 @@ export const is_template_node = (node: SvelteNode): node is TemplateNode =>
 	is_standard_node(node) ||
 	is_tag_node(node);
 
+export type SupportedSvelteNodeName =
+	| "Root"
+	| "Script"
+	| AttributeLikeNodeName
+	| BlockNodeName
+	| CssASTNodeName
+	| ElementLikeNodeName
+	| StandardNodeName
+	| TagNodeName;
 export const is_supported_svelte_node = (node: SvelteNode | Script): node is SupportedSvelteNode =>
 	node.type === "Script" || is_template_node(node);
