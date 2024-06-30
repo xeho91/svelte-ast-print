@@ -9,6 +9,7 @@ import { print } from "esrap";
 import { print_fragment } from "#node/fragment";
 import { define_printer } from "#printer";
 import type { Fragment, IfBlock } from "#types";
+import { insert } from "#util";
 
 const has_alternate_else_if = (node: Fragment): boolean => node.nodes.some((n) => n.type === "IfBlock");
 
@@ -45,37 +46,25 @@ export const print_if_block = define_printer((node: IfBlock, options) => {
 	const { alternate, consequent, elseif, test } = node;
 
 	if (elseif) {
-		return [
+		return insert(
 			"{:else if",
 			" ",
 			print(test).code,
 			"}",
 			print_fragment(consequent, options),
-			alternate
-				? [
-						//
-						!has_alternate_else_if(alternate) ? "{:else}" : "",
-						print_fragment(alternate, options),
-					].join("")
-				: "",
-		].join("");
+			alternate && insert(!has_alternate_else_if(alternate) && "{:else}", print_fragment(alternate, options)),
+		);
 	}
 
-	return [
+	return insert(
 		"{#if",
 		" ",
 		print(test).code,
 		"}",
 		print_fragment(consequent, options),
-		alternate
-			? [
-					//
-					!has_alternate_else_if(alternate) ? "{:else}" : "",
-					print_fragment(alternate, options),
-				].join("")
-			: "",
+		alternate && insert(!has_alternate_else_if(alternate) && "{:else}", print_fragment(alternate, options)),
 		"{/if}",
-	].join("");
+	);
 });
 
 if (import.meta.vitest) {

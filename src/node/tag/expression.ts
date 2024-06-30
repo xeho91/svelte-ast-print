@@ -7,6 +7,7 @@ import { print } from "esrap";
 
 import { define_printer } from "#printer";
 import type { ExpressionTag } from "#types";
+import { insert } from "#util";
 
 /**
  * Print Svelte AST node {@link ExpressionTag} as string.
@@ -18,12 +19,7 @@ import type { ExpressionTag } from "#types";
  */
 export const print_expression_tag = define_printer((node: ExpressionTag, _options) => {
 	const { expression } = node;
-	return [
-		//
-		"{",
-		print(expression).code,
-		"}",
-	].join("");
+	return insert("{", print(expression).code, "}");
 });
 
 if (import.meta.vitest) {
