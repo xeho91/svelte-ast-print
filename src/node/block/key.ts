@@ -67,5 +67,4 @@ if (import.meta.vitest) {
 			`);
 		});
 	});
-	//
 }
