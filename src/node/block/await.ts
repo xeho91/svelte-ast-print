@@ -32,7 +32,7 @@ import { insert } from "#util";
  *
  * @example with catch body only
  * ```svelte
- * https://svelte.dev/docs/logic-blocks#await
+ * {#await expression catch name}...{/await}
  * ```
  */
 export const print_await_block = define_printer((node: AwaitBlock, options) => {
