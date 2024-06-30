@@ -1,8 +1,8 @@
 import { print } from "esrap";
 
+import type { Expression } from "estree";
 import { define_printer } from "#printer";
 import type { Attribute, Directive, SpreadAttribute, StyleDirective } from "#types";
-import type { Expression } from "estree";
 
 const print_attribute = define_printer((node: Attribute, _options) => {
 	const { name } = node;

@@ -85,6 +85,7 @@
 		"@total-typescript/tsconfig": "1.0.4",
 		"@types/estree": "1.0.5",
 		"@types/node": "20.14.9",
+		"dedent": "1.5.3",
 		"locate-character": "3.0.0",
 		"svelte": "5.0.0-next.166",
 		"tslib": "2.6.3",
