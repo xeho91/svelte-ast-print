@@ -19,7 +19,7 @@ import { insert } from "#util";
  * {@const assignment}
  * ```
  */
-export const print_expression_tag = define_printer((node: ConstTag, _options) => {
+export const print_const_tag = define_printer((node: ConstTag, _options) => {
 	const { declaration } = node;
 
 	return insert(
