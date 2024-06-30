@@ -39,25 +39,28 @@ if (import.meta.vitest) {
 	]);
 
 	describe("KeyBlock", () => {
-		it("correctly prints the block", ({ expect }) => {
-			const code1 = `
+		it("correctly prints the block where expression tag is used", ({ expect }) => {
+			const code = `
 				{#key value}
 					<div transition:fade>{value}</div>
 				{/key}
 			`;
-			const node1 = parse_and_extract_svelte_node<KeyBlock>(code1, "KeyBlock");
+			const node1 = parse_and_extract_svelte_node<KeyBlock>(code, "KeyBlock");
 			expect(print_key_block(node1, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
 				"{#key value}
 					<div transition:fade>{value}</div>
 				{/key}"
 			`);
-			const code2 = `
+		});
+
+		it("correctly prints the block where no key expression is used", ({ expect }) => {
+			const code = `
 				{#key value}
 					<Component />
 				{/key}
 			`;
-			const node2 = parse_and_extract_svelte_node<KeyBlock>(code2, "KeyBlock");
-			expect(print_key_block(node2, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
+			const node = parse_and_extract_svelte_node<KeyBlock>(code, "KeyBlock");
+			expect(print_key_block(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
 				"{#key value}
 					<Component />
 				{/key}"
