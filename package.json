@@ -33,9 +33,12 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"files": ["src/"],
+	"files": ["dist/"],
 	"imports": {
-		"#*": "./src/*.ts"
+		"#*": {
+			"source": "./src/*.ts",
+			"default": "./dist/*.js"
+		}
 	},
 	"exports": {
 		".": "./src/mod.ts",
@@ -82,6 +85,7 @@
 		"locate-character": "3.0.0",
 		"svelte": "5.0.0-next.166",
 		"tslib": "2.6.3",
+		"type-fest": "4.20.1",
 		"typescript": "5.5.2",
 		"zimmerframe": "1.1.2"
 	},

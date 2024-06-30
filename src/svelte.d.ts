@@ -1,6 +1,6 @@
 /**
  * TODO: Convince Svelte maintainers to expose AST node types from this file in `next` package releases
- * 
+ *
  * Copied from https://github.com/sveltejs/svelte/blob/c42bb04276af0024b49aa46918eec69ad56570a5/packages/svelte/types/index.d.ts#L561
  * @module
  */
@@ -416,8 +416,8 @@ declare module "svelte/compiler" {
 	}
 	export interface BaseNode_1 {
 		type: string;
-		start: number;
-		end: number;
+		start?: number;
+		end?: number;
 	}
 
 	export interface BaseElement_1 extends BaseNode_1 {
@@ -757,10 +757,10 @@ declare module "svelte/compiler" {
 
 		unique(preferred_name: string): import("estree").Identifier;
 	}
-	namespace Css {
+	export namespace Css {
 		export interface BaseNode {
-			start: number;
-			end: number;
+			start?: number;
+			end?: number;
 		}
 
 		export interface StyleSheet extends BaseNode {
@@ -912,10 +912,10 @@ declare module "svelte/compiler" {
 	}
 	export interface BaseNode {
 		type: string;
-		start: number;
-		end: number;
+		start?: number;
+		end?: number;
 		/** This is set during parsing on elements/components/expressions/text (but not attributes etc) */
-		parent: SvelteNode | null;
+		parent?: SvelteNode | null;
 	}
 
 	export interface Fragment {
@@ -1047,7 +1047,7 @@ declare module "svelte/compiler" {
 		expression: SimpleCallExpression | (ChainExpression & { expression: SimpleCallExpression });
 	}
 
-	type Tag = ExpressionTag | HtmlTag | ConstTag | DebugTag | RenderTag;
+	export type Tag = ExpressionTag | HtmlTag | ConstTag | DebugTag | RenderTag;
 
 	/** An `animate:` directive */
 	export interface AnimateDirective extends BaseNode {
@@ -1146,7 +1146,7 @@ declare module "svelte/compiler" {
 		expression: null | Expression;
 	}
 
-	type Directive =
+	export type Directive =
 		| AnimateDirective
 		| BindDirective
 		| ClassDirective
@@ -1250,7 +1250,7 @@ declare module "svelte/compiler" {
 		name: "svelte:window";
 	}
 
-	type ElementLike =
+	export type ElementLike =
 		| Component
 		| TitleElement
 		| SlotElement

@@ -1,10 +1,6 @@
-import type { Fragment } from "svelte/compiler";
+import { define_printer } from "#printer";
+import type { Fragment } from "#types";
 
-import type { TransformedPrintOptions } from "#options";
-
-export function print_fragment(node: Fragment, options: TransformedPrintOptions): string {
-	const { indent } = options;
-	const { nodes } = node;
-
+export const print_fragment = define_printer((node: Fragment, options) => {
 	return "";
-}
+});
