@@ -51,9 +51,7 @@ if (import.meta.vitest) {
 		it("supports brackets notation and question mark", ({ expect }) => {
 			const code = "{svelte[5].release?.date}";
 			const node = parse_and_extract_svelte_node<ExpressionTag>(code, "ExpressionTag");
-			expect(print_expression_tag(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(
-				`"{svelte[5].release?.date}"`,
-			);
+			expect(print_expression_tag(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"{svelte[5].release?.date}"`);
 		});
 	});
 }
