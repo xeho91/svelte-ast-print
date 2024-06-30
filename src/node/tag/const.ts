@@ -46,7 +46,7 @@ if (import.meta.vitest) {
 				{/each}
 			`;
 			const node = parse_and_extract_svelte_node<ConstTag>(code, "ConstTag");
-			expect(print_expression_tag(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(
+			expect(print_const_tag(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(
 				`"{@const area = box.width * box.height}"`,
 			);
 		});
