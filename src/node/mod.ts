@@ -1,4 +1,4 @@
-import { print_attribute_like } from "#node/attribute-like";
+import { print_attribute_like } from "#node/attribute-like/mod";
 import { print_block } from "#node/block/mod";
 import { print_css } from "#node/css";
 import { print_element_like } from "#node/element-like";
