@@ -70,21 +70,39 @@ importers:
         specifier: 1.6.0
         version: 1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0)
     devDependencies:
+      '@total-typescript/ts-reset':
+        specifier: 0.5.1
+        version: 0.5.1
       '@total-typescript/tsconfig':
         specifier: 1.0.4
         version: 1.0.4
+      '@types/estree':
+        specifier: 1.0.5
+        version: 1.0.5
       '@types/node':
         specifier: 20.14.9
         version: 20.14.9
+      dedent:
+        specifier: 1.5.3
+        version: 1.5.3
+      locate-character:
+        specifier: 3.0.0
+        version: 3.0.0
       svelte:
         specifier: 5.0.0-next.166
         version: 5.0.0-next.166
       tslib:
         specifier: 2.6.3
         version: 2.6.3
+      type-fest:
+        specifier: 4.20.1
+        version: 4.20.1
       typescript:
         specifier: 5.5.2
         version: 5.5.2
+      zimmerframe:
+        specifier: 1.1.2
+        version: 1.1.2
 
   libs/color:
     dependencies:
