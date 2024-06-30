@@ -1,7 +1,7 @@
 import { print } from "esrap";
 
-import { define_printer } from "#printer";
 import { print_attributes_like } from "#node/attribute-like";
+import { define_printer } from "#printer";
 import type { Script } from "#types";
 import { NEW_LINE } from "#util";
 

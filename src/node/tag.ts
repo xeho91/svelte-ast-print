@@ -1,5 +1,5 @@
-import type { Tag } from "#types";
 import { define_printer } from "#printer";
+import type { Tag } from "#types";
 
 export const print_tag = define_printer((node: Tag, options) => {
 	// biome-ignore format: Prettier

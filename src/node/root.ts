@@ -1,6 +1,6 @@
+import { print_css } from "#node/css";
 import { print_fragment } from "#node/fragment";
 import { print_script } from "#node/script";
-import { print_css } from "#node/css";
 import { define_printer } from "#printer";
 import type { Root } from "#types";
 import { NEW_LINE } from "#util";

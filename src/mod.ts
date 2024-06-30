@@ -1,8 +1,8 @@
 import { print as es_print } from "esrap";
 
 import { get_printer } from "#node/mod";
-import { transform_options, type PrintOptions } from "#options";
-import { is_supported_svelte_node, type SupportedSvelteNode, type SvelteNode } from "#types";
+import { type PrintOptions, transform_options } from "#options";
+import { type SupportedSvelteNode, type SvelteNode, is_supported_svelte_node } from "#types";
 
 /**
  * Print a {@link SvelteNode} Svelte AST node as stringified version.
