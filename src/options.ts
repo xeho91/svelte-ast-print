@@ -5,43 +5,8 @@ export interface FormatOptions {
 	indent: Indent | (string & {});
 }
 
-// biome-ignore lint/suspicious/noEmptyInterface: WIP
-export interface AttributeLikeOptions {
-	//
-}
-
-// biome-ignore lint/suspicious/noEmptyInterface: WIP
-export interface BlockOptions {
-	//
-}
-
-// biome-ignore lint/suspicious/noEmptyInterface: WIP
-export interface CssOptions {
-	//
-}
-
-// biome-ignore lint/suspicious/noEmptyInterface: WIP
-export interface ElementLikeOptions {
-	//
-}
-
 export interface RootOptions {
 	order: (keyof Root)[];
-}
-
-// biome-ignore lint/suspicious/noEmptyInterface: WIP
-export interface ScriptOptions {
-	//
-}
-
-// biome-ignore lint/suspicious/noEmptyInterface: WIP
-export interface StandardOptions {
-	//
-}
-
-// biome-ignore lint/suspicious/noEmptyInterface: WIP
-export interface TagOptions {
-	//
 }
 
 type Indent = keyof typeof INDENT;
@@ -53,30 +18,16 @@ const INDENT = {
 
 export interface PrintOptions {
 	format: FormatOptions;
-	attribute: AttributeLikeOptions;
-	block: BlockOptions;
-	css: CssOptions;
-	element: ElementLikeOptions;
 	root: RootOptions;
-	script: ScriptOptions;
-	standard: StandardOptions;
-	tag: TagOptions;
 }
 
 export const DEFAULT_OPTIONS = {
 	format: {
 		indent: "\t",
 	},
-	attribute: {},
-	block: {},
-	css: {},
-	element: {},
 	root: {
 		order: ["module", "instance", "fragment", "css"],
 	},
-	script: {},
-	standard: {},
-	tag: {},
 } as const satisfies PrintOptions;
 
 const is_untransformed_indent = (indent: string): indent is Indent => Object.keys(INDENT).includes(indent);
