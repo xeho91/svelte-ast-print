@@ -81,7 +81,7 @@ if (import.meta.vitest) {
 				"<Navbar let:hidden let:toggle>
 					<NavBrand href="/">
 						<img src="/images/flowbite-svelte-icon-logo.svg" class="me-3 h-6 sm:h-9" alt="Flowbite Logo" />
-						<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite
+						<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite</span>
 					</NavBrand>
 
 					<NavHamburger on:click={toggle} />
@@ -93,7 +93,7 @@ if (import.meta.vitest) {
 						</NavLi>
 
 						<MegaMenu items={menu} let:item>
-							<a href={item.href} class="hover:text-primary-600 dark:hover:text-primary-500">{item.name}
+							<a href={item.href} class="hover:text-primary-600 dark:hover:text-primary-500">{item.name}</a>
 						</MegaMenu>
 
 						<NavLi href="/services">Services</NavLi>
