@@ -1,10 +1,14 @@
 {
 	"$schema": "https://json.schemastore.org/package",
 	"name": "svelte-ast-print",
-	"version": "0.0.1-next.0",
+	"version": "0.1.0",
 	"type": "module",
 	"description": "Print Svelte AST nodes as a string. Aka parse in reverse.",
-	"keywords": ["svelte", "ast", "print"],
+	"keywords": [
+		"svelte",
+		"ast",
+		"print"
+	],
 	"license": "MIT",
 	"author": {
 		"name": "Mateusz Kadlubowski",
@@ -33,7 +37,9 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"files": ["dist/"],
+	"files": [
+		"dist/"
+	],
 	"imports": {
 		"#test/*": {
 			"development": "./test/*.ts"
