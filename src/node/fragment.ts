@@ -17,6 +17,7 @@ export const print_fragment = define_printer((node: Fragment, options) => {
 
 	return nodes
 		.map((n) => {
+			// WARN: This is workaround for cyclic dependency
 			return get_printer(n)(n, options);
 		})
 		.join("");

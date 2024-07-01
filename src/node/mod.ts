@@ -1,3 +1,5 @@
+// WARN: This is workaround for cyclic dependency
+//
 import { print_attribute_like } from "#node/attribute-like/mod";
 import { print_block } from "#node/block/mod";
 import { print_css } from "#node/css/mod";
