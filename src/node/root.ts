@@ -3,7 +3,7 @@
  * @module
  */
 
-import { print_css } from "#node/css";
+import { print_css } from "#node/css/mod";
 import { print_fragment } from "#node/fragment";
 import { print_script } from "#node/script";
 import { define_printer } from "#printer";

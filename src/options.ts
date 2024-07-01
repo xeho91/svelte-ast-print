@@ -65,7 +65,7 @@ export interface PrintOptions {
 
 export const DEFAULT_OPTIONS = {
 	format: {
-		indent: "tab",
+		indent: "\t",
 	},
 	attribute: {},
 	block: {},
@@ -79,6 +79,8 @@ export const DEFAULT_OPTIONS = {
 	tag: {},
 } as const satisfies PrintOptions;
 
+const is_untransformed_indent = (indent: string): indent is Indent => Object.keys(INDENT).includes(indent);
+
 export function transform_options<const TOptions extends Partial<PrintOptions> = Partial<PrintOptions>>(
 	options = {} as TOptions,
 ): PrintOptions {
@@ -90,7 +92,7 @@ export function transform_options<const TOptions extends Partial<PrintOptions> =
 		...rest_base,
 		format: {
 			...rest_format,
-			indent: INDENT[indent],
+			indent: is_untransformed_indent(indent) ? INDENT[indent] : indent,
 		},
 	};
 }
