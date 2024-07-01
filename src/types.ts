@@ -2,8 +2,10 @@ import "@total-typescript/ts-reset/recommended";
 import type { IterableElement } from "type-fest";
 
 import type {
+	AnimateDirective,
 	Attribute,
 	AwaitBlock,
+	BindDirective,
 	Block,
 	ClassDirective,
 	Comment,
@@ -19,6 +21,8 @@ import type {
 	HtmlTag,
 	IfBlock,
 	KeyBlock,
+	LetDirective,
+	OnDirective,
 	RenderTag,
 	Root,
 	Script,
@@ -29,11 +33,15 @@ import type {
 	Tag,
 	TemplateNode,
 	Text,
+	TransitionDirective,
+	UseDirective,
 } from "svelte/compiler";
 
 export type {
+	AnimateDirective,
 	Attribute,
 	AwaitBlock,
+	BindDirective,
 	Block,
 	ClassDirective,
 	Comment,
@@ -49,6 +57,8 @@ export type {
 	HtmlTag,
 	IfBlock,
 	KeyBlock,
+	LetDirective,
+	OnDirective,
 	RenderTag,
 	Root,
 	Script,
@@ -59,6 +69,8 @@ export type {
 	Tag,
 	TemplateNode,
 	Text,
+	TransitionDirective,
+	UseDirective,
 };
 
 export type SupportedSvelteNode = TemplateNode | Script | Css.Node | Fragment;

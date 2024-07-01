@@ -1,6 +1,6 @@
 import { print } from "esrap";
 
-import { print_attributes_like } from "#node/attribute-like";
+import { print_attributes } from "#node/attribute-like/mod";
 import { print_fragment } from "#node/fragment";
 import { define_printer } from "#printer";
 import type { ElementLike } from "#types";
@@ -9,7 +9,7 @@ export const print_element_like = define_printer((node: ElementLike, options) =>
 	const { name, attributes, fragment } = node;
 	const has_child_nodes = fragment.nodes.length > 0;
 	const start_closing_tag = has_child_nodes ? ">" : " />";
-	const start = `<${name}${print_specials(node)}${print_attributes_like(attributes, options)}${start_closing_tag}`;
+	const start = `<${name}${print_specials(node)}${print_attributes(attributes, options)}${start_closing_tag}`;
 	const end = has_child_nodes ? `</${name}>` : "";
 
 	return `${start}${print_fragment(fragment, options)}${end}`;
