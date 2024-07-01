@@ -13,7 +13,7 @@
 			"name": "Mateusz Kadlubowski",
 			"avatar_url": "https://avatars.githubusercontent.com/u/18627568?v=4",
 			"profile": "https://github.com/xeho91",
-			"contributions": ["code", "maintenance", "doc"]
+			"contributions": ["code", "maintenance", "doc", "infra", "test"]
 		}
 	],
 	"contributorsPerLine": 7,
