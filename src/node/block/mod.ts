@@ -1,3 +1,9 @@
+/**
+ * Related to Svelte AST {@link Block} nodes.
+ * @see {@link https://svelte.dev/docs/logic-blocks}
+ * @module
+ */
+
 import { print_await_block } from "#node/block/await";
 import { print_each_block } from "#node/block/each";
 import { print_if_block } from "#node/block/if";

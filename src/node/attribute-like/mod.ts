@@ -40,7 +40,5 @@ export function print_attributes(
 ): string {
 	if (attributes.length === 0) return "";
 
-	const stringified = attributes.map((a) => print_attribute_like(a, options)).join(" ");
-
-	return ` ${stringified}`;
+	return attributes.map((a) => print_attribute_like(a, options)).join(" ");
 }
