@@ -12,8 +12,8 @@ env:
     CI: true
 
 permissions:
-    contents: read
-    pull-requests: read
+    contents: write
+    pull-requests: write
 
 jobs:
     auto:

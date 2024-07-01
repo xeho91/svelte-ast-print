@@ -7,6 +7,7 @@
 		"useIgnoreFile": true
 	},
 	"files": {
+		"ignore": ["src/svelte.d.ts"],
 		"ignoreUnknown": true
 	},
 	"formatter": {
