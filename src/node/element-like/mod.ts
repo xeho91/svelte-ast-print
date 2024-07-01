@@ -41,22 +41,3 @@ export const print_element_like = define_printer((node: ElementLike, options) =>
 		case "SvelteWindow": return print_svelte_window(node, options);
 	}
 });
-
-// function print_specials(node: ElementLike): string {
-// 	// biome-ignore format: Prettier
-// 	switch(node.type) {
-// 		case "Component":
-// 		case "TitleElement":
-// 		case "SlotElement":
-// 		case "RegularElement":
-// 		case "SvelteBody":
-// 		case "SvelteDocument":
-// 		case "SvelteFragment":
-// 		case "SvelteHead":
-// 		case "SvelteOptions":
-// 		case "SvelteSelf":
-// 		case "SvelteWindow": return "";
-// 		case "SvelteComponent": return ` this={${print(node.expression)}}`;
-// 		case "SvelteElement": return ` this={${print(node.tag)}}`;
-// 	}
-// }
