@@ -14,7 +14,7 @@
 	"homepage": "https://github.com/xeho91/svelte-ast-print",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/xeho91/svelte-ast-print.git"
+		"url": "git+https://github.com/xeho91/svelte-ast-print.git"
 	},
 	"bugs": "https://github.com/xeho91/svelte-ast-print/issues",
 	"funding": [
