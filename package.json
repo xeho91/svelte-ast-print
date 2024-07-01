@@ -3,7 +3,7 @@
 	"name": "svelte-ast-print",
 	"version": "0.0.1-next.0",
 	"type": "module",
-	"description": "Print Svelte AST nodes as string.",
+	"description": "Print Svelte AST nodes as a string. Aka parse in reverse.",
 	"keywords": ["svelte", "ast", "print"],
 	"license": "MIT",
 	"author": {
