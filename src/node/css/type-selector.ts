@@ -1,5 +1,6 @@
 /**
  * Related to Svelte AST node {@link Css.TypeSelector}.
+ * @see {@link https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors}
  * @module
  */
 
@@ -8,9 +9,11 @@ import type { Css } from "#types";
 
 /**
  * Print Svelte AST node {@link Css.TypeSelector} as string.
+ *
+ * @see {@link https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors}
  */
-export const print_css_type_selector = define_printer((node: Css.TypeSelector, options) => {
-	return "";
+export const print_css_type_selector = define_printer((node: Css.TypeSelector, _options) => {
+	return node.name;
 });
 
 if (import.meta.vitest) {
@@ -23,9 +26,14 @@ if (import.meta.vitest) {
 	describe("Css.TypeSelector", () => {
 		it("prints correctly", ({ expect }) => {
 			const code = `
+				<style>
+					p {
+						color: red;
+					}
+				</style>
 			`;
 			const node = parse_and_extract_svelte_node<Css.TypeSelector>(code, "TypeSelector");
-			expect(print_css_type_selector(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot("");
+			expect(print_css_type_selector(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"p"`);
 		});
 	});
 }

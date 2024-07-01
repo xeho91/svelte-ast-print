@@ -62,7 +62,13 @@ if (import.meta.vitest) {
 				</style>
 			`;
 			const node = parse_and_extract_svelte_node<Css.Node>(code, "StyleSheet");
-			expect(print_css(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"<style></style>"`);
+			expect(print_css(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
+				"<style>
+					p {
+					color: burlywood;
+				}
+				</style>"
+			`);
 		});
 	});
 }

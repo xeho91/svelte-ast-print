@@ -9,8 +9,8 @@ import type { Css } from "#types";
 /**
  * Print Svelte AST node {@link Css.NestingSelector} as string.
  */
-export const print_css_nesting_selector = define_printer((node: Css.NestingSelector, options) => {
-	return "";
+export const print_css_nesting_selector = define_printer((node: Css.NestingSelector, _options) => {
+	return node.name;
 });
 
 if (import.meta.vitest) {
@@ -23,9 +23,16 @@ if (import.meta.vitest) {
 	describe("Css.NestingSelector", () => {
 		it("prints correctly", ({ expect }) => {
 			const code = `
+				<style>
+					p {
+						& span {
+							color: orange;
+						}
+					}
+				</style>
 			`;
 			const node = parse_and_extract_svelte_node<Css.NestingSelector>(code, "NestingSelector");
-			expect(print_css_nesting_selector(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot("");
+			expect(print_css_nesting_selector(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"&"`);
 		});
 	});
 }

@@ -9,8 +9,8 @@ import type { Css } from "#types";
 /**
  * Print Svelte AST node {@link Css.Percentage} as string.
  */
-export const print_css_percentage = define_printer((node: Css.Percentage, options) => {
-	return "";
+export const print_css_percentage = define_printer((node: Css.Percentage, _options) => {
+	return node.value;
 });
 
 if (import.meta.vitest) {
@@ -23,9 +23,16 @@ if (import.meta.vitest) {
 	describe("Css.Percentage", () => {
 		it("prints correctly", ({ expect }) => {
 			const code = `
+				<style>
+					@keyframes fadeIn {
+						50% {
+							opacity: 0;
+						}
+					}
+				</style>
 			`;
 			const node = parse_and_extract_svelte_node<Css.Percentage>(code, "Percentage");
-			expect(print_css_percentage(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot("");
+			expect(print_css_percentage(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"50%"`);
 		});
 	});
 }

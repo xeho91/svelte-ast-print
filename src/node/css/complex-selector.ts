@@ -3,6 +3,7 @@
  * @module
  */
 
+import { print_css_relative_selector } from "#node/css/relative-selector";
 import { define_printer } from "#printer";
 import type { Css } from "#types";
 
@@ -10,7 +11,13 @@ import type { Css } from "#types";
  * Print Svelte AST node {@link Css.ComplexSelector} as string.
  */
 export const print_css_complex_selector = define_printer((node: Css.ComplexSelector, options) => {
-	return "";
+	const { children } = node;
+
+	return children
+		.map((relative_selector) => {
+			return print_css_relative_selector(relative_selector, options);
+		})
+		.join("");
 });
 
 if (import.meta.vitest) {
@@ -23,9 +30,14 @@ if (import.meta.vitest) {
 	describe("Css.ComplexSelector", () => {
 		it("prints correctly", ({ expect }) => {
 			const code = `
+				<style>
+					p {
+						color: red;
+					}
+				</style>
 			`;
 			const node = parse_and_extract_svelte_node<Css.ComplexSelector>(code, "ComplexSelector");
-			expect(print_css_complex_selector(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot("");
+			expect(print_css_complex_selector(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"p"`);
 		});
 	});
 }
