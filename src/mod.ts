@@ -29,25 +29,3 @@ export function print<const TNode extends SvelteNode, const TOptions extends Par
 
 	return es_print(node).code;
 }
-
-print(
-	{
-		type: "IfBlock",
-		test: {
-			type: "Literal",
-			value: "lol",
-		},
-		consequent: {
-			type: "Fragment",
-			nodes: [],
-			transparent: false,
-		},
-		elseif: false,
-		alternate: null,
-	},
-	{
-		format: {
-			indent: "tab",
-		},
-	},
-);
