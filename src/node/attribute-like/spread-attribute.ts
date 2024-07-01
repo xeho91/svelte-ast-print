@@ -22,3 +22,37 @@ export const print_spread_attribute = define_printer((node: SpreadAttribute, _op
 
 	return insert("{...", print(expression).code, "}");
 });
+
+if (import.meta.vitest) {
+	const { describe, it } = import.meta.vitest;
+	const [{ parse_and_extract_svelte_node }, { DEFAULT_OPTIONS }] = await Promise.all([
+		import("#test/mod"),
+		import("#options"),
+	]);
+
+	describe("SpreadAttribute", () => {
+		it("works using normal identifier", ({ expect }) => {
+			const code = `
+				<Widget {...things} />
+			`;
+			const node = parse_and_extract_svelte_node<SpreadAttribute>(code, "SpreadAttribute");
+			expect(print_spread_attribute(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"{...things}"`);
+		});
+
+		it("works using $$props", ({ expect }) => {
+			const code = `
+				<Widget {...$$props} />
+			`;
+			const node = parse_and_extract_svelte_node<SpreadAttribute>(code, "SpreadAttribute");
+			expect(print_spread_attribute(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"{...$$props}"`);
+		});
+
+		it("works using $$restProps", ({ expect }) => {
+			const code = `
+				<Widget {...$$restProps} />
+			`;
+			const node = parse_and_extract_svelte_node<SpreadAttribute>(code, "SpreadAttribute");
+			expect(print_spread_attribute(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"{...$$restProps}"`);
+		});
+	});
+}

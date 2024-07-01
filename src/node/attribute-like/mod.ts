@@ -5,7 +5,7 @@
  */
 
 import { print_attribute } from "#node/attribute-like/attribute";
-import { print_directive } from "#node/attribute-like/directive";
+import { print_directive } from "#node/attribute-like/directive/mod";
 import { print_spread_attribute } from "#node/attribute-like/spread-attribute";
 import { define_printer } from "#printer";
 import type { AttributeLike } from "#types";
