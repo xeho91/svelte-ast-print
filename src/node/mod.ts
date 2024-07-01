@@ -2,12 +2,12 @@
 //
 import { print_attribute_like } from "#node/attribute-like/mod";
 import { print_block } from "#node/block/mod";
-import { print_css } from "#node/css/mod";
+import { print_css_node } from "#node/css/mod";
 import { print_element_like } from "#node/element-like/mod";
 import { print_fragment } from "#node/fragment";
+import { print_html_node } from "#node/html";
 import { print_root } from "#node/root";
 import { print_script } from "#node/script";
-import { print_standard } from "#node/standard";
 import { print_tag } from "#node/tag/mod";
 import type { Printer } from "#printer";
 import type { SupportedSvelteNode } from "#types";
@@ -20,7 +20,7 @@ export function get_printer<const TNode extends SupportedSvelteNode>(node: TNode
 		case "Script": return print_script as Printer<TNode>;
 		// Standard related
 		case "Comment":
-		case "Text": return print_standard as Printer<TNode>;
+		case "Text": return print_html_node as Printer<TNode>;
 		// Tag related
 		case "ConstTag":
 		case "DebugTag":
@@ -76,6 +76,6 @@ export function get_printer<const TNode extends SupportedSvelteNode>(node: TNode
 		case "Rule":
 		case "SelectorList":
 		case "StyleSheet":
-		case "TypeSelector": return print_css as Printer<TNode>;
+		case "TypeSelector": return print_css_node as Printer<TNode>;
 	}
 }

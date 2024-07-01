@@ -1,11 +1,11 @@
 import type { Root } from "#types";
 
-export interface FormatOptions {
+interface FormatOptions {
 	/** Indentation */
 	indent: Indent | (string & {});
 }
 
-export interface RootOptions {
+interface RootOptions {
 	order: (keyof Root)[];
 }
 

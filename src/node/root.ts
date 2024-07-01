@@ -3,7 +3,7 @@
  * @module
  */
 
-import { print_css } from "#node/css/mod";
+import { print_css_node } from "#node/css/mod";
 import { print_fragment } from "#node/fragment";
 import { print_script } from "#node/script";
 import { define_printer } from "#printer";
@@ -25,7 +25,7 @@ export const print_root = define_printer((node: Root, options) => {
 		.map((type) => {
 			// biome-ignore format: Prettier
 			switch (type) {
-				case "css": return insert(css && print_css(css, options));
+				case "css": return insert(css && print_css_node(css, options));
 				case "fragment": return print_fragment(fragment, options);
 				case "instance": return insert(instance && print_script(instance, options));
 				case "module": return insert(module && print_script(module, options));

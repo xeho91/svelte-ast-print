@@ -19,7 +19,7 @@ import { print_css_type_selector } from "#node/css/type-selector";
 import { define_printer } from "#printer";
 import type { Css } from "#types";
 
-export const print_css = define_printer((node: Css.Node, options) => {
+export const print_css_node = define_printer((node: Css.Node, options) => {
 	const { type } = node;
 	// biome-ignore format: Prettier
 	switch (type) {
@@ -62,7 +62,7 @@ if (import.meta.vitest) {
 				</style>
 			`;
 			const node = parse_and_extract_svelte_node<Css.Node>(code, "StyleSheet");
-			expect(print_css(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
+			expect(print_css_node(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
 				"<style>
 					p {
 					color: burlywood;

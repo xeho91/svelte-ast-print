@@ -4,9 +4,9 @@
  */
 
 import { define_printer } from "#printer";
-import type { Comment, Text } from "#types";
+import type { Comment, HtmlNode, Text } from "#types";
 
-export const print_standard = define_printer((node: Comment | Text, options) => {
+export const print_html_node = define_printer((node: HtmlNode, options) => {
 	if (node.type === "Comment") {
 		return print_comment(node, options);
 	}
