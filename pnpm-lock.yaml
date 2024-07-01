@@ -91,6 +91,9 @@ importers:
       typescript:
         specifier: 5.5.2
         version: 5.5.2
+      vite:
+        specifier: 5.3.2
+        version: 5.3.2(@types/node@20.14.9)
       zimmerframe:
         specifier: 1.1.2
         version: 1.1.2
@@ -4930,7 +4933,6 @@ snapshots:
       '@esbuild/win32-arm64': 0.21.5
       '@esbuild/win32-ia32': 0.21.5
       '@esbuild/win32-x64': 0.21.5
-    optional: true
 
   escalade@3.1.2:
     optional: true
@@ -5912,8 +5914,7 @@ snapshots:
   mute-stream@0.0.8:
     optional: true
 
-  nanoid@3.3.7:
-    optional: true
+  nanoid@3.3.7: {}
 
   negotiator@0.6.3:
     optional: true
@@ -6134,8 +6135,7 @@ snapshots:
   pegjs@0.10.0:
     optional: true
 
-  picocolors@1.0.1:
-    optional: true
+  picocolors@1.0.1: {}
 
   picomatch@2.3.1: {}
 
@@ -6212,7 +6212,6 @@ snapshots:
       nanoid: 3.3.7
       picocolors: 1.0.1
       source-map-js: 1.2.0
-    optional: true
 
   prettier@2.8.8:
     optional: true
@@ -6631,8 +6630,7 @@ snapshots:
     dependencies:
       atomic-sleep: 1.0.0
 
-  source-map-js@1.2.0:
-    optional: true
+  source-map-js@1.2.0: {}
 
   source-map-support@0.5.21:
     dependencies:
@@ -7119,7 +7117,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.14.9
       fsevents: 2.3.3
-    optional: true
 
   vitest@1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0):
     dependencies:
