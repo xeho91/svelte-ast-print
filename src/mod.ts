@@ -2,19 +2,20 @@ import { print as es_print } from "esrap";
 
 import { get_printer } from "#node/mod";
 import { type PrintOptions, transform_options } from "#options";
-import { type SupportedSvelteNode, type SvelteNode, is_supported_svelte_node } from "#types";
+import { type SvelteNode, is_supported_svelte_node } from "#types";
 
 /**
- * Print a {@link SvelteNode} Svelte AST node as stringified version.
+ * Print AST {@link SvelteNode} as string.
+ *
  * If:
- * AST Node type is unique, that comes from Svelte AST - defined as {@link SupportedSvelteNode} - then it will use
- * our printer.
+ * AST node type is unique - comes from Svelte AST - then it will use this package printer.
+ *
  * Else:
  * It uses {@link print} to print Estree complaint AST node.
  *
  * @param node - Svelte AST node from {@link parse}
  * @param options_ - printing options
- * @returns Stringified Svelte AST node.
+ * @returns Stringified Svelte AST node
  */
 export function print<const TNode extends SvelteNode, const TOptions extends Partial<PrintOptions>>(
 	node: TNode,
