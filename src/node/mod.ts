@@ -1,6 +1,6 @@
 import { print_attribute_like } from "#node/attribute-like/mod";
 import { print_block } from "#node/block/mod";
-import { print_css } from "#node/css";
+import { print_css } from "#node/css/mod";
 import { print_element_like } from "#node/element-like/mod";
 import { print_fragment } from "#node/fragment";
 import { print_root } from "#node/root";
