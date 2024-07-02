@@ -1,26 +1,34 @@
 <!DOCTYPE html><html class="default" lang="en"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>svelte-ast-print - v0.0.1-next.0</title><meta name="description" content="Documentation for svelte-ast-print"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">svelte-ast-print - v0.0.1-next.0</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h2>svelte-ast-print - v0.0.1-next.0</h2></div><div class="tsd-panel tsd-typography"><a id="md:svelte-ast-print" class="tsd-anchor"></a><h1 class="tsd-anchor-link"><code>svelte-ast-print</code><a href="#md:svelte-ast-print" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p><img src="https://img.shields.io/npm/v/svelte-ast-print?style=for-the-badge&amp;logo=npm" alt="NPM Version"></p>
 <p>Print <strong>Svelte AST</strong> nodes as a string.<br>
-A.k.a. <a href="https://svelte.dev/docs/svelte-compiler#parse"><code>parse</code></a> in reverse.\</p>
+A.k.a. <a href="https://svelte.dev/docs/svelte-compiler#parse"><code>parse</code></a> in reverse.</p>
 <p>This is what you need to create <a href="https://codemod.com/blog/what-are-codemods#ill-find-replace-whats-the-issue-hint-a-lot">codemods</a> - e.g. for migration between Svelte versions syntaxes.</p>
 <a id="md:documentation" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Documentation<a href="#md:documentation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p><a href="https://xeho91.github.io/svelte-ast-print">https://xeho91.github.io/svelte-ast-print</a></p>
 <a id="md:acknowledgements" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Acknowledgements<a href="#md:acknowledgements" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>This package depends on:</p>
 <ul>
 <li><a href="https://github.com/rich-harris/esrap"><code>esrap</code></a> for printing <a href="https://github.com/estree/estree">ESTree</a> specification-compliant AST nodes</li>
 </ul>
-<a id="md:limitations" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Limitations<a href="#md:limitations" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
-<li>
-<p>It doesn't print formatted output.<br>
-The primary goal is to be able to write codemods as soon as possible - because right now, there are no alternatives.</p>
+<a id="md:limitations" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Limitations<a href="#md:limitations" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><blockquote>
+<p>[!WARNING]
+<strong>TypeScript isn't supported</strong>, yet.<br>
+At the moment Svelte parser skips TypeScript related syntax. Also, <a href="https://github.com/rich-harris/esrap"><code>esrap</code></a> doesn't recognize TypeScript related AST nodes.</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>It doesn't print formatted output.</strong><br>
+The current focus is to be able to write codemods as soon as possible - because right now, there are no alternatives.</p>
 <p>If you need to format modified Svelte AST, use available formatters for Svelte:</p>
 <ul>
 <li><a href="https://github.com/biomejs/biome">Biome</a> - <em>⚠️ has partial support</em></li>
 <li><a href="https://github.com/prettier/prettier">Prettier</a> with <a href="https://github.com/sveltejs/prettier-plugin-svelte"><code>prettier-plugin-svelte</code></a></li>
 </ul>
-</li>
-<li>
-<p>Is not optimized for performance yet - See <a href="https://github.com/xeho91/svelte-ast-print/discussions/2">Roadmap</a></p>
-</li>
-</ol>
+</blockquote>
+<hr>
+<blockquote>
+<p>[!NOTE]
+<strong>Is not optimized for performance</strong>, yet.<br>
+See <a href="https://github.com/xeho91/svelte-ast-print/discussions/2">Roadmap</a></p>
+</blockquote>
 <a id="md:getting-started" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Getting started<a href="#md:getting-started" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
 <li>
 <p>Use the package manager of your choice to install this package:</p>
@@ -50,8 +58,8 @@ The primary goal is to be able to write codemods as soon as possible - because r
 </details>
 </li>
 <li>
-<p>Incorporate it into your project, for example with the Svelte <a href="https://svelte.dev/docs/svelte-compiler#parse"><code>parse</code></a> method:</p>
-<pre><code class="ts"><span class="hl-3">import</span><span class="hl-1"> </span><span class="hl-4">fs</span><span class="hl-1"> </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;node:fs&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">print</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;svelte-ast-print&quot;</span><span class="hl-1">;</span><br/><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">parse</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;svelte/compiler&quot;</span><span class="hl-1">;</span><br/><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">originalSvelteCode</span><span class="hl-1"> = </span><span class="hl-4">fs</span><span class="hl-1">.</span><span class="hl-0">readFileSync</span><span class="hl-1">(</span><span class="hl-2">&quot;src/App.svelte&quot;</span><span class="hl-1">, </span><span class="hl-2">&quot;utf-8&quot;</span><span class="hl-1">);</span><br/><br/><span class="hl-5">let</span><span class="hl-1"> </span><span class="hl-4">svelteAST</span><span class="hl-1"> = </span><span class="hl-0">parse</span><span class="hl-1">(</span><span class="hl-4">originalSvelteCode</span><span class="hl-1">, { </span><span class="hl-4">modern:</span><span class="hl-1"> </span><span class="hl-5">true</span><span class="hl-1"> });</span><br/><br/><span class="hl-7">// ...</span><br/><span class="hl-7">// Do some modifications on this AST...</span><br/><span class="hl-7">// e.g. transform `&lt;slot /&gt;` to `{@render children()}`</span><br/><span class="hl-7">// ...</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">svelteCode</span><span class="hl-1"> = </span><span class="hl-0">print</span><span class="hl-1">(</span><span class="hl-4">svelteAST</span><span class="hl-1">); </span><span class="hl-7">// AST goes back to string! 🎉</span><br/><br/><span class="hl-4">fs</span><span class="hl-1">.</span><span class="hl-0">writeFileSync</span><span class="hl-1">(</span><span class="hl-2">&quot;src/App.svelte&quot;</span><span class="hl-1">, </span><span class="hl-4">svelteCode</span><span class="hl-1">, { </span><span class="hl-4">encoding:</span><span class="hl-1"> </span><span class="hl-2">&quot; utf-8&quot;</span><span class="hl-1"> });</span>
+<p>Incorporate it into your project, for example using Node.js and with the Svelte <a href="https://svelte.dev/docs/svelte-compiler#parse"><code>parse</code></a> method:</p>
+<pre><code class="ts"><span class="hl-3">import</span><span class="hl-1"> </span><span class="hl-4">fs</span><span class="hl-1"> </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;node:fs&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">print</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;svelte-ast-print&quot;</span><span class="hl-1">;</span><br/><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">parse</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;svelte/compiler&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">originalSvelteCode</span><span class="hl-1"> = </span><span class="hl-4">fs</span><span class="hl-1">.</span><span class="hl-0">readFileSync</span><span class="hl-1">(</span><span class="hl-2">&quot;src/App.svelte&quot;</span><span class="hl-1">, </span><span class="hl-2">&quot;utf-8&quot;</span><span class="hl-1">);</span><br/><span class="hl-5">let</span><span class="hl-1"> </span><span class="hl-4">svelteAST</span><span class="hl-1"> = </span><span class="hl-0">parse</span><span class="hl-1">(</span><span class="hl-4">originalSvelteCode</span><span class="hl-1">, { </span><span class="hl-4">modern:</span><span class="hl-1"> </span><span class="hl-5">true</span><span class="hl-1"> });</span><br/><span class="hl-7">//                                          👆 For now, only modern is supported.</span><br/><span class="hl-7">//                                             By default is &#39;false&#39;.</span><br/><span class="hl-7">//                                             Is it planned to be &#39;true&#39; from Svelte v6+</span><br/><br/><span class="hl-7">// ...</span><br/><span class="hl-7">// Do some modifications on this AST...</span><br/><span class="hl-7">// e.g. transform `&lt;slot /&gt;` to `{@render children()}`</span><br/><span class="hl-7">// ...</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">output</span><span class="hl-1"> = </span><span class="hl-0">print</span><span class="hl-1">(</span><span class="hl-4">svelteAST</span><span class="hl-1">); </span><span class="hl-7">// AST is now a stringified code output! 🎉</span><br/><br/><span class="hl-4">fs</span><span class="hl-1">.</span><span class="hl-0">writeFileSync</span><span class="hl-1">(</span><span class="hl-2">&quot;src/App.svelte&quot;</span><span class="hl-1">, </span><span class="hl-4">output</span><span class="hl-1">, { </span><span class="hl-4">encoding:</span><span class="hl-1"> </span><span class="hl-2">&quot; utf-8&quot;</span><span class="hl-1"> });</span>
 </code><button type="button">Copy</button></pre>
 
 </li>
@@ -64,11 +72,9 @@ The primary goal is to be able to write codemods as soon as possible - because r
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/xeho91"><img src="https://avatars.githubusercontent.com/u/18627568?v=4?s=100" width="100px;" alt="Mateusz Kadlubowski"/><br /><sub><b>Mateusz Kadlubowski</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Code">💻</a> <a href="#maintenance-xeho91" title="Maintenance">🚧</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Documentation">📖</a></td>
-    </tr>
-  </tbody>
+  <tr>
+    <td align="center"><a href="https://github.com/xeho91"><img src="https://avatars.githubusercontent.com/u/18627568?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mateusz Kadlubowski</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Code">💻</a> <a href="#maintenance-xeho91" title="Maintenance">🚧</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Documentation">📖</a> <a href="#infra-xeho91" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Tests">⚠️</a></td>
+  </tr>
 </table>
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
