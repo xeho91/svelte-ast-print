@@ -3,6 +3,9 @@
 	"extends": ["@total-typescript/tsconfig/bundler/dom/library"],
 	"compilerOptions": {
 		"customConditions": ["development"],
+		"rootDir": "src/",
 		"types": ["vitest/importMeta"]
-	}
+	},
+	"include": ["src/"],
+	"exclude": ["test/", "src/**/*.test.ts"]
 }

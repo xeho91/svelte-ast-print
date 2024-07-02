@@ -40,26 +40,27 @@
 		},
 		"#*": {
 			"development": "./src/*.ts",
-			"default": "./src/*.ts"
+			"default": "./dist/*.js"
 		}
 	},
 	"exports": {
-		".": "./src/mod.ts",
+		".": "./dist/mod.js",
+		"./*": "./dist/*.js",
 		"./package.json": "./package.json"
 	},
 	"packageManager": "pnpm@9.5.0-beta.0+sha256.bd91cddc9b205c94b5bf0380cec8fc8e4b1dde7b8c5191732f3d4e73848e860e",
 	"scripts": {
 		"build": "pnpm run \"/^build:.*/\" ",
 		"build:doc": "typedoc",
-		"build:pkg": "vite build",
+		"build:pkg": "tsup",
 		"clean": "pnpm run \"/^clean:.*/\"; del \"./**/node_modules\" ",
-		"clean:build": "del \"./dist\" ",
+		"clean:build": "del \"./.tsup\" \"./dist\" ",
 		"clean:cache": "del \"./node_modules/.cache\" ",
 		"clean:doc": "del \"./docs\" ",
 		"clean:test": "del \"./coverage\" ",
 		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:doc": "typedoc --watch",
-		"dev:pkg": "vite build --watch",
+		"dev:pkg": "tsup --watch",
 		"dev:test": "pnpm vitest watch --passWithNoTests --ui",
 		"fix": "pnpm run \"/^fix:.*/\" ",
 		"fix:format": "biome format . --verbose --write",
@@ -86,9 +87,9 @@
 		"@types/node": "20.14.9",
 		"dedent": "1.5.3",
 		"svelte": "5.0.0-next.166",
+		"tsup": "8.1.0",
 		"type-fest": "4.20.1",
 		"typescript": "5.5.2",
-		"vite": "5.3.2",
 		"zimmerframe": "1.1.2"
 	},
 	"peerDependencies": {
