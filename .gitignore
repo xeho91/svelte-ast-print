@@ -1,6 +1,9 @@
 # Build output
 dist/
 
+# Build cache
+.tsup
+
 # Dependencies which are downloadable
 node_modules/
 

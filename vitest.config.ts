@@ -1,7 +1,12 @@
+/// <reference types="vitest" />
+
 import { defineConfig } from "vitest/config";
 
-/** @see {@link https://vitest.dev/} */
-const config = defineConfig({
+/** @see {@link https://vitejs.dev/} */
+export default defineConfig({
+	resolve: {
+		conditions: ["development"],
+	},
 	test: {
 		include: ["src/**/*.test.ts"],
 		includeSource: ["src/**/*.ts"],
@@ -10,5 +15,3 @@ const config = defineConfig({
 		},
 	},
 });
-
-export default config;
