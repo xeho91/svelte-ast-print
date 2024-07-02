@@ -3,7 +3,7 @@
 ![NPM Version](https://img.shields.io/npm/v/svelte-ast-print?style=for-the-badge&logo=npm)
 
 Print **Svelte AST** nodes as a string.\
-A.k.a. [`parse`] in reverse.\
+A.k.a. [`parse`] in reverse.
 
 This is what you need to create [codemods] - e.g. for migration between Svelte versions syntaxes.
 
@@ -19,15 +19,26 @@ This package depends on:
 
 ## Limitations
 
-1. It doesn't print formatted output.\
-   The primary goal is to be able to write codemods as soon as possible - because right now, there are no alternatives.
+> [!WARNING]
+> **TypeScript isn't supported**, yet.\
+> At the moment Svelte parser skips TypeScript related syntax. Also, [`esrap`] doesn't recognize TypeScript related AST nodes.
 
-   If you need to format modified Svelte AST, use available formatters for Svelte:
+---
 
-   - [Biome](https://github.com/biomejs/biome) - _⚠️ has partial support_
-   - [Prettier](https://github.com/prettier/prettier) with [`prettier-plugin-svelte`](https://github.com/sveltejs/prettier-plugin-svelte)
+> [!IMPORTANT]
+> **It doesn't print formatted output.**\
+> The current focus is to be able to write codemods as soon as possible - because right now, there are no alternatives.
+>
+> If you need to format modified Svelte AST, use available formatters for Svelte:
+>
+> - [Biome](https://github.com/biomejs/biome) - _⚠️ has partial support_
+> - [Prettier](https://github.com/prettier/prettier) with [`prettier-plugin-svelte`](https://github.com/sveltejs/prettier-plugin-svelte)
 
-2. Is not optimized for performance yet - See [Roadmap](https://github.com/xeho91/svelte-ast-print/discussions/2)
+---
+
+> [!NOTE]
+> **Is not optimized for performance**, yet.\
+> See [Roadmap](https://github.com/xeho91/svelte-ast-print/discussions/2)
 
 ## Getting started
 
@@ -69,7 +80,7 @@ This package depends on:
 
    </details>
 
-1. Incorporate it into your project, for example with the Svelte [`parse`] method:
+1. Incorporate it into your project, for example using Node.js and with the Svelte [`parse`] method:
 
    ```ts
    import fs from "node:fs";
@@ -77,19 +88,20 @@ This package depends on:
    import { print } from "svelte-ast-print";
    import { parse } from "svelte/compiler";
 
-
    const originalSvelteCode = fs.readFileSync("src/App.svelte", "utf-8");
-
    let svelteAST = parse(originalSvelteCode, { modern: true });
+   //                                          👆 For now, only modern is supported.
+   //                                             By default is 'false'.
+   //                                             Is it planned to be 'true' from Svelte v6+
 
    // ...
    // Do some modifications on this AST...
    // e.g. transform `<slot />` to `{@render children()}`
    // ...
 
-   const svelteCode = print(svelteAST); // AST goes back to string! 🎉
+   const output = print(svelteAST); // AST is now a stringified code output! 🎉
 
-   fs.writeFileSync("src/App.svelte", svelteCode, { encoding: " utf-8" });
+   fs.writeFileSync("src/App.svelte", output, { encoding: " utf-8" });
    ```
 
 ## Contributing
