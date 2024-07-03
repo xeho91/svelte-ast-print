@@ -1361,7 +1361,7 @@ declare module "svelte/compiler" {
 		| Comment
 		| Block;
 
-	export type SvelteNode = Node | TemplateNode | Fragment | Css.Node;
+	export type SvelteNode = Node | TemplateNode | Fragment | Css.Node | Script;
 
 	export interface Script extends BaseNode {
 		type: "Script";
