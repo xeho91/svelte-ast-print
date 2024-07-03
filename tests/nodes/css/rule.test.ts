@@ -1,8 +1,7 @@
+import type { Css } from "svelte/compiler";
 import { describe, it } from "vitest";
 
 import { parse_and_extract_svelte_node } from "#tests/mod";
-import { DEFAULT_OPTIONS } from "#options";
-import type { Css } from "#types";
 
 import { print } from "svelte-ast-print";
 
@@ -18,7 +17,7 @@ describe("Css.Atrule", () => {
 			</style>
 		`;
 		const node = parse_and_extract_svelte_node<Css.Atrule>(code, "Atrule");
-		expect(print(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
+		expect(print(node)).toMatchInlineSnapshot(`
 			"@media screen and (max-width: 1000px) {
 				p {
 					max-width: 60ch;
@@ -39,7 +38,7 @@ describe("Css.Block", () => {
 			</style>
 		`;
 		const node = parse_and_extract_svelte_node<Css.Block>(code, "Block");
-		expect(print(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
+		expect(print(node)).toMatchInlineSnapshot(`
 			"{
 				color: red;
 				background-color: black;
@@ -58,7 +57,7 @@ describe("Css.Declaration", () => {
 			</style>
 		`;
 		const node = parse_and_extract_svelte_node<Css.Declaration>(code, "Declaration");
-		expect(print(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`"background-color: orange;"`);
+		expect(print(node)).toMatchInlineSnapshot(`"background-color: orange;"`);
 	});
 });
 
@@ -72,7 +71,7 @@ describe("Css.Rule", () => {
 			</style>
 		`;
 		const node = parse_and_extract_svelte_node<Css.Rule>(code, "Rule");
-		expect(print(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
+		expect(print(node)).toMatchInlineSnapshot(`
 			"p {
 				color: red;
 			}"

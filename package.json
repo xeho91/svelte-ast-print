@@ -49,8 +49,8 @@
 	},
 	"exports": {
 		".": {
-			"types": "./src/idex.js",
-			"default": "./src/index.js"
+			"types": "./src/types.d.ts",
+			"default": "./src/mod.js"
 		},
 		"./package.json": "./package.json"
 	},

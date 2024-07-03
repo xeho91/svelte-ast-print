@@ -53,7 +53,7 @@ describe("Css.ClassSelector", () => {
 			</style>
 		`;
 		const node = parse_and_extract_svelte_node<Css.ClassSelector>(code, "ClassSelector");
-		expect(print(node, { format: { indent: "4-spaces" } })).toMatchInlineSnapshot(`".button"`);
+		expect(print(node)).toMatchInlineSnapshot(`".button"`);
 	});
 });
 

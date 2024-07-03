@@ -1,8 +1,7 @@
+import type { Css } from "svelte/compiler";
 import { describe, it } from "vitest";
 
 import { parse_and_extract_svelte_node } from "#tests/mod";
-import { DEFAULT_OPTIONS } from "#options";
-import type { Css } from "#types";
 
 import { print } from "svelte-ast-print";
 
@@ -14,7 +13,7 @@ describe("Css.StyleSheet", () => {
 				</style>
 			`;
 		const node = parse_and_extract_svelte_node<Css.StyleSheet>(code, "StyleSheet");
-		expect(print(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
+		expect(print(node)).toMatchInlineSnapshot(`
 				"<style lang="sass">
 
 				</style>"
@@ -50,7 +49,7 @@ describe("Css.StyleSheet", () => {
 				</style>
 			`;
 		const node = parse_and_extract_svelte_node<Css.StyleSheet>(code, "StyleSheet");
-		expect(print(node, DEFAULT_OPTIONS)).toMatchInlineSnapshot(`
+		expect(print(node)).toMatchInlineSnapshot(`
 			"<style>
 				@layer base {
 					:root {
