@@ -30,7 +30,7 @@ describe("Css.AttributeSelector", () => {
 		expect(print(node)).toMatchInlineSnapshot(`"[aria-disabled="true"]"`);
 	});
 
-	it("print correctly witho value and flags", ({ expect }) => {
+	it("print correctly with value and flags", ({ expect }) => {
 		const code = `
 			<style>
 				div[aria-disabled="false" s] {

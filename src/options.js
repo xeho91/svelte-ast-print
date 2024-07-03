@@ -18,7 +18,7 @@ export class Options {
 
 	/**
 	 * @private
-	 * @type {PrintOptions} raw options, before tranformation - for better DX
+	 * @type {PrintOptions} raw options, before transformation - for better DX
 	 */
 	#raw;
 

@@ -96,7 +96,7 @@ class Printer {
 
 	/**
 	 * @typedef PrintEsNodeOptions
-	 * @property {boolean} skip_indent;
+	 * @property {boolean} [false] skip_indent
 	 */
 
 	/**
@@ -146,7 +146,6 @@ class Printer {
 		const { visit } = context;
 		this.#print_new_line();
 		this.#depth++;
-		this.#print_indent();
 		visit(node, this);
 		this.#depth--;
 	}
@@ -158,12 +157,8 @@ class Printer {
 	print_element_like_fragment(node, context) {
 		const { visit } = context;
 		const has_element_like_node = this.#has_fragment_element_like_node(node);
-		if (has_element_like_node) {
-			this.#print_new_line();
-			visit(node, this);
-		} else {
-			visit(node, this);
-		}
+		if (has_element_like_node) this.#print_new_line();
+		visit(node, this);
 	}
 
 	/**
@@ -197,7 +192,7 @@ class Printer {
 	#print_element_like(node, context) {
 		const { fragment, name } = node;
 		const is_self_closing = this.#is_fragment_empty(fragment);
-		if (this.#output.at(-1) === "\n") this.#print_indent();
+		if (this.is_last_output_new_line) this.#print_indent();
 		this.#print("<");
 		this.#print(name);
 		this.#print_element_like_attributes(node, context);
@@ -209,9 +204,24 @@ class Printer {
 				this.print_element_like_fragment(fragment, context);
 				this.#depth--;
 			}
-			if (this.#output.at(-1) === ">") this.#print_new_line();
 			this.#print_element_like_closing_tag(name);
 		}
+	}
+
+	get is_last_output_closing_tag() {
+		return /\{\/\w*\}$$/.test(this.#output);
+	}
+
+	get is_last_output_closing_element_like() {
+		return /(<\/[^>:]+(:[^>]+)?>|\/>)$/.test(this.#output);
+	}
+
+	get is_last_output_closing_comment() {
+		return /-->$/.test(this.#output);
+	}
+
+	get is_last_output_new_line() {
+		return /\n$/.test(this.#output);
 	}
 
 	#produce() {
@@ -224,54 +234,23 @@ class Printer {
 			Root(node, context) {
 				const { state, stop, visit } = context;
 				const { order } = state.#options;
-				const is_fragment_empty = node.fragment.nodes.every((n) => {
-					return n.type === "Text" && n.raw.split("\n").every((text) => text === "");
-				});
-				order.forEach((name, index) => {
-					const is_not_last = index < order.length - 1;
+				for (const name of order) {
 					const root_node = node[name];
-					const next_node_name = order[index + 1];
-					const has_next_node = Boolean(node[next_node_name]);
-					switch (name) {
-						case "options": {
-							// FIXME: This is a bug probably
-							if (node.options) visit({ ...node.options, type: "SvelteOptions" }, state);
-							break;
-						}
-						case "fragment": {
-							break;
-						}
-						case "css": {
-							if (node.css) visit(node.css, state);
-							break;
-						}
-						case "instance": {
-							if (node.instance) visit(node.instance, state);
-							break;
-						}
-						case "module": {
-							if (node.module) visit(node.module, state);
-							break;
-						}
-					}
-					const should_print_new_lines = [
-						root_node,
-						is_not_last,
-						has_next_node,
-						next_node_name !== "fragment",
-						is_fragment_empty,
-					].every(Boolean);
-					if (should_print_new_lines) {
-						state.#print_new_line();
-						state.#print_new_line();
-					}
-				});
+					if (name === "options" && node.options) {
+						// FIXME: This is a bug probably
+						visit({ ...node.options, type: "SvelteOptions" }, state);
+					} else if (root_node) visit(root_node, state);
+				}
 				// NOTE: There can't be anything next to Root
 				stop();
 			},
 
 			Script(node, { state, visit }) {
 				const { attributes, content } = node;
+				if (state.#output !== "") {
+					state.#print_new_line();
+					state.#print_new_line();
+				}
 				state.#print("<script");
 				for (const attribute of attributes) {
 					state.#print(" ");
@@ -291,7 +270,13 @@ class Printer {
 				const { state, visit } = context;
 				for (const node of nodes) {
 					visit(node, state);
-					if (state.#output.at(-1) === ">") state.#print_new_line();
+					if (
+						state.is_last_output_closing_tag ||
+						state.is_last_output_closing_element_like ||
+						state.is_last_output_closing_comment
+					) {
+						state.#print_new_line();
+					}
 				}
 			},
 
@@ -331,6 +316,7 @@ class Printer {
 			Comment(node, context) {
 				const { data } = node;
 				const { state } = context;
+				state.#print_indent();
 				state.#print("<!--");
 				state.#print(data);
 				state.#print("-->");
@@ -426,7 +412,7 @@ class Printer {
 				state.#print(name);
 				if (!is_shorthand) {
 					state.#print("={");
-					state.#print_es_node(expression);
+					state.#print_es_node(expression, { skip_indent: true });
 					state.#print("}");
 				}
 			},
@@ -635,19 +621,19 @@ class Printer {
 				const { catch: catch_, error, expression, pending, then, value } = node;
 				const { state } = context;
 				state.#print("{#await ");
-				state.#print_es_node(expression);
+				state.#print_es_node(expression, { skip_indent: true });
 				if (then && !pending) {
 					state.#print(" then");
 					if (value) {
 						state.#print(" ");
-						state.#print_es_node(value);
+						state.#print_es_node(value, { skip_indent: true });
 					}
 				}
 				if (catch_ && !pending) {
 					state.#print(" catch");
 					if (error) {
 						state.#print(" ");
-						state.#print_es_node(error);
+						state.#print_es_node(error, { skip_indent: true });
 					}
 				}
 				state.#print("}");
@@ -659,7 +645,7 @@ class Printer {
 						state.#print("{:then");
 						if (value) {
 							state.#print(" ");
-							state.#print_es_node(value);
+							state.#print_es_node(value, { skip_indent: true });
 							state.#print("}");
 						}
 					}
@@ -670,7 +656,7 @@ class Printer {
 						state.#print("{:catch");
 						if (error) {
 							state.#print(" ");
-							state.#print_es_node(error);
+							state.#print_es_node(error, { skip_indent: true });
 							state.#print("}");
 						}
 					}
@@ -710,6 +696,8 @@ class Printer {
 			EachBlock(node, context) {
 				const { body, context: node_context, expression, fallback, index, key } = node;
 				const { state } = context;
+				if (state.#depth > 0) state.#print_new_line();
+				state.#print_indent();
 				state.#print("{#each ");
 				state.#print_es_node(expression, { skip_indent: true });
 				state.#print(" as ");
@@ -729,6 +717,7 @@ class Printer {
 					state.#print("{:else}");
 					state.print_block_fragment(fallback, context);
 				}
+				state.#print_indent();
 				state.#print("{/each}");
 			},
 
@@ -792,6 +781,7 @@ class Printer {
 						}
 						visit(alternate, state);
 					}
+					state.#depth--;
 					state.#print("{/if}");
 				}
 			},
@@ -809,7 +799,7 @@ class Printer {
 				const { expression, fragment } = node;
 				const { state } = context;
 				state.#print("{#key ");
-				state.#print_es_node(expression);
+				state.#print_es_node(expression, { skip_indent: true });
 				state.#print("}");
 				state.print_block_fragment(fragment, context);
 				state.#print("{/key}");
@@ -1103,7 +1093,7 @@ class Printer {
 			 */
 			StyleSheet(node, context) {
 				const { attributes, children } = node;
-				const { state } = context;
+				const { state, visit } = context;
 				state.#print("<style");
 				for (const attribute of attributes) {
 					state.#print(" ");

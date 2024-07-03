@@ -24,7 +24,8 @@ describe("Script", () => {
 
 			<script lang="ts">
 				export let variant = BUTTON_DEFAULT_VARIANT;
-			</script>"
+			</script>
+			"
 		`);
 	});
 
