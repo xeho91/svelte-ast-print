@@ -11,6 +11,9 @@ importers:
       esrap:
         specifier: 1.2.2
         version: 1.2.2
+      zimmerframe:
+        specifier: 1.1.2
+        version: 1.1.2
     optionalDependencies:
       '@auto-it/all-contributors':
         specifier: 11.1.6
@@ -67,9 +70,6 @@ importers:
         specifier: 1.6.0
         version: 1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0)
     devDependencies:
-      '@total-typescript/ts-reset':
-        specifier: 0.5.1
-        version: 0.5.1
       '@total-typescript/tsconfig':
         specifier: 1.0.4
         version: 1.0.4
@@ -94,9 +94,6 @@ importers:
       typescript:
         specifier: 5.5.3
         version: 5.5.3
-      zimmerframe:
-        specifier: 1.1.2
-        version: 1.1.2
 
   libs/color:
     dependencies:

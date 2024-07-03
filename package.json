@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/package",
 	"name": "svelte-ast-print",
-	"version": "0.0.1-next.0",
+	"version": "0.2.0-next.0",
 	"type": "module",
 	"description": "Print Svelte AST nodes as a string. Aka parse in reverse.",
 	"keywords": ["svelte", "ast", "print"],
@@ -33,34 +33,37 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"files": ["dist/"],
+	"files": ["src/"],
 	"imports": {
-		"#test/*": {
-			"development": "./test/*.ts"
+		"#tests/*": {
+			"development": "./tests/*.ts"
 		},
 		"#*": {
-			"development": "./src/*.ts",
-			"default": "./dist/*.js"
+			"development": "./src/*.js",
+			"default": "./src/*.js"
+		},
+		"#types": {
+			"development": "./src/types.d.ts",
+			"default": "./src/types.d.ts"
 		}
 	},
 	"exports": {
-		".": "./dist/mod.js",
-		"./*": "./dist/*.js",
+		".": {
+			"types": "./src/types.d.ts",
+			"default": "./src/mod.js"
+		},
 		"./package.json": "./package.json"
 	},
 	"packageManager": "pnpm@9.5.0-beta.0+sha256.bd91cddc9b205c94b5bf0380cec8fc8e4b1dde7b8c5191732f3d4e73848e860e",
 	"scripts": {
 		"build": "pnpm run \"/^build:.*/\" ",
 		"build:doc": "typedoc",
-		"build:pkg": "tsup",
 		"clean": "pnpm run \"/^clean:.*/\"; del \"./**/node_modules\" ",
-		"clean:build": "del \"./.tsup\" \"./dist\" ",
 		"clean:cache": "del \"./node_modules/.cache\" ",
 		"clean:doc": "del \"./docs\" ",
 		"clean:test": "del \"./coverage\" ",
 		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:doc": "typedoc --watch",
-		"dev:pkg": "tsup --watch",
 		"dev:test": "pnpm vitest watch --passWithNoTests --ui",
 		"fix": "pnpm run \"/^fix:.*/\" ",
 		"fix:format": "biome format . --verbose --write",
@@ -73,15 +76,15 @@
 		"lint:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" ",
 		"lint:ts": "tsc --noEmit",
 		"lint:typos": "typos --verbose",
-		"release": "pnpm run build:pkg && auto shipit",
+		"release": "pnpm auto shipit",
 		"serve:doc": "serve \"./docs\" ",
 		"test": "vitest run . --passWithNoTests"
 	},
 	"dependencies": {
-		"esrap": "1.2.2"
+		"esrap": "1.2.2",
+		"zimmerframe": "1.1.2"
 	},
 	"devDependencies": {
-		"@total-typescript/ts-reset": "0.5.1",
 		"@total-typescript/tsconfig": "1.0.4",
 		"@types/estree": "1.0.5",
 		"@types/node": "20.14.9",
@@ -89,8 +92,7 @@
 		"svelte": "5.0.0-next.169",
 		"tsup": "8.1.0",
 		"type-fest": "4.20.1",
-		"typescript": "5.5.3",
-		"zimmerframe": "1.1.2"
+		"typescript": "5.5.3"
 	},
 	"peerDependencies": {
 		"svelte": "^5.0.0-next.169 || ^5.0.0"

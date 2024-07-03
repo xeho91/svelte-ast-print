@@ -8,10 +8,6 @@ export default defineConfig({
 		conditions: ["development"],
 	},
 	test: {
-		include: ["src/**/*.test.ts"],
-		includeSource: ["src/**/*.ts"],
-		typecheck: {
-			enabled: true,
-		},
+		include: ["tests/**/*.test.ts"],
 	},
 });
