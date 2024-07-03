@@ -76,7 +76,7 @@
 		"lint:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" ",
 		"lint:ts": "tsc --noEmit",
 		"lint:typos": "typos --verbose",
-		"release": "pnpm run build:pkg && auto shipit",
+		"release": "pnpm auto shipit",
 		"serve:doc": "serve \"./docs\" ",
 		"test": "vitest run . --passWithNoTests"
 	},
@@ -85,7 +85,6 @@
 		"zimmerframe": "1.1.2"
 	},
 	"devDependencies": {
-		"@total-typescript/ts-reset": "0.5.1",
 		"@total-typescript/tsconfig": "1.0.4",
 		"@types/estree": "1.0.5",
 		"@types/node": "20.14.9",
