@@ -6,8 +6,8 @@
 import { print as print_es } from "esrap";
 import { walk } from "zimmerframe";
 
-import { is_element_like_node, is_svelte_node } from "#node";
-import { Options } from "#options";
+import { is_element_like_node, is_svelte_node } from "./node";
+import { Options } from "./options";
 
 /**
  * Print AST {@link AST.SvelteNode} as a string.
