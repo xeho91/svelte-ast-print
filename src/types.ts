@@ -1,14 +1,14 @@
 import type { Root } from "svelte/compiler";
 import type { IterableElement, ReadonlyTuple } from "type-fest";
 
-import type { DEFAULT_ORDER, Options } from "#options";
+import type { DEFAULT_INDENT, DEFAULT_ORDER, Options } from "#options";
 
 type Indent = IterableElement<typeof Options.INDENT>[0];
 
 interface FormatOptions {
 	/**
 	 * Indentation style.
-	 * @default "tab"
+	 * @default {@link DEFAULT_INDENT}
 	 */
 	indent?: Indent;
 }

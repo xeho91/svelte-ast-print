@@ -2,9 +2,9 @@
  * @import { PrintOptions } from "./types.ts";
  */
 
-/** @satisfies {PrintOptions["format"]["indent"]} */
+/** @satisfies {NonNullable<PrintOptions["format"]>["indent"]} */
 export const DEFAULT_INDENT = "tab";
-/** @satisfies {PrintOptions["root"]["order"]} */
+/** @satisfies {NonNullable<PrintOptions["root"]>["order"]} */
 export const DEFAULT_ORDER = /** @type {const} */ (["options", "module", "instance", "fragment", "css"]);
 
 export class Options {
