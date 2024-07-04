@@ -11,6 +11,17 @@ import { walk } from "zimmerframe";
 import { is_element_like_node, is_svelte_node } from "#nodes";
 import { Options } from "#options";
 
+export {
+	is_attribute_like_node as isAttributeLikeNode,
+	is_block_node as isBlockNode,
+	is_css_node as isCssNode,
+	is_element_like_node as isElementLikeNode,
+	is_html_node as isHtmlNode,
+	is_svelte_node as isSvelteNode,
+	is_tag_node as isTagNode,
+	is_template_node as isTemplateNode,
+} from "#nodes";
+
 /**
  * Print AST {@link SvelteAST.SvelteNode} as a string.
  * Aka parse in reverse.

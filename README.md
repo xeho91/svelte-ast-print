@@ -28,10 +28,10 @@ This package depends on:
 ---
 
 > [!IMPORTANT]
-> **It doesn't print formatted output.**\
+> **It ignores any previous formatting**.
 > The current focus is to be able to write codemods as soon as possible - because right now, there are no alternatives.
 >
-> If you need to format modified Svelte AST, use available formatters for Svelte:
+> If you need to format modified and stringified Svelte AST, use available formatters for Svelte:
 >
 > - [Biome](https://github.com/biomejs/biome) - _⚠️ has partial support_
 > - [Prettier](https://github.com/prettier/prettier) with [`prettier-plugin-svelte`](https://github.com/sveltejs/prettier-plugin-svelte)
