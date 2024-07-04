@@ -33,7 +33,7 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"files": ["src/"],
+	"files": ["src/", "types/"],
 	"imports": {
 		"#tests/*": {
 			"types": "./tests/*.ts",
@@ -79,7 +79,7 @@
 		"lint:typos": "typos --verbose",
 		"prepare": "pnpm build:types",
 		"prepublishOnly": "pnpm test && pnpm build:types",
-		"release": "pnpm auto shipit",
+		"release": "pnpm build:types && pnpm auto shipit",
 		"serve:doc": "serve \"./docs\" ",
 		"test": "vitest run . --passWithNoTests"
 	},
