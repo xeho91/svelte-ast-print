@@ -1,6 +1,6 @@
-# (Mon Jul 01 2024)
+# Changelog
 
-## `v0.1.0`
+## `v0.1.0` _(Mon Jul 01 2024)_
 
 :tada: This release contains work from a new contributor! :tada:
 
@@ -8,6 +8,7 @@ Thank you, Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91)), for all y
 
 ### 🚀 Enhancement
 
+- feat: Add type guards for narrow down the type of Svelte AST node
 - feat: Print `Css` [#76](https://github.com/xeho91/svelte-ast-print/pull/76) ([@xeho91](https://github.com/xeho91))
 - feat: Print `Root` [#75](https://github.com/xeho91/svelte-ast-print/pull/75) ([@xeho91](https://github.com/xeho91))
 - feat: Print `Fragment` [#74](https://github.com/xeho91/svelte-ast-print/pull/74) ([@xeho91](https://github.com/xeho91))
