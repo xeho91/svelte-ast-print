@@ -1,30 +1,56 @@
 /**
- * @import * as AST from "svelte/compiler";
+ * @import * as SvelteAST from "svelte/compiler";
  * @import { Context } from "zimmerframe";
+ *
+ * @import { Node, SupportedSvelteNode } from "#nodes";
  */
 
 import { print as print_es } from "esrap";
 import { walk } from "zimmerframe";
 
-import { is_element_like_node, is_svelte_node } from "./node";
-import { Options } from "./options";
+import { is_element_like_node, is_svelte_node } from "#nodes";
+import { Options } from "#options";
 
 /**
- * Print AST {@link AST.SvelteNode} as a string.
+ * Print AST {@link SvelteAST.SvelteNode} as a string.
  * Aka parse in reverse.
  *
  * ## How does it work under the hood?
  *
- * **IF**: the AST node is Svelte node {@link AST.SvelteNode},
- * e.g. created from [Svelte parser](https://svelte.dev/docs/svelte-compiler#parse) - {@link parse}\
- * **THEN:** it uses the printer(s) from this package.
+ * 1. Firstly, it determines whether the provided AST node is unique node for Svelte {@link SvelteAST.Node}.
+ * 2. Based on type check guard from above:
+ *    - it uses either this package's {@link Printer} to print Svelte AST node,
+ *    - otherwise it uses `esrap` {@link print_es} to print ESTree specification-complaint AST node
  *
- * **ELSE**: the provided AST Node is [Estree compliant](https://github.com/estree/estree), e.g. from `acorn`\
- * **THEN:** it uses `esrap` package {@link print.
+ * ## How to use it?
  *
- * @param {AST.SvelteNode} node - Svelte AST node
+ * @example writing a codemode using Node.js
+   ```js
+   import fs from "node:fs";
+
+   import { print } from "svelte-ast-print";
+   import { parse } from "svelte/compiler";
+
+   const originalSvelteCode = fs.readFileSync("src/App.svelte", "utf-8");
+   let svelteAST = parse(originalSvelteCode, { modern: true });
+   //                                          👆 For now, only modern is supported.
+   //                                             By default is 'false'.
+   //                                             Is it planned to be 'true' from Svelte v6+
+
+   // ...
+   // Do some modifications on this AST...
+   // e.g. transform `<slot />` to `{@render children()}`
+   // ...
+
+   const output = print(svelteAST); // AST is now a stringified code output! 🎉
+
+   fs.writeFileSync("src/App.svelte", output, { encoding: " utf-8" });
+   ```
+ *
+ * @param {Node} node - Svelte or ESTree AST node
  * @param {Partial<ConstructorParameters<typeof Options>[0]>} options - printing options
  * @returns {string} Stringified Svelte AST node
+ * TODO: Ask Svelte maintainers if `Script` and `SvelteOptions` were omittted from `SvelteNode` intentionally - possibly forgotten to include
  */
 export function print(node, options = {}) {
 	if (is_svelte_node(node)) {
@@ -36,29 +62,25 @@ export function print(node, options = {}) {
 
 class Printer {
 	/**
-	 * @private
-	 * @type {AST.SvelteNode}
+	 * @type {Node}
 	 */
 	#node;
 	/**
-	 * @private
 	 * @type {Options}
 	 */
 	#options;
 
 	/**
-	 * @private
 	 * @type {number}
 	 */
 	#depth = 0;
 	/**
-	 * @private
 	 * @type {string}
 	 */
 	#output = "";
 
 	/**
-	 * @param {AST.SvelteNode} node - Svelte AST node
+	 * @param {Node} node - Svelte or ESTree AST node
 	 * @param {Options} options - transformed options
 	 */
 	constructor(node, options) {
@@ -67,41 +89,53 @@ class Printer {
 		this.#produce();
 	}
 
+	/**
+	 * @returns {string}
+	 */
 	toString() {
 		return this.#output;
 	}
 
 	/**
 	 * @param {string} code
+	 * @returns {void}
 	 */
 	#print(code) {
 		this.#output += code;
 	}
 
+	/**
+	 * @returns {void}
+	 */
 	#print_new_line() {
 		this.#output += "\n";
 	}
 
 	/**
 	 * Depth aware indent
+	 * @returns {string}
 	 */
 	get #indent() {
 		const { indent } = this.#options;
 		return Array(this.#depth).fill(indent).join("");
 	}
 
+	/**
+	 * @returns {void}
+	 */
 	#print_indent() {
 		this.#output += this.#indent;
 	}
 
 	/**
 	 * @typedef PrintEsNodeOptions
-	 * @property {boolean} [false] skip_indent
+	 * @property {boolean} [skip_indent]
 	 */
 
 	/**
 	 * @param {Parameters<typeof print_es>[0]} node
 	 * @param {Partial<PrintEsNodeOptions> | undefined} options
+	 * @returns {void}
 	 */
 	#print_es_node(node, options = {}) {
 		const { skip_indent = false } = options;
@@ -111,7 +145,8 @@ class Printer {
 	}
 
 	/**
-	 * @param {AST.Text} node
+	 * @param {SvelteAST.Text} node
+	 * @returns {boolean}
 	 */
 	#is_text_new_line_or_indents_only(node) {
 		const { raw } = node;
@@ -119,7 +154,8 @@ class Printer {
 	}
 
 	/**
-	 * @param {AST.Fragment} fragment
+	 * @param {SvelteAST.Fragment} fragment
+	 * @returns {boolean}
 	 */
 	#has_fragment_element_like_node(fragment) {
 		const { nodes } = fragment;
@@ -132,15 +168,17 @@ class Printer {
 	}
 
 	/**
-	 * @param {AST.Fragment} fragment
+	 * @param {SvelteAST.Fragment} fragment
+	 * @returns {boolean}
 	 */
 	#is_fragment_empty(fragment) {
 		return fragment.nodes.length === 0;
 	}
 
 	/**
-	 * @param {AST.Fragment} node
-	 * @param {Context<AST.Fragment, typeof this>} context
+	 * @param {SvelteAST.Fragment} node
+	 * @param {Context<Node, typeof this>} context
+	 * @returns {void}
 	 */
 	print_block_fragment(node, context) {
 		const { visit } = context;
@@ -151,8 +189,9 @@ class Printer {
 	}
 
 	/**
-	 * @param {AST.Fragment} node
-	 * @param {Context<AST.Fragment, typeof this>} context
+	 * @param {SvelteAST.Fragment} node
+	 * @param {Context<Node, typeof this>} context
+	 * @returns {void}
 	 */
 	print_element_like_fragment(node, context) {
 		const { visit } = context;
@@ -162,8 +201,9 @@ class Printer {
 	}
 
 	/**
-	 * @param {AST.ElementLike} node
-	 * @param {Context<AST.ElementLike, typeof this>} context
+	 * @param {SvelteAST.ElementLike} node
+	 * @param {Context<Node, typeof this>} context
+	 * @returns {void}
 	 */
 	#print_element_like_attributes(node, context) {
 		const { state, visit } = context;
@@ -177,6 +217,7 @@ class Printer {
 
 	/**
 	 * @param {string} name
+	 * @returns {void}
 	 */
 	#print_element_like_closing_tag(name) {
 		if (this.#output.at(-1) === "\n") this.#print_indent();
@@ -186,8 +227,9 @@ class Printer {
 	}
 
 	/**
-	 * @param {AST.ElementLike} node
-	 * @param {import("zimmerframe").Context<AST.ElementLike, typeof this>} context
+	 * @param {SvelteAST.ElementLike} node
+	 * @param {Context<Node, typeof this>} context
+	 * @returns {void}
 	 */
 	#print_element_like(node, context) {
 		const { fragment, name } = node;
@@ -208,22 +250,37 @@ class Printer {
 		}
 	}
 
+	/**
+	 * @returns {boolean}
+	 */
 	get is_last_output_closing_tag() {
 		return /\{\/\w*\}$$/.test(this.#output);
 	}
 
+	/**
+	 * @returns {boolean}
+	 */
 	get is_last_output_closing_element_like() {
 		return /(<\/[^>:]+(:[^>]+)?>|\/>)$/.test(this.#output);
 	}
 
+	/**
+	 * @returns {boolean}
+	 */
 	get is_last_output_closing_comment() {
 		return /-->$/.test(this.#output);
 	}
 
+	/**
+	 * @returns {boolean}
+	 */
 	get is_last_output_new_line() {
 		return /\n$/.test(this.#output);
 	}
 
+	/**
+	 * @returns {void}
+	 */
 	#produce() {
 		walk(this.#node, this, {
 			_(_node, context) {
@@ -237,8 +294,9 @@ class Printer {
 				for (const name of order) {
 					const root_node = node[name];
 					if (name === "options" && node.options) {
-						// FIXME: This is a bug probably
+						//  @ts-ignore FIXME: This is likely a bug - at runtime Svelte AST node `SvelteOptions` _(aliased as SvelteOptionsRaw)_ doesn't have 'type' entry
 						visit({ ...node.options, type: "SvelteOptions" }, state);
+						//  @ts-ignore FIXME: Typing issue `SvelteOptions` and `SvelteOptionsRaw` are incompatible
 					} else if (root_node) visit(root_node, state);
 				}
 				// NOTE: There can't be anything next to Root
@@ -752,7 +810,7 @@ class Printer {
 			IfBlock(node, context) {
 				const { alternate, consequent, elseif, test } = node;
 				const { state, visit } = context;
-				/** @param {AST.Fragment} node */
+				/** @param {SvelteAST.Fragment} node */
 				const has_alternate_else_if = (node) => node.nodes.some((n) => n.type === "IfBlock");
 				if (elseif) {
 					state.#print("{:else if ");
@@ -967,7 +1025,7 @@ class Printer {
 			 * <svelte:options option={value} />
 			 * ```
 			 *
-			 * WARN: This one is different, because it can be extracted only from {@link AST.Root}
+			 * WARN: This one is different, because it can be extracted only from {@link SvelteAST.Root}
 			 */
 			SvelteOptions(node, context) {
 				const { state } = context;

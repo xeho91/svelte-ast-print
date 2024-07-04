@@ -1,9 +1,11 @@
 /**
- * @import * as AST from "svelte/compiler";
+ * @import * as _reset from "@total-typescript/ts-reset";
+ * @import { Node as ESTreeASTNode } from "estree";
+ * @import * as SvelteAST from "svelte/compiler";
  */
 
-/** @typedef {AST.Attribute | AST.SpreadAttribute | AST.Directive} AttributeLike */
-export const ATTRIBUTE_LIKE_NODE_NAMES = new Set(
+/** @typedef {SvelteAST.Attribute | SvelteAST.SpreadAttribute | SvelteAST.Directive} AttributeLike */
+const ATTRIBUTE_LIKE_NODE_NAMES = new Set(
 	/** @type {const} */ ([
 		"AnimateDirective",
 		"Attribute",
@@ -18,7 +20,7 @@ export const ATTRIBUTE_LIKE_NODE_NAMES = new Set(
 	]),
 );
 /**
- * @param {AST.SvelteNode} node
+ * @param {SvelteAST.SvelteNode} node
  * @returns {node is AttributeLike}
  */
 export const is_attribute_like_node = (node) => ATTRIBUTE_LIKE_NODE_NAMES.has(node.type);
@@ -35,12 +37,12 @@ export const BLOCK_NODE_NAMES = new Set(
 	]),
 );
 /**
- * @param {AST.SvelteNode} node
- * @returns {node is AST.Block}
+ * @param {SvelteAST.SvelteNode} node
+ * @returns {node is SvelteAST.Block}
  */
 export const is_block_node = (node) => BLOCK_NODE_NAMES.has(node.type);
 
-export const CSS_AST_NODE_NAMES = new Set(
+const CSS_AST_NODE_NAMES = new Set(
 	/** @type {const} */ ([
 		"Atrule",
 		"AttributeSelector",
@@ -63,12 +65,12 @@ export const CSS_AST_NODE_NAMES = new Set(
 	]),
 );
 /**
- * @param {AST.SvelteNode} node
- * @returns {node is AST.Css.Node}
+ * @param {SvelteAST.SvelteNode} node
+ * @returns {node is SvelteAST.Css.Node}
  */
 export const is_css_node = (node) => CSS_AST_NODE_NAMES.has(node.type);
 
-export const ELEMENT_LIKE_NODE_NAMES = new Set(
+const ELEMENT_LIKE_NODE_NAMES = new Set(
 	/** @type {const} */ ([
 		"Component",
 		"RegularElement",
@@ -86,13 +88,13 @@ export const ELEMENT_LIKE_NODE_NAMES = new Set(
 	]),
 );
 /**
- * @param {AST.SvelteNode} node
- * @returns {node is AST.ElementLike}
+ * @param {SvelteAST.SvelteNode} node
+ * @returns {node is SvelteAST.ElementLike}
  */
 export const is_element_like_node = (node) => ELEMENT_LIKE_NODE_NAMES.has(node.type);
 
 /** @typedef {Comment | Text} HtmlNode */
-export const HTML_NODE_NAMES = new Set(
+const HTML_NODE_NAMES = new Set(
 	/** @type {const} */ ([
 		//
 		"Comment",
@@ -100,12 +102,12 @@ export const HTML_NODE_NAMES = new Set(
 	]),
 );
 /**
- * @param {AST.SvelteNode} node
+ * @param {SvelteAST.SvelteNode} node
  * @returns {node is HtmlNode}
  */
 export const is_html_node = (node) => HTML_NODE_NAMES.has(node.type);
 
-export const TAG_NODE_NAMES = new Set(
+const TAG_NODE_NAMES = new Set(
 	/** @type {const} */ ([
 		//
 		"ExpressionTag",
@@ -116,14 +118,14 @@ export const TAG_NODE_NAMES = new Set(
 	]),
 );
 /**
- * @param {AST.SvelteNode} node
- * @returns {node is AST.Tag}
+ * @param {SvelteAST.SvelteNode} node
+ * @returns {node is SvelteAST.Tag}
  */
 export const is_tag_node = (node) => TAG_NODE_NAMES.has(node.type);
 
 /**
- * @param {AST.SvelteNode} node
- * @returns {node is AST.TemplateNode}
+ * @param {SvelteAST.SvelteNode} node
+ * @returns {node is SvelteAST.TemplateNode}
  */
 export const is_template_node = (node) =>
 	node.type === "Root" ||
@@ -136,7 +138,17 @@ export const is_template_node = (node) =>
 	is_tag_node(node);
 
 /**
- * @param {AST.SvelteNode} node
- * @returns {node is AST.SvelteNode}
+ * @typedef {SvelteAST.Script | SvelteAST.SvelteNode | SvelteAST.SvelteOptionsRaw} SupportedSvelteNode
  */
-export const is_svelte_node = (node) => node.type === "Script" || is_template_node(node);
+
+/**
+ * @typedef {ESTreeASTNode | SupportedSvelteNode} Node
+ * TODO: Ask Svelte maintainers if `Script` and `SvelteOptions` were omittted from `SvelteNode` intentionally - possibly forgotten to include
+ */
+
+/**
+ * @param {Node} node
+ * @returns {node is SupportedSvelteNode}
+ */
+export const is_svelte_node = (node) =>
+	node.type === "SvelteOptions" || node.type === "Script" || is_template_node(node);

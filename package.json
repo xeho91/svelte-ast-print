@@ -36,32 +36,33 @@
 	"files": ["src/"],
 	"imports": {
 		"#tests/*": {
+			"types": "./tests/*.ts",
 			"development": "./tests/*.ts"
 		},
 		"#*": {
+			"types": "./src/*.js",
 			"development": "./src/*.js",
 			"default": "./src/*.js"
-		},
-		"#types": {
-			"development": "./src/types.d.ts",
-			"default": "./src/types.d.ts"
 		}
 	},
 	"exports": {
 		".": {
-			"types": "./src/types.d.ts",
+			"types": "./types/mod.d.ts",
 			"default": "./src/mod.js"
 		},
 		"./package.json": "./package.json"
 	},
+	"types": "./types/mod.d.ts",
 	"packageManager": "pnpm@9.5.0-beta.0+sha256.bd91cddc9b205c94b5bf0380cec8fc8e4b1dde7b8c5191732f3d4e73848e860e",
 	"scripts": {
 		"build": "pnpm run \"/^build:.*/\" ",
 		"build:doc": "typedoc",
+		"build:types": "dts-buddy",
 		"clean": "pnpm run \"/^clean:.*/\"; del \"./**/node_modules\" ",
 		"clean:cache": "del \"./node_modules/.cache\" ",
 		"clean:doc": "del \"./docs\" ",
 		"clean:test": "del \"./coverage\" ",
+		"clean:types": "del \"./types\" ",
 		"dev": "pnpm run \"/^dev:.*/\" ",
 		"dev:doc": "typedoc --watch",
 		"dev:test": "pnpm vitest watch --passWithNoTests --ui",
@@ -76,6 +77,8 @@
 		"lint:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\" ",
 		"lint:ts": "tsc --noEmit",
 		"lint:typos": "typos --verbose",
+		"prepare": "pnpm build:types",
+		"prepublishOnly": "pnpm test && pnpm build:types",
 		"release": "pnpm auto shipit",
 		"serve:doc": "serve \"./docs\" ",
 		"test": "vitest run . --passWithNoTests"
@@ -85,17 +88,19 @@
 		"zimmerframe": "1.1.2"
 	},
 	"devDependencies": {
+		"@total-typescript/ts-reset": "0.5.1",
 		"@total-typescript/tsconfig": "1.0.4",
 		"@types/estree": "1.0.5",
 		"@types/node": "20.14.9",
 		"dedent": "1.5.3",
-		"svelte": "5.0.0-next.169",
+		"dts-buddy": "0.5.1",
+		"svelte": "5.0.0-next.164",
 		"tsup": "8.1.0",
 		"type-fest": "4.20.1",
 		"typescript": "5.5.3"
 	},
 	"peerDependencies": {
-		"svelte": "^5.0.0-next.169 || ^5.0.0"
+		"svelte": "^5.0.0-next.164 || ^5.0.0"
 	},
 	"optionalDependencies": {
 		"@auto-it/all-contributors": "11.1.6",
