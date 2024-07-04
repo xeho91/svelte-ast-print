@@ -2,14 +2,14 @@
  * @import * as SvelteAST from "svelte/compiler";
  * @import { Context } from "zimmerframe";
  *
- * @import { Node, SupportedSvelteNode } from "#nodes";
+ * @import { Node } from "./nodes.js";
  */
 
 import { print as print_es } from "esrap";
 import { walk } from "zimmerframe";
 
-import { is_element_like_node, is_svelte_node } from "#nodes";
-import { Options } from "#options";
+import { is_element_like_node, is_svelte_node } from "./nodes.js";
+import { Options } from "./options.js";
 
 export {
 	is_attribute_like_node as isAttributeLikeNode,
@@ -20,7 +20,7 @@ export {
 	is_svelte_node as isSvelteNode,
 	is_tag_node as isTagNode,
 	is_template_node as isTemplateNode,
-} from "#nodes";
+} from "./nodes.js";
 
 /**
  * Print AST {@link SvelteAST.SvelteNode} as a string.

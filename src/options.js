@@ -2,7 +2,7 @@
  * @import { Css, Fragment, Root, Script, SvelteOptionsRaw } from "svelte/compiler";
  * @import { IterableElement, ReadonlyTuple } from "type-fest";
  *
- * @import { print } from "#mod";
+ * @import { print } from "./mod.js";
  */
 
 /**
