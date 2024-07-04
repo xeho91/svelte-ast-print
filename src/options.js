@@ -1,12 +1,73 @@
 /**
- * @import { PrintOptions } from "./types.ts";
+ * @import { Css, Fragment, Root, Script, SvelteOptionsRaw } from "svelte/compiler";
+ * @import { IterableElement, ReadonlyTuple } from "type-fest";
+ *
+ * @import { print } from "./mod.js";
  */
 
-/** @satisfies {PrintOptions["format"]["indent"]} */
+/**
+ * Options for {@link print} defined by user.
+ *
+ * @typedef PrintOptions
+ * @property {Partial<FormatOptions>} [format] - formatting options
+ * @property {Partial<RootOptions>} [root] - Svelte AST node {@link Root} based options
+ */
+
+/**
+ * Name _(alias)_ for indentation type. This package will automatically determine a desired indent.
+ * @typedef {IterableElement<typeof Options.INDENT>[0]} IndentName
+ */
+
+/**
+ * @satisfies {IndentName}
+ */
 export const DEFAULT_INDENT = "tab";
-/** @satisfies {PrintOptions["root"]["order"]} */
+
+/**
+ * Options related to formatting.
+ * Provided for building a stable API - gives an space for expansion on future improvements/features.
+ *
+ * @typedef FormatOptions
+ * @property {IndentName} [indent] - defaults to {@link DEFAULT_INDENT}
+ */
+
+/**
+ * @typedef {Extract<keyof Root, "css" | "fragment" | "instance" | "module" | "options">} RootNode
+ */
+
+/**
+ * Specified order of {@link Root} child AST nodes to print out.
+ *
+ * ## Legend
+ *
+ * - `"options"` - {@link SvelteOptionsRaw}
+ * - `"module"` - {@link Script}
+ * - `"instance"` - {@link Script}
+ * - `"fragment"` - {@link Fragment}
+ * - `"css"` - {@link Css.StyleSheet}
+ *
+ * @typedef {ReadonlyTuple<RootNode, 5>} RootOrder
+ */
+
+// TODO: Use generic type parameter, so we use it only when passed node is {@link Root}
+/**
+ * Options related to {@link Root} Svelte AST node.
+ * @typedef RootOptions
+ * @property {RootOrder} [order] - defaults to {@link DEFAULT_ORDER}
+ */
+
+/**
+ * @satisfies {ReadonlyTuple<RootNode, 5>}
+ */
 export const DEFAULT_ORDER = /** @type {const} */ (["options", "module", "instance", "fragment", "css"]);
 
+/**
+ * This class is for internal use only.
+ * Give sa a better control on transforming passed options to the second argument of {@link print}
+ *
+ * @private
+ * @internal
+ */
 export class Options {
 	static INDENT = new Map(
 		/** @type {const} */ ([
@@ -17,13 +78,12 @@ export class Options {
 	);
 
 	/**
-	 * @private
-	 * @type {PrintOptions} raw options, before transformation - for better DX
+	 * @type {PrintOptions} raw options - _(before transformation)_ - for better DX
 	 */
 	#raw;
 
 	/**
-	 * @param {PrintOptions} raw
+	 * @param {PrintOptions} raw - provided options by user - before transformation
 	 */
 	constructor(raw) {
 		this.#raw = raw;
@@ -38,7 +98,7 @@ export class Options {
 		return transformed;
 	}
 
-	/** @type {NonNullable<NonNullable<PrintOptions["root"]>["order"]>} */
+	/** @type {RootOrder} */
 	get order() {
 		const { root } = this.#raw;
 

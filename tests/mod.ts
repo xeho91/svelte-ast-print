@@ -1,12 +1,14 @@
 import dedent from "dedent";
-import { type SvelteNode, parse } from "svelte/compiler";
+import { parse } from "svelte/compiler";
 import { type Context, walk } from "zimmerframe";
 
-export function parse_svelte_code(code: string): SvelteNode {
-	return parse(code, { modern: true }) as SvelteNode;
+import type { Node } from "#nodes";
+
+export function parse_svelte_code(code: string): Node {
+	return parse(code, { modern: true }) as Node;
 }
 
-export function extract_svelte_node<TNode extends SvelteNode>(parsed: SvelteNode, name: TNode["type"]): TNode {
+export function extract_svelte_node<TNode extends Node>(parsed: Node, name: TNode["type"]): TNode {
 	const results: {
 		target: TNode | undefined;
 	} = {
@@ -14,7 +16,7 @@ export function extract_svelte_node<TNode extends SvelteNode>(parsed: SvelteNode
 	};
 
 	walk(parsed, results, {
-		[name](node: TNode, context: Context<SvelteNode, typeof results>) {
+		[name](node: TNode, context: Context<Node, typeof results>) {
 			const { state, stop } = context;
 			state.target = node;
 			stop();
@@ -28,7 +30,7 @@ export function extract_svelte_node<TNode extends SvelteNode>(parsed: SvelteNode
 	return results.target;
 }
 
-export function parse_and_extract_svelte_node<TNode extends SvelteNode>(code: string, name: TNode["type"]): TNode {
+export function parse_and_extract_svelte_node<TNode extends Node>(code: string, name: TNode["type"]): TNode {
 	const parsed = parse_svelte_code(dedent(code));
 	return extract_svelte_node(parsed, name);
 }
