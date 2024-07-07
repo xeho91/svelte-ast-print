@@ -360,4 +360,22 @@ describe("SnippetBlock", () => {
 			{/snippet}"
 		`);
 	});
+
+	it("works with nested snippet", ({ expect }) => {
+		const code = `
+			{#snippet parent(message)}
+				{#snippet children(name)}
+					<p>hello {name}! {message}!</p>
+				{/snippet}
+			{/snippet}
+		`;
+		const node = parse_and_extract_svelte_node<SnippetBlock>(code, "SnippetBlock");
+		expect(print(node)).toMatchInlineSnapshot(`
+			"{#snippet parent(message)}
+				{#snippet children(name)}
+					<p>hello {name}! {message}!</p>
+				{/snippet}
+			{/snippet}"
+		`);
+	});
 });
