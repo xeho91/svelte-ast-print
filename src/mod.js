@@ -887,16 +887,18 @@ class Printer {
 			SnippetBlock(node, context) {
 				const { body, expression, parameters } = node;
 				const { state } = context;
+				state.#print_indent();
 				state.#print("{#snippet ");
-				state.#print_es_node(expression);
+				state.#print_es_node(expression, { skip_indent: true });
 				state.#print("(");
 				parameters.forEach((pattern, index) => {
-					state.#print_es_node(pattern);
+					state.#print_es_node(pattern, { skip_indent: true });
 					if (parameters[index + 1]) state.#print(", ");
 				});
 				state.#print(")");
 				state.#print("}");
 				state.print_block_fragment(body, context);
+				state.#print_indent();
 				state.#print("{/snippet}");
 			},
 

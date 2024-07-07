@@ -1,17 +1,11 @@
-# v0.2.0 (Thu Jul 04 2024)
+<!--markdownlint-disable no-duplicate-heading -->
+# Changelog
 
-:tada: This release contains work from a new contributor! :tada:
+## `v0.2.1` (Sun Jul 07 2024)
 
-Thank you, Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91)), for all your work!
+### 🐛 Bug Fix
 
-#### 🚀 Enhancement
-
-- chore: Release [#81](https://github.com/xeho91/svelte-ast-print/pull/81) ([@xeho91](https://github.com/xeho91))
-- feat: Initial minor release [#77](https://github.com/xeho91/svelte-ast-print/pull/77) ([@xeho91](https://github.com/xeho91))
-
-#### ⚠️ Pushed to `main`
-
-- 🎉 Start of the project ([@xeho91](https://github.com/xeho91))
+- fix: Indentation issue with nested `SnippetBlock` [#82](https://github.com/xeho91/svelte-ast-print/pull/82) ([@xeho91](https://github.com/xeho91))
 
 #### Authors: 1
 
@@ -19,9 +13,7 @@ Thank you, Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91)), for all y
 
 ---
 
-# Changelog
-
-## `v0.1.0` _(Mon Jul 01 2024)_
+## `v0.2.0` _(Mon Jul 01 2024)_
 
 :tada: This release contains work from a new contributor! :tada:
 
