@@ -8,6 +8,9 @@ export default defineConfig({
 		conditions: ["development"],
 	},
 	test: {
+		coverage: {
+			include: ["src/"],
+		},
 		include: ["tests/**/*.test.ts"],
 	},
 });
