@@ -178,12 +178,21 @@ class Printer {
 	}
 
 	/**
+	 * By default we assume everything starts with an indent or new line
+	 * @type {boolean}
+	 */
+	#was_last_text_indent_or_space_only = true;
+
+	/**
 	 * @param {SvelteAST.Text} node
 	 * @returns {boolean}
 	 */
 	#is_text_new_line_or_indents_only(node) {
+		// TODO: Refactor, there's probably a smarter regex to achieve it
 		const { raw } = node;
-		return /^(?:(?: {2}| {4})|\t|\n)*$/.test(raw);
+		if (raw === " ") return this.#was_last_text_indent_or_space_only;
+		if (this.#depth === 0) return /^(?: {1,}|\t|\n)*$/.test(raw);
+		return /^(?: {2,}|\t|\n)*$/.test(raw);
 	}
 
 	/**
@@ -494,7 +503,12 @@ class Printer {
 			Text(node, context) {
 				const { raw } = node;
 				const { state } = context;
-				if (!state.#is_text_new_line_or_indents_only(node)) state.#print(raw);
+				if (state.#is_text_new_line_or_indents_only(node)) {
+					state.#was_last_text_indent_or_space_only = true;
+				} else {
+					state.#was_last_text_indent_or_space_only = false;
+					state.#print(raw);
+				}
 			},
 
 			Attribute(node, context) {
