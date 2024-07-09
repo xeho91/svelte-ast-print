@@ -214,7 +214,10 @@ class Printer {
 	 * @returns {void}
 	 */
 	#print_block_opening_tag(name, content) {
-		if (
+		if (this.#is_last_output_script_closing_tag) {
+			this.#print_new_line();
+			this.#print_new_line();
+		} else if (
 			this.#is_last_output_closing_block ||
 			this.#is_last_output_closing_comment ||
 			this.#is_last_output_opening_element_like ||
