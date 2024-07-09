@@ -129,6 +129,20 @@ class Printer {
 		this.#output += "\n";
 	}
 
+	#print_opening_new_line() {
+		if (this.#is_last_output_script_closing_tag) {
+			this.#print_new_line();
+			this.#print_new_line();
+		} else if (
+			this.#is_last_output_closing_block ||
+			this.#is_last_output_closing_comment ||
+			this.#is_last_output_opening_element_like ||
+			this.#is_last_output_closing_element_like
+		) {
+			this.#print_new_line();
+		}
+	}
+
 	/**
 	 * @returns {void}
 	 */
@@ -223,17 +237,7 @@ class Printer {
 	 * @returns {void}
 	 */
 	#print_block_opening_tag(name, content) {
-		if (this.#is_last_output_script_closing_tag) {
-			this.#print_new_line();
-			this.#print_new_line();
-		} else if (
-			this.#is_last_output_closing_block ||
-			this.#is_last_output_closing_comment ||
-			this.#is_last_output_opening_element_like ||
-			this.#is_last_output_closing_element_like
-		) {
-			this.#print_new_line();
-		}
+		this.#print_opening_new_line();
 		this.#print_indent();
 		this.#print("{#");
 		this.#print(name);
@@ -248,8 +252,8 @@ class Printer {
 	 * @returns {void}
 	 */
 	#print_block_middle_tag(name, content) {
-		if (!this.#is_last_output_new_line) this.#print_new_line();
-		this.#print_indent();
+		this.#print_opening_new_line();
+		if (this.#is_last_output_new_line) this.#print_indent();
 		this.#print("{:");
 		this.#print(name);
 		if (content) {
@@ -296,16 +300,7 @@ class Printer {
 	 */
 	#print_element_like_opening_tag(name, options = {}) {
 		const { self_close = false } = options;
-		if (this.#is_last_output_script_closing_tag) {
-			this.#print_new_line();
-			this.#print_new_line();
-		} else if (
-			this.#is_last_output_closing_block ||
-			this.#is_last_output_closing_comment ||
-			this.#is_last_output_closing_element_like
-		) {
-			this.#print_new_line();
-		}
+		this.#print_opening_new_line();
 		if (this.#is_last_output_new_line) this.#print_indent();
 		this.#print("<");
 		this.#print(name);
@@ -449,10 +444,7 @@ class Printer {
 			Script(node, context) {
 				const { attributes, content } = node;
 				const { state, visit } = context;
-				if (state.#is_last_output_closing_element_like) {
-					state.#print_new_line();
-					state.#print_new_line();
-				}
+				state.#print_opening_new_line();
 				for (const attribute of attributes) {
 					visit(attribute, state);
 				}
@@ -1107,7 +1099,7 @@ class Printer {
 			SvelteElement(node, context) {
 				const { attributes, fragment, name, tag } = node;
 				const { state, visit } = context;
-				// WARN: Workaround
+				// WARN: Workaround to convert `this` into attribute
 				visit(
 					{
 						type: "Attribute",
@@ -1246,9 +1238,12 @@ class Printer {
 				const { state } = context;
 				state.#print("{@debug");
 				identifiers.forEach((identifier, index) => {
-					state.#print(" ");
+					state.#print_space();
 					state.#print_es_node(identifier);
-					if (identifiers[index + 1]) state.#print(", ");
+					if (identifiers[index + 1]) {
+						state.#print(",");
+						state.#print_space();
+					}
 				});
 				state.#print("}");
 			},
@@ -1274,7 +1269,8 @@ class Printer {
 			HtmlTag(node, context) {
 				const { expression } = node;
 				const { state } = context;
-				state.#print("{@html ");
+				state.#print("{@html");
+				state.#print_space();
 				state.#print_es_node(expression);
 				state.#print("}");
 			},
@@ -1292,7 +1288,8 @@ class Printer {
 			RenderTag(node, context) {
 				const { expression } = node;
 				const { state } = context;
-				state.#print("{@render ");
+				state.#print("{@render");
+				state.#print_space();
 				state.#print_es_node(expression);
 				state.#print("}");
 			},
@@ -1329,10 +1326,10 @@ class Printer {
 				const { state, visit } = context;
 				state.#print("@");
 				state.#print(name);
-				state.#print(" ");
+				state.#print_space();
 				state.#print(prelude);
 				if (block) {
-					state.#print(" ");
+					state.#print_space();
 					visit(block, state);
 				}
 			},
@@ -1357,7 +1354,7 @@ class Printer {
 					state.#print('"');
 				}
 				if (flags) {
-					state.#print(" ");
+					state.#print_space();
 					state.#print(flags);
 				}
 				state.#print("]");
@@ -1423,7 +1420,8 @@ class Printer {
 				const { property, value } = node;
 				const { state } = context;
 				state.#print(property);
-				state.#print(": ");
+				state.#print(":");
+				state.#print_space();
 				// NOTE: It removes any existing indentation, because output will look uglier
 				state.#print(value.split(/[\s\t\n]+/).join(" "));
 				state.#print(";");
@@ -1501,7 +1499,7 @@ class Printer {
 				const { block, prelude } = node;
 				const { state, visit } = context;
 				visit(prelude, state);
-				state.#print(" ");
+				state.#print_space();
 				visit(block, state);
 			},
 
@@ -1509,7 +1507,7 @@ class Printer {
 				const { combinator, selectors } = node;
 				const { state, visit } = context;
 				if (combinator) {
-					state.#print(" ");
+					state.#print_space();
 					visit(combinator, state);
 				}
 				for (const selector of selectors) {
