@@ -291,8 +291,9 @@ class Printer {
 			this.#is_last_output_closing_block ||
 			this.#is_last_output_closing_comment ||
 			this.#is_last_output_closing_element_like
-		)
+		) {
 			this.#print_new_line();
+		}
 		if (this.#is_last_output_new_line) this.#print_indent();
 		this.#print("<");
 		this.#print(name);
@@ -471,7 +472,17 @@ class Printer {
 			Comment(node, context) {
 				const { data } = node;
 				const { state } = context;
-				state.#print_indent();
+				if (state.#is_last_output_script_closing_tag) {
+					state.#print_new_line();
+					state.#print_new_line();
+				} else if (
+					state.#is_last_output_closing_block ||
+					state.#is_last_output_closing_comment ||
+					state.#is_last_output_closing_element_like
+				) {
+					state.#print_new_line();
+				}
+				if (state.#is_last_output_new_line) state.#print_indent();
 				state.#print("<!--");
 				state.#print(data);
 				state.#print("-->");
