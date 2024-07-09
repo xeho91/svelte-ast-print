@@ -74,8 +74,7 @@ describe("Fragment", () => {
 			{/await}
 			{#key value}
 				<div transition:fade>{value}</div>
-			{/key}
-			"
+			{/key}"
 		`);
 	});
 

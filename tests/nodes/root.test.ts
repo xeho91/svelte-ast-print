@@ -101,6 +101,7 @@ describe("Root", () => {
 
 				$: remaining = todos.filter((t) => !t.done).length;
 			</script>
+
 			<div class="centered">
 				<h1>todos</h1>
 				<ul class="todos">
@@ -119,6 +120,7 @@ describe("Root", () => {
 					Clear completed
 				</button>
 			</div>
+
 			<style>
 				.centered {
 					max-width: 20em;
@@ -167,16 +169,16 @@ describe("Root", () => {
 					component: Button,
 					tags: ['autodocs'],
 					args: {
-					children: 'Click me',
-					onclick: onclickFn,
+						children: 'Click me',
+						onclick: onclickFn,
 					},
 					argTypes: {
-					backgroundColor: { control: 'color' },
-					size: {
-						control: { type: 'select' },
-						options: ['small', 'medium', 'large'],
-					},
-					children: { control: 'text' },
+						backgroundColor: { control: 'color' },
+						size: {
+							control: { type: 'select' },
+							options: ['small', 'medium', 'large'],
+						},
+						children: { control: 'text' },
 					},
 				});
 			</script>
@@ -207,7 +209,7 @@ describe("Root", () => {
 		expect(print(node)).toMatchInlineSnapshot(
 			`
 			"<script context="module" lang="ts">
-				import { defineMeta, setTemplate, Args, StoryContext } from '@storybook/addon-svelte-csf';
+				import { defineMeta, setTemplate, type Args, type StoryContext } from '@storybook/addon-svelte-csf';
 				import { fn } from '@storybook/test';
 				import Button from './components/Button.svelte';
 
@@ -235,8 +237,7 @@ describe("Root", () => {
 			<script lang="ts">
 				setTemplate(template);
 			</script>
-
-			{#snippet template({ children, ...args }, context)}
+			{#snippet template({ children, ...args }: Args<typeof Story>, context: StoryContext<typeof Story>)}
 				<Button {...args}>{children}</Button>
 			{/snippet}
 			<!-- Only use this sparingly as the main CTA. -->
@@ -247,9 +248,44 @@ describe("Root", () => {
 			<Story name="Small" args={{ size: 'small' }} />
 			<Story name="Long content">
 				<Button onclick={onclickFn}>The very long content</Button>
-			</Story>
-			"
+			</Story>"
 		`,
 		);
+	});
+
+	it("prints correctly an legacy example from Storybook", ({ expect }) => {
+		const code = `
+			<script context="module">
+				import { defineMeta } from "@storybook/addon-svelte-csf";
+
+				/** This is a description for the **Button** component stories. */
+				const { Story } = defineMeta({ title: "Atoms/Button", component: Button });
+			</script>
+
+			<!-- This is a description for the **Button** component stories. -->
+			<Meta title="Atoms/Button" component={Button} />
+
+			<Template let:args>
+				<Button {...args} />
+			</Template>
+
+			<Story name="Default" />
+		`;
+		const node = parse_and_extract_svelte_node<Root>(code, "Root");
+		expect(print(node)).toMatchInlineSnapshot(`
+			"<script context="module">
+				import { defineMeta } from "@storybook/addon-svelte-csf";
+
+				/** This is a description for the **Button** component stories. */
+				const { Story } = defineMeta({ title: "Atoms/Button", component: Button });
+			</script>
+
+			<!-- This is a description for the **Button** component stories. -->
+			<Meta title="Atoms/Button" component={Button} />
+			<Template let:args>
+				<Button {...args} />
+			</Template>
+			<Story name="Default" />"
+		`);
 	});
 });

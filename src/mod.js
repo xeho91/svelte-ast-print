@@ -8,7 +8,7 @@
 import { print as print_es } from "esrap";
 import { walk } from "zimmerframe";
 
-import { is_element_like_node, is_svelte_node } from "./nodes.js";
+import { is_attribute_like_node, is_element_like_node, is_svelte_node } from "./nodes.js";
 import { Options } from "./options.js";
 
 export {
@@ -89,6 +89,10 @@ class Printer {
 	 * @type {string}
 	 */
 	#output = "";
+	/**
+	 * @type {Set<string>}
+	 */
+	#attributes = new Set();
 
 	/**
 	 * @param {Node} node - Svelte or ESTree AST node
@@ -104,6 +108,9 @@ class Printer {
 	 * @returns {string}
 	 */
 	toString() {
+		if (is_attribute_like_node(this.#node)) {
+			return this.#stringified_attributes;
+		}
 		return this.#output;
 	}
 
@@ -122,6 +129,27 @@ class Printer {
 		this.#output += "\n";
 	}
 
+	#print_opening_new_line() {
+		if (this.#is_last_output_script_closing_tag) {
+			this.#print_new_line();
+			this.#print_new_line();
+		} else if (
+			this.#is_last_output_closing_block ||
+			this.#is_last_output_closing_comment ||
+			this.#is_last_output_opening_element_like ||
+			this.#is_last_output_closing_element_like
+		) {
+			this.#print_new_line();
+		}
+	}
+
+	/**
+	 * @returns {void}
+	 */
+	#print_space() {
+		this.#output += " ";
+	}
+
 	/**
 	 * Depth aware indent
 	 * @returns {string}
@@ -136,6 +164,14 @@ class Printer {
 	 */
 	#print_indent() {
 		this.#output += this.#indent;
+	}
+
+	get #stringified_attributes() {
+		// TODO: Determine what join should be, space or new line, based on options.
+		if (this.#attributes.size > 0) {
+			return [...this.#attributes].join(" ");
+		}
+		return "";
 	}
 
 	/**
@@ -156,12 +192,21 @@ class Printer {
 	}
 
 	/**
+	 * By default we assume everything starts with an indent or new line
+	 * @type {boolean}
+	 */
+	#was_last_text_indent_or_space_only = true;
+
+	/**
 	 * @param {SvelteAST.Text} node
 	 * @returns {boolean}
 	 */
 	#is_text_new_line_or_indents_only(node) {
+		// TODO: Refactor, there's probably a smarter regex to achieve it
 		const { raw } = node;
-		return /^(?:(?: {2}| {4})|\t|\n)*$/.test(raw);
+		if (raw === " ") return this.#was_last_text_indent_or_space_only;
+		if (this.#depth === 0) return /^(?: {1,}|\t|\n)*$/.test(raw);
+		return /^(?: {2,}|\t|\n)*$/.test(raw);
 	}
 
 	/**
@@ -187,43 +232,88 @@ class Printer {
 	}
 
 	/**
+	 * @param {"await" | "each" | "if" | "key" | "snippet"} name
+	 * @param {string} content
+	 * @returns {void}
+	 */
+	#print_block_opening_tag(name, content) {
+		this.#print_opening_new_line();
+		this.#print_indent();
+		this.#print("{#");
+		this.#print(name);
+		this.#print_space();
+		this.#print(content);
+		this.#print("}");
+	}
+
+	/**
+	 * @param {"then" | "catch" | "else if" | "else"} name
+	 * @param {string} [content]
+	 * @returns {void}
+	 */
+	#print_block_middle_tag(name, content) {
+		this.#print_opening_new_line();
+		if (this.#is_last_output_new_line) this.#print_indent();
+		this.#print("{:");
+		this.#print(name);
+		if (content) {
+			this.#print_space();
+			this.#print(content);
+		}
+		this.#print("}");
+	}
+
+	/**
+	 * @param {"await" | "each" | "if" | "key" | "snippet"} name
+	 * @returns {void}
+	 */
+	#print_block_closing_tag(name) {
+		this.#print_new_line();
+		this.#print_indent();
+		this.#print("{/");
+		this.#print(name);
+		this.#print("}");
+	}
+
+	/**
 	 * @param {SvelteAST.Fragment} node
 	 * @param {Context<Node, typeof this>} context
 	 * @returns {void}
 	 */
-	print_block_fragment(node, context) {
+	#print_block_fragment(node, context) {
 		const { visit } = context;
 		this.#print_new_line();
 		this.#depth++;
 		visit(node, this);
-		this.#depth--;
+		if (this.#depth > 0) this.#depth--;
 	}
 
 	/**
-	 * @param {SvelteAST.Fragment} node
-	 * @param {Context<Node, typeof this>} context
-	 * @returns {void}
+	 * @typedef PrintElementLikeOpeningTagOptions
+	 * @property {boolean}[self_close]
 	 */
-	print_element_like_fragment(node, context) {
-		const { visit } = context;
-		const has_element_like_node = this.#has_fragment_element_like_node(node);
-		if (has_element_like_node) this.#print_new_line();
-		visit(node, this);
-	}
 
 	/**
-	 * @param {SvelteAST.ElementLike} node
-	 * @param {Context<Node, typeof this>} context
+	 * @param {string} name
+	 * @param {Partial<PrintElementLikeOpeningTagOptions>} [options]
 	 * @returns {void}
 	 */
-	#print_element_like_attributes(node, context) {
-		const { state, visit } = context;
-		const { attributes } = node;
-		for (const attribute_like of attributes) {
-			this.#output += " ";
-			visit(attribute_like, state);
+	#print_element_like_opening_tag(name, options = {}) {
+		const { self_close = false } = options;
+		this.#print_opening_new_line();
+		if (this.#is_last_output_new_line) this.#print_indent();
+		this.#print("<");
+		this.#print(name);
+		if (this.#attributes.size > 0) {
+			this.#print_space();
+			this.#print(this.#stringified_attributes);
+			this.#attributes.clear();
 		}
-		// if (this.#output.at(-1) === "\n") this.#print_indent();
+		if (self_close) {
+			if (!this.#is_last_output_new_line) this.#print_space();
+			this.#print("/");
+		}
+		this.#print(">");
 	}
 
 	/**
@@ -231,10 +321,23 @@ class Printer {
 	 * @returns {void}
 	 */
 	#print_element_like_closing_tag(name) {
-		if (this.#output.at(-1) === "\n") this.#print_indent();
-		this.#print("</");
+		if (this.#is_last_output_closing_element_like || this.#is_last_output_closing_block) this.#print_new_line();
+		if (this.#is_last_output_new_line) this.#print_indent();
+		this.#print("<");
+		this.#print("/");
 		this.#print(name);
 		this.#print(">");
+	}
+
+	/**
+	 * @param {SvelteAST.Fragment} node
+	 * @param {Context<Node, typeof this>} context
+	 * @returns {void}
+	 */
+	#print_element_like_fragment(node, context) {
+		const { visit } = context;
+		if (this.#has_fragment_element_like_node(node)) this.#print_new_line();
+		visit(node, this);
 	}
 
 	/**
@@ -243,50 +346,74 @@ class Printer {
 	 * @returns {void}
 	 */
 	#print_element_like(node, context) {
-		const { fragment, name } = node;
+		const { attributes, fragment, name } = node;
+		const { state, visit } = context;
 		const is_self_closing = this.#is_fragment_empty(fragment);
-		if (this.is_last_output_new_line) this.#print_indent();
-		this.#print("<");
-		this.#print(name);
-		this.#print_element_like_attributes(node, context);
-		if (is_self_closing) this.#print(" />");
-		else {
-			this.#print(">");
-			if (fragment) {
-				this.#depth++;
-				this.print_element_like_fragment(fragment, context);
-				this.#depth--;
-			}
+		for (const attribute_like of attributes) {
+			visit(attribute_like, state);
+		}
+		this.#print_element_like_opening_tag(name, { self_close: is_self_closing });
+		if (fragment && !is_self_closing) {
+			this.#depth++;
+			this.#print_element_like_fragment(fragment, context);
+			this.#depth--;
 			this.#print_element_like_closing_tag(name);
 		}
 	}
 
 	/**
+	 * @param {SvelteAST.Text | SvelteAST.ExpressionTag} node
+	 * @returns {string}
+	 */
+	#stringify_attribute_like_text_or_expression_tag(node) {
+		if (node.type === "Text") {
+			const { raw } = node;
+			return `"${raw}"`;
+		}
+		const { expression } = node;
+		return `{${print_es(expression).code}}`;
+	}
+
+	/**
 	 * @returns {boolean}
 	 */
-	get is_last_output_closing_tag() {
+	get #is_last_output_closing_block() {
 		return /\{\/\w*\}$$/.test(this.#output);
 	}
 
 	/**
 	 * @returns {boolean}
 	 */
-	get is_last_output_closing_element_like() {
+	get #is_last_output_opening_element_like() {
+		return /<(?!\/).*>$/s.test(this.#output);
+	}
+
+	/**
+	 * @returns {boolean}
+	 */
+	get #is_last_output_closing_element_like() {
 		return /(<\/[^>:]+(:[^>]+)?>|\/>)$/.test(this.#output);
 	}
 
 	/**
 	 * @returns {boolean}
 	 */
-	get is_last_output_closing_comment() {
+	get #is_last_output_closing_comment() {
 		return /-->$/.test(this.#output);
 	}
 
 	/**
 	 * @returns {boolean}
 	 */
-	get is_last_output_new_line() {
+	get #is_last_output_new_line() {
 		return /\n$/.test(this.#output);
+	}
+
+	/**
+	 * @returns {boolean}
+	 */
+	get #is_last_output_script_closing_tag() {
+		return /<\/script>$/.test(this.#output);
 	}
 
 	/**
@@ -305,8 +432,8 @@ class Printer {
 				for (const name of order) {
 					const root_node = node[name];
 					if (name === "options" && node.options) {
-						//  @ts-ignore FIXME: This is likely a bug - at runtime Svelte AST node `SvelteOptions` _(aliased as SvelteOptionsRaw)_ doesn't have 'type' entry
-						visit({ ...node.options, type: "SvelteOptions" }, state);
+						//  @ts-ignore FIXME: This is likely a bug - at runtime Svelte AST node `SvelteOptions` _(aliased as SvelteOptionsRaw)_ doesn't have 'type' & 'name' entry
+						visit({ ...node.options, type: "SvelteOptions", name: "svelte:options" }, state);
 						//  @ts-ignore FIXME: Typing issue `SvelteOptions` and `SvelteOptionsRaw` are incompatible
 					} else if (root_node) visit(root_node, state);
 				}
@@ -314,24 +441,20 @@ class Printer {
 				stop();
 			},
 
-			Script(node, { state, visit }) {
+			Script(node, context) {
 				const { attributes, content } = node;
-				if (state.#output !== "") {
-					state.#print_new_line();
-					state.#print_new_line();
-				}
-				state.#print("<script");
+				const { state, visit } = context;
+				state.#print_opening_new_line();
 				for (const attribute of attributes) {
-					state.#print(" ");
 					visit(attribute, state);
 				}
-				state.#print(">");
+				state.#print_element_like_opening_tag("script");
 				state.#print_new_line();
 				state.#depth++;
 				state.#print_es_node(content);
 				state.#depth--;
 				state.#print_new_line();
-				state.#print("</script>");
+				state.#print_element_like_closing_tag("script");
 			},
 
 			Fragment(node, context) {
@@ -339,38 +462,6 @@ class Printer {
 				const { state, visit } = context;
 				for (const node of nodes) {
 					visit(node, state);
-					if (
-						state.is_last_output_closing_tag ||
-						state.is_last_output_closing_element_like ||
-						state.is_last_output_closing_comment
-					) {
-						state.#print_new_line();
-					}
-				}
-			},
-
-			Attribute(node, context) {
-				const { name, value } = node;
-				const { state, visit } = context;
-				const is_shorthand =
-					value !== true &&
-					value[0]?.type === "ExpressionTag" &&
-					value[0].expression.type === "Identifier" &&
-					value[0].expression.name === name;
-				if (!is_shorthand) {
-					state.#print(name);
-				}
-				// NOTE: This is e.g. `<button disabled />`,
-				// so its a shorthand - we don't need to append anything
-				if (value !== true) {
-					// WARN: I can't find a case where it can be an array?
-					// This may be a problem in the future
-					for (const text_or_expression_tag of value) {
-						if (!is_shorthand) state.#print("=");
-						text_or_expression_tag.type === "Text" && state.#print('"');
-						visit(text_or_expression_tag, state);
-						text_or_expression_tag.type === "Text" && state.#print('"');
-					}
 				}
 			},
 
@@ -385,7 +476,17 @@ class Printer {
 			Comment(node, context) {
 				const { data } = node;
 				const { state } = context;
-				state.#print_indent();
+				if (state.#is_last_output_script_closing_tag) {
+					state.#print_new_line();
+					state.#print_new_line();
+				} else if (
+					state.#is_last_output_closing_block ||
+					state.#is_last_output_closing_comment ||
+					state.#is_last_output_closing_element_like
+				) {
+					state.#print_new_line();
+				}
+				if (state.#is_last_output_new_line) state.#print_indent();
 				state.#print("<!--");
 				state.#print(data);
 				state.#print("-->");
@@ -394,8 +495,37 @@ class Printer {
 			Text(node, context) {
 				const { raw } = node;
 				const { state } = context;
-				const is_new_line_or_indents_only = state.#is_text_new_line_or_indents_only(node);
-				if (!is_new_line_or_indents_only) state.#print(raw);
+				if (state.#is_text_new_line_or_indents_only(node)) {
+					state.#was_last_text_indent_or_space_only = true;
+				} else {
+					state.#was_last_text_indent_or_space_only = false;
+					state.#print(raw);
+				}
+			},
+
+			Attribute(node, context) {
+				const { name, value } = node;
+				const { state } = context;
+				const is_shorthand_expression_tag =
+					value !== true &&
+					value[0]?.type === "ExpressionTag" &&
+					value[0].expression.type === "Identifier" &&
+					value[0].expression.name === name;
+				let stringified = "";
+				if (!is_shorthand_expression_tag) {
+					stringified += name;
+				}
+				// NOTE: This is e.g. `<button disabled />`,
+				// so its a shorthand - we don't need to append anything
+				if (value !== true) {
+					// WARN: I can't find a case where it can be an array?
+					// This may be a problem in the future
+					for (const text_or_expression_tag of value) {
+						if (!is_shorthand_expression_tag) stringified += "=";
+						stringified += state.#stringify_attribute_like_text_or_expression_tag(text_or_expression_tag);
+					}
+				}
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -409,9 +539,11 @@ class Printer {
 			SpreadAttribute(node, context) {
 				const { expression } = node;
 				const { state } = context;
-				state.#print("{...");
-				state.#print_es_node(expression, { skip_indent: true });
-				state.#print("}");
+				let stringified = "{";
+				stringified += "...";
+				stringified += print_es(expression).code;
+				stringified += "}";
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -430,14 +562,16 @@ class Printer {
 			AnimateDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
-				state.#print("animate");
-				state.#print(":");
-				state.#print(name);
+				let stringified = "animate";
+				stringified += ":";
+				stringified += name;
 				if (expression) {
-					state.#print("={");
-					state.#print_es_node(expression);
-					state.#print("}");
+					stringified += "=";
+					stringified += "{";
+					stringified += print_es(expression).code;
+					stringified += "}";
 				}
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -451,12 +585,14 @@ class Printer {
 			BindDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
-				state.#print("bind");
-				state.#print(":");
-				state.#print(name);
-				state.#print("={");
-				state.#print_es_node(expression);
-				state.#print("}");
+				let stringified = "bind";
+				stringified += ":";
+				stringified += name;
+				stringified += "=";
+				stringified += "{";
+				stringified += print_es(expression).code;
+				stringified += "}";
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -476,40 +612,44 @@ class Printer {
 				const { name, expression } = node;
 				const { state } = context;
 				const is_shorthand = expression.type === "Identifier" && expression.name === name;
-				state.#print("class");
-				state.#print(":");
-				state.#print(name);
+				let stringified = "class";
+				stringified += ":";
+				stringified += name;
 				if (!is_shorthand) {
-					state.#print("={");
-					state.#print_es_node(expression, { skip_indent: true });
-					state.#print("}");
+					stringified += "=";
+					stringified += "{";
+					stringified += print_es(expression).code;
+					stringified += "}";
 				}
+				state.#attributes.add(stringified);
 			},
 
 			/**
 			 * @see {@link https://svelte.dev/docs/special-elements#slot-slot-key-value}
 			 *
-			 * @example with value
+			 * @example with expression
 			 * ```svelte
-			 * let:item={item}
+			 * let:item={expression}
 			 * ```
 			 *
-			 * @example without value
+			 * @example without expression
 			 * ```svelte
-			 * let:item={item}
+			 * let:item
 			 * ```
 			 */
 			LetDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
-				state.#print("let");
-				state.#print(":");
-				state.#print(name);
+				let stringified = "let";
+				stringified += ":";
+				stringified += name;
 				if (expression) {
-					state.#print("={");
-					state.#print_es_node(expression);
-					state.#print("}");
+					stringified += "=";
+					stringified += "{";
+					stringified += print_es(expression).code;
+					stringified += "}";
 				}
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -528,18 +668,20 @@ class Printer {
 			OnDirective(node, context) {
 				const { name, expression, modifiers } = node;
 				const { state } = context;
-				state.#print("on");
-				state.#print(":");
-				state.#print(name);
+				let stringified = "on";
+				stringified += ":";
+				stringified += name;
 				if (modifiers.length > 0) {
-					state.#print("|");
-					state.#print(modifiers.join("|"));
+					stringified += "|";
+					stringified += modifiers.join("|");
 				}
 				if (expression) {
-					state.#print("={");
-					state.#print_es_node(expression, { skip_indent: true });
-					state.#print("}");
+					stringified += "=";
+					stringified += "{";
+					stringified += print_es(expression).code;
+					stringified += "}";
 				}
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -566,22 +708,21 @@ class Printer {
 			 */
 			StyleDirective(node, context) {
 				const { name, modifiers, value } = node;
-				const { state, visit } = context;
-				state.#print("style");
-				state.#print(":");
-				state.#print(name);
+				const { state } = context;
+				let stringified = "style";
+				stringified += ":";
+				stringified += name;
 				if (modifiers.length > 0) {
-					state.#print("|");
-					state.#print(modifiers.join("|"));
+					stringified += "|";
+					stringified += modifiers.join("|");
 				}
 				if (value !== true) {
 					for (const text_or_expression_tag of value) {
-						state.#print("=");
-						if (text_or_expression_tag.type === "Text") state.#print(`"`);
-						visit(text_or_expression_tag, state);
-						if (text_or_expression_tag.type === "Text") state.#print(`"`);
+						stringified += "=";
+						stringified += state.#stringify_attribute_like_text_or_expression_tag(text_or_expression_tag);
 					}
 				}
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -621,20 +762,23 @@ class Printer {
 			TransitionDirective(node, context) {
 				const { expression, intro, modifiers, name, outro } = node;
 				const { state } = context;
-				if (intro && !outro) state.#print("in");
-				else if (!intro && outro) state.#print("out");
-				else state.#print("transition");
-				state.#print(":");
-				state.#print(name);
+				let stringified = "";
+				if (intro && !outro) stringified += "in";
+				else if (!intro && outro) stringified += "out";
+				else stringified += "transition";
+				stringified += ":";
+				stringified += name;
 				if (modifiers.length > 0) {
-					state.#print("|");
-					state.#print(modifiers.join("|"));
+					stringified += "|";
+					stringified += modifiers.join("|");
 				}
 				if (expression) {
-					state.#print("={");
-					state.#print_es_node(expression);
-					state.#print("}");
+					stringified += "=";
+					stringified += "{";
+					stringified += print_es(expression).code;
+					stringified += "}";
 				}
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -653,14 +797,16 @@ class Printer {
 			UseDirective(node, context) {
 				const { expression, name } = node;
 				const { state } = context;
-				state.#print("use");
-				state.#print(":");
-				state.#print(name);
+				let stringified = "use";
+				stringified += ":";
+				stringified += name;
 				if (expression) {
-					state.#print("={");
-					state.#print_es_node(expression);
-					state.#print("}");
+					stringified += "=";
+					stringified += "{";
+					stringified += print_es(expression).code;
+					stringified += "}";
 				}
+				state.#attributes.add(stringified);
 			},
 
 			/**
@@ -687,51 +833,43 @@ class Printer {
 			 * ```
 			 */
 			AwaitBlock(node, context) {
+				const name = "await";
 				const { catch: catch_, error, expression, pending, then, value } = node;
 				const { state } = context;
-				state.#print("{#await ");
-				state.#print_es_node(expression, { skip_indent: true });
+				let await_block_content = print_es(expression).code;
 				if (then && !pending) {
-					state.#print(" then");
+					await_block_content += " then";
 					if (value) {
-						state.#print(" ");
-						state.#print_es_node(value, { skip_indent: true });
+						await_block_content += " ";
+						await_block_content += print_es(value).code;
 					}
 				}
 				if (catch_ && !pending) {
-					state.#print(" catch");
+					await_block_content += " catch";
 					if (error) {
-						state.#print(" ");
-						state.#print_es_node(error, { skip_indent: true });
+						await_block_content += " ";
+						await_block_content += print_es(error).code;
 					}
 				}
-				state.#print("}");
+				state.#print_block_opening_tag(name, await_block_content);
 				if (pending) {
-					state.print_block_fragment(pending, context);
+					state.#print_block_fragment(pending, context);
 				}
 				if (then) {
 					if (pending) {
-						state.#print("{:then");
-						if (value) {
-							state.#print(" ");
-							state.#print_es_node(value, { skip_indent: true });
-							state.#print("}");
-						}
+						const then_block_content = value ? print_es(value).code : undefined;
+						state.#print_block_middle_tag("then", then_block_content);
 					}
-					state.print_block_fragment(then, context);
+					state.#print_block_fragment(then, context);
 				}
 				if (catch_) {
 					if (pending) {
-						state.#print("{:catch");
-						if (error) {
-							state.#print(" ");
-							state.#print_es_node(error, { skip_indent: true });
-							state.#print("}");
-						}
+						const catch_block_content = error ? print_es(error).code : undefined;
+						state.#print_block_middle_tag("catch", catch_block_content);
 					}
-					state.print_block_fragment(catch_, context);
+					state.#print_block_fragment(catch_, context);
 				}
-				state.#print("{/await}");
+				state.#print_block_closing_tag(name);
 			},
 
 			/**
@@ -763,31 +901,28 @@ class Printer {
 			 * ```
 			 */
 			EachBlock(node, context) {
+				const name = "each";
 				const { body, context: node_context, expression, fallback, index, key } = node;
 				const { state } = context;
-				if (state.#depth > 0) state.#print_new_line();
-				state.#print_indent();
-				state.#print("{#each ");
-				state.#print_es_node(expression, { skip_indent: true });
-				state.#print(" as ");
-				state.#print_es_node(node_context, { skip_indent: true });
+				let content = print_es(expression).code;
+				content += " as ";
+				content += print_es(node_context).code;
 				if (index) {
-					state.#print(", ");
-					state.#print(index);
+					content += ", ";
+					content += index;
 				}
 				if (key) {
-					state.#print(" (");
-					state.#print_es_node(key);
-					state.#print(")");
+					content += " (";
+					content += print_es(key).code;
+					content += ")";
 				}
-				state.#print("}");
-				state.print_block_fragment(body, context);
+				state.#print_block_opening_tag(name, content);
+				state.#print_block_fragment(body, context);
 				if (fallback) {
-					state.#print("{:else}");
-					state.print_block_fragment(fallback, context);
+					state.#print_block_middle_tag("else");
+					state.#print_block_fragment(fallback, context);
 				}
-				state.#print_indent();
-				state.#print("{/each}");
+				state.#print_block_closing_tag(name);
 			},
 
 			/**
@@ -819,39 +954,31 @@ class Printer {
 			 * ```
 			 */
 			IfBlock(node, context) {
+				const name = "if";
 				const { alternate, consequent, elseif, test } = node;
-				const { state, visit } = context;
+				const { state } = context;
 				/** @param {SvelteAST.Fragment} node */
 				const has_alternate_else_if = (node) => node.nodes.some((n) => n.type === "IfBlock");
 				if (elseif) {
-					state.#print("{:else if ");
-					state.#print_es_node(test, { skip_indent: true });
-					state.#print("}");
-					state.#print_new_line();
-					visit(consequent, state);
+					if (state.#depth > 0) state.#depth--;
+					state.#print_block_middle_tag("else if", print_es(test).code);
+					state.#print_block_fragment(consequent, context);
 					if (alternate) {
 						if (!has_alternate_else_if(alternate)) {
-							state.#print("{:else}");
-							state.#print_new_line();
+							state.#print_block_middle_tag("else");
 						}
-						visit(alternate, state);
+						state.#print_block_fragment(alternate, context);
 					}
 				} else {
-					state.#print("{#if ");
-					state.#print_es_node(test, { skip_indent: true });
-					state.#print("}");
-					state.#print_new_line();
-					state.#depth++;
-					visit(consequent, state);
+					state.#print_block_opening_tag("if", print_es(test).code);
+					state.#print_block_fragment(consequent, context);
 					if (alternate) {
 						if (!has_alternate_else_if(alternate)) {
-							state.#print("{:else}");
-							state.#print_new_line();
+							state.#print_block_middle_tag("else");
 						}
-						visit(alternate, state);
+						state.#print_block_fragment(alternate, context);
 					}
-					state.#depth--;
-					state.#print("{/if}");
+					state.#print_block_closing_tag(name);
 				}
 			},
 
@@ -865,13 +992,12 @@ class Printer {
 			 * ```
 			 */
 			KeyBlock(node, context) {
+				const name = "key";
 				const { expression, fragment } = node;
 				const { state } = context;
-				state.#print("{#key ");
-				state.#print_es_node(expression, { skip_indent: true });
-				state.#print("}");
-				state.print_block_fragment(fragment, context);
-				state.#print("{/key}");
+				state.#print_block_opening_tag(name, print_es(expression).code);
+				state.#print_block_fragment(fragment, context);
+				state.#print_block_closing_tag(name);
 			},
 
 			/**
@@ -885,21 +1011,16 @@ class Printer {
 			 * ```
 			 */
 			SnippetBlock(node, context) {
+				const name = "snippet";
 				const { body, expression, parameters } = node;
 				const { state } = context;
-				state.#print_indent();
-				state.#print("{#snippet ");
-				state.#print_es_node(expression, { skip_indent: true });
-				state.#print("(");
-				parameters.forEach((pattern, index) => {
-					state.#print_es_node(pattern, { skip_indent: true });
-					if (parameters[index + 1]) state.#print(", ");
-				});
-				state.#print(")");
-				state.#print("}");
-				state.print_block_fragment(body, context);
-				state.#print_indent();
-				state.#print("{/snippet}");
+				let content = print_es(expression).code;
+				content += "(";
+				content += parameters.map((pattern) => print_es(pattern).code).join(", ");
+				content += ")";
+				state.#print_block_opening_tag(name, content);
+				state.#print_block_fragment(body, context);
+				state.#print_block_closing_tag(name);
 			},
 
 			/**
@@ -976,24 +1097,31 @@ class Printer {
 			 * ```
 			 */
 			SvelteElement(node, context) {
-				const { fragment, name, tag } = node;
-				const { state } = context;
+				const { attributes, fragment, name, tag } = node;
+				const { state, visit } = context;
+				// WARN: Workaround to convert `this` into attribute
+				visit(
+					{
+						type: "Attribute",
+						name: "this",
+						value: [
+							{
+								type: "ExpressionTag",
+								expression: tag,
+							},
+						],
+					},
+					state,
+				);
+				for (const attribute_like of attributes) {
+					visit(attribute_like, state);
+				}
 				const is_self_closing = state.#is_fragment_empty(fragment);
-				if (state.#output.at(-1) === "\n") state.#print_indent();
-				state.#print("<");
-				state.#print(name);
-				state.#print(" this={");
-				state.#print_es_node(tag);
-				state.#print("}");
-				state.#print_element_like_attributes(node, context);
-				if (is_self_closing) state.#print(" />");
-				else {
-					state.#print(">");
-					if (fragment) {
-						state.#depth++;
-						state.print_element_like_fragment(fragment, context);
-						state.#depth--;
-					}
+				state.#print_element_like_opening_tag(name, { self_close: is_self_closing });
+				if (!is_self_closing && fragment) {
+					state.#depth++;
+					state.#print_element_like_fragment(fragment, context);
+					state.#depth--;
 					state.#print_element_like_closing_tag(name);
 				}
 			},
@@ -1041,10 +1169,12 @@ class Printer {
 			 * WARN: This one is different, because it can be extracted only from {@link SvelteAST.Root}
 			 */
 			SvelteOptions(node, context) {
-				const { state } = context;
-				state.#print("<svelte:options");
-				state.#print_element_like_attributes(node, context);
-				state.#print(" />");
+				const { attributes, name } = node;
+				const { state, visit } = context;
+				for (const attribute_like of attributes) {
+					visit(attribute_like, state);
+				}
+				state.#print_element_like_opening_tag(name, { self_close: true });
 			},
 
 			/**
@@ -1108,9 +1238,12 @@ class Printer {
 				const { state } = context;
 				state.#print("{@debug");
 				identifiers.forEach((identifier, index) => {
-					state.#print(" ");
+					state.#print_space();
 					state.#print_es_node(identifier);
-					if (identifiers[index + 1]) state.#print(", ");
+					if (identifiers[index + 1]) {
+						state.#print(",");
+						state.#print_space();
+					}
 				});
 				state.#print("}");
 			},
@@ -1136,7 +1269,8 @@ class Printer {
 			HtmlTag(node, context) {
 				const { expression } = node;
 				const { state } = context;
-				state.#print("{@html ");
+				state.#print("{@html");
+				state.#print_space();
 				state.#print_es_node(expression);
 				state.#print("}");
 			},
@@ -1154,7 +1288,8 @@ class Printer {
 			RenderTag(node, context) {
 				const { expression } = node;
 				const { state } = context;
-				state.#print("{@render ");
+				state.#print("{@render");
+				state.#print_space();
 				state.#print_es_node(expression);
 				state.#print("}");
 			},
@@ -1165,12 +1300,14 @@ class Printer {
 			StyleSheet(node, context) {
 				const { attributes, children } = node;
 				const { state, visit } = context;
-				state.#print("<style");
+				if (state.#is_last_output_closing_element_like) {
+					state.#print_new_line();
+					state.#print_new_line();
+				}
 				for (const attribute of attributes) {
-					state.#print(" ");
 					visit(attribute, state);
 				}
-				state.#print(">");
+				state.#print_element_like_opening_tag("style");
 				state.#print_new_line();
 				state.#depth++;
 				children.forEach((child, index) => {
@@ -1181,7 +1318,7 @@ class Printer {
 				});
 				state.#depth--;
 				state.#print_new_line();
-				state.#print("</style>");
+				state.#print_element_like_closing_tag("style");
 			},
 
 			Atrule(node, context) {
@@ -1189,10 +1326,10 @@ class Printer {
 				const { state, visit } = context;
 				state.#print("@");
 				state.#print(name);
-				state.#print(" ");
+				state.#print_space();
 				state.#print(prelude);
 				if (block) {
-					state.#print(" ");
+					state.#print_space();
 					visit(block, state);
 				}
 			},
@@ -1217,7 +1354,7 @@ class Printer {
 					state.#print('"');
 				}
 				if (flags) {
-					state.#print(" ");
+					state.#print_space();
 					state.#print(flags);
 				}
 				state.#print("]");
@@ -1283,7 +1420,8 @@ class Printer {
 				const { property, value } = node;
 				const { state } = context;
 				state.#print(property);
-				state.#print(": ");
+				state.#print(":");
+				state.#print_space();
 				// NOTE: It removes any existing indentation, because output will look uglier
 				state.#print(value.split(/[\s\t\n]+/).join(" "));
 				state.#print(";");
@@ -1361,7 +1499,7 @@ class Printer {
 				const { block, prelude } = node;
 				const { state, visit } = context;
 				visit(prelude, state);
-				state.#print(" ");
+				state.#print_space();
 				visit(block, state);
 			},
 
@@ -1369,7 +1507,7 @@ class Printer {
 				const { combinator, selectors } = node;
 				const { state, visit } = context;
 				if (combinator) {
-					state.#print(" ");
+					state.#print_space();
 					visit(combinator, state);
 				}
 				for (const selector of selectors) {

@@ -1,9 +1,8 @@
 # `svelte-ast-print`
 
 ![NPM Version](https://img.shields.io/npm/v/svelte-ast-print?style=for-the-badge&logo=npm)
-![JSR Version](https://img.shields.io/jsr/v/%40xeho91/svelte-ast-print?style=for-the-badge&logo=jsr)
 
-Print **Svelte AST** nodes as a string.\
+Print **Svelte [AST]** nodes as a string.\
 A.k.a. [`parse`] in reverse.
 
 This is what you need to create [codemods] - e.g. for migration between Svelte versions syntaxes.
@@ -16,8 +15,8 @@ This is what you need to create [codemods] - e.g. for migration between Svelte v
 
 This package depends on:
 
-1 [`esrap`] for printing [ESTree] specification-compliant AST nodes
-2 [`zimmerframe`] for walking on the AST nodes
+1. [`esrap`] for printing [ESTree] specification-compliant [AST] nodes
+1. [`zimmerframe`] for walking on the [AST] nodes
 
 ## Limitations
 
@@ -149,3 +148,4 @@ This project is licensed under the [MIT License](./LICENSE.md).
 [ESTree]: https://github.com/estree/estree
 [codemods]: https://codemod.com/blog/what-are-codemods#ill-find-replace-whats-the-issue-hint-a-lot
 [`parse`]: https://svelte.dev/docs/svelte-compiler#parse
+[AST]: https://en.wikipedia.org/wiki/Abstract_syntax_tree
