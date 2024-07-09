@@ -101,6 +101,7 @@ describe("Root", () => {
 
 				$: remaining = todos.filter((t) => !t.done).length;
 			</script>
+
 			<div class="centered">
 				<h1>todos</h1>
 				<ul class="todos">
@@ -119,6 +120,7 @@ describe("Root", () => {
 					Clear completed
 				</button>
 			</div>
+
 			<style>
 				.centered {
 					max-width: 20em;
@@ -167,16 +169,16 @@ describe("Root", () => {
 					component: Button,
 					tags: ['autodocs'],
 					args: {
-					children: 'Click me',
-					onclick: onclickFn,
+						children: 'Click me',
+						onclick: onclickFn,
 					},
 					argTypes: {
-					backgroundColor: { control: 'color' },
-					size: {
-						control: { type: 'select' },
-						options: ['small', 'medium', 'large'],
-					},
-					children: { control: 'text' },
+						backgroundColor: { control: 'color' },
+						size: {
+							control: { type: 'select' },
+							options: ['small', 'medium', 'large'],
+						},
+						children: { control: 'text' },
 					},
 				});
 			</script>
@@ -235,20 +237,14 @@ describe("Root", () => {
 			<script lang="ts">
 				setTemplate(template);
 			</script>
-
 			{#snippet template({ children, ...args }, context)}
 				<Button {...args}>{children}</Button>
-			{/snippet}
-			<!-- Only use this sparingly as the main CTA. -->
-			<Story name="Primary" args={{ primary: true }} />
+			{/snippet}<!-- Only use this sparingly as the main CTA. --><Story name="Primary" args={{ primary: true }} />
 			<Story name="Secondary" />
-			<Story name="Large" args={{ size: 'large' }} />
-			<!-- This is _tiny_ 🤏 -->
-			<Story name="Small" args={{ size: 'small' }} />
+			<Story name="Large" args={{ size: 'large' }} /><!-- This is _tiny_ 🤏 --><Story name="Small" args={{ size: 'small' }} />
 			<Story name="Long content">
 				<Button onclick={onclickFn}>The very long content</Button>
-			</Story>
-			"
+			</Story>"
 		`,
 		);
 	});

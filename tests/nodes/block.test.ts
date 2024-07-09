@@ -73,6 +73,24 @@ describe("AwaitBlock", () => {
 			{/await}"
 		`);
 	});
+
+	it("nested blocks works", ({ expect }) => {
+		const code = `
+			{#await promiseParent catch error}
+				{#await promiseChildren catch error}
+					<p>The error is {error}</p>
+				{/await}
+			{/await}
+		`;
+		const node = parse_and_extract_svelte_node<AwaitBlock>(code, "AwaitBlock");
+		expect(print(node)).toMatchInlineSnapshot(`
+			"{#await promiseParent catch error}
+				{#await promiseChildren catch error}
+					<p>The error is {error}</p>
+				{/await}
+			{/await}"
+		`);
+	});
 });
 
 describe("EachBlock", () => {
@@ -184,6 +202,32 @@ describe("EachBlock", () => {
 		expect(print(node)).toMatchInlineSnapshot(`
 			"{#each todos as todo}
 				<p>{todo.text}</p>
+			{:else}
+				<p>No tasks today!</p>
+			{/each}"
+		`);
+	});
+
+	it("nested blocks works", ({ expect }) => {
+		const code = `
+			{#each todos as todo}
+				{#each todo.subtasks as subtask}
+					<p>{subtask.test}</p>
+				{:else}
+					<p>No subtasks available!</p>
+				{/each}
+			{:else}
+				<p>No tasks today!</p>
+			{/each}
+		`;
+		const node = parse_and_extract_svelte_node<EachBlock>(code, "EachBlock");
+		expect(print(node)).toMatchInlineSnapshot(`
+			"{#each todos as todo}
+				{#each todo.subtasks as subtask}
+					<p>{subtask.test}</p>
+				{:else}
+					<p>No subtasks available!</p>
+				{/each}
 			{:else}
 				<p>No tasks today!</p>
 			{/each}"
