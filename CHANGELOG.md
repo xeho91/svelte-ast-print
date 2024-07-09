@@ -1,3 +1,15 @@
+# v0.2.2 (Tue Jul 09 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Indentation issues [#83](https://github.com/xeho91/svelte-ast-print/pull/83) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 <!--markdownlint-disable no-duplicate-heading -->
 # Changelog
 
