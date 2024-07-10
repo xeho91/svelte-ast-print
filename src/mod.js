@@ -577,21 +577,29 @@ class Printer {
 			/**
 			 * @see {@link https://svelte.dev/docs/element-directives#bind-property}
 			 *
-			 * @example pattern
+			 * @example default pattern
 			 * ```svelte
 			 * bind:property={variable}
+			 * ```
+			 *
+			 * @example shorthand - when variable name is same as property
+			 * ```svelte
+			 * bind:property
 			 * ```
 			 */
 			BindDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
+				const is_shorthand = expression?.type === "Identifier" && expression.name === name;
 				let stringified = "bind";
 				stringified += ":";
 				stringified += name;
-				stringified += "=";
-				stringified += "{";
-				stringified += print_es(expression).code;
-				stringified += "}";
+				if (!is_shorthand) {
+					stringified += "=";
+					stringified += "{";
+					stringified += print_es(expression).code;
+					stringified += "}";
+				}
 				state.#attributes.add(stringified);
 			},
 

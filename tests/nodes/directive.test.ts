@@ -36,7 +36,19 @@ describe("AnimateDirective", () => {
 	});
 });
 
-describe("BindDIrective", () => {
+describe("BindDirective", () => {
+	it("prints correctly when is a shorthand", ({ expect }) => {
+		const code = `
+			<script lang="ts">
+				let value: string;
+			</script>
+
+			<input type="text" bind:value />
+		`;
+		const node = parse_and_extract_svelte_node<BindDirective>(code, "BindDirective");
+		expect(print(node)).toMatchInlineSnapshot(`"bind:value"`);
+	});
+
 	it("works on binding input value", ({ expect }) => {
 		const code = `
 			<input bind:value={name} />
