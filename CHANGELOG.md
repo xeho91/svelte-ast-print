@@ -1,3 +1,15 @@
+# v0.2.3 (Wed Jul 10 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Printing `BindDirective` when is a shorthand [#84](https://github.com/xeho91/svelte-ast-print/pull/84) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.2.2 (Tue Jul 09 2024)
 
 #### 🐛 Bug Fix
