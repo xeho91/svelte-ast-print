@@ -1,4 +1,5 @@
 /**
+ * @import * as EstreeAST from "estree";
  * @import * as SvelteAST from "svelte/compiler";
  * @import { Context } from "zimmerframe";
  *
@@ -239,7 +240,8 @@ class Printer {
 	#print_block_opening_tag(name, content) {
 		this.#print_opening_new_line();
 		this.#print_indent();
-		this.#print("{#");
+		this.#print("{");
+		this.#print("#");
 		this.#print(name);
 		this.#print_space();
 		this.#print(content);
@@ -372,6 +374,54 @@ class Printer {
 		}
 		const { expression } = node;
 		return `{${print_es(expression).code}}`;
+	}
+
+	/**
+	 * @typedef StringifyDirectiveParams
+	 * @property {"animate" | "bind" | "class" | "let" | "on" | "style" | "in" | "out" | "transition" | "use"} directive
+	 * @property {string} name
+	 * @property {EstreeAST.Expression | EstreeAST.MemberExpression | null} expression
+	 * @property {string[]} [modifiers]
+	 */
+
+	/**
+	 * @param {StringifyDirectiveParams["directive"]} directive
+	 * @param {StringifyDirectiveParams["name"]} name
+	 * @returns {string}
+	 */
+	#stringify_directive_name(directive, name) {
+		return `${directive}:${name}`;
+	}
+
+	/**
+	 * @param {NonNullable<StringifyDirectiveParams["modifiers"]>} modifiers
+	 * @returns {string}
+	 */
+	#stringify_directive_modifiers(modifiers) {
+		let results = "";
+		if (modifiers?.length > 0) {
+			results += "|";
+			results += modifiers.join("|");
+		}
+		return results;
+	}
+
+	/**
+	 * @param {StringifyDirectiveParams} params
+	 * @returns {string}
+	 */
+	#stringify_directive(params) {
+		const { directive, name, expression, modifiers } = params;
+		const is_shorthand = expression?.type === "Identifier" && expression.name === name;
+		let results = this.#stringify_directive_name(directive, name);
+		if (modifiers) results += this.#stringify_directive_modifiers(modifiers);
+		if (!is_shorthand && expression) {
+			results += "=";
+			results += "{";
+			results += print_es(expression).code;
+			results += "}";
+		}
+		return results;
 	}
 
 	/**
@@ -549,69 +599,52 @@ class Printer {
 			/**
 			 * @see {@link https://svelte.dev/docs/element-directives#animate-fn}
 			 *
-			 * @example without params
+			 * @example with expression
 			 * ```svelte
-			 * animate:name
+			 * animate:name={expression}
 			 * ```
 			 *
-			 * @example with params
+			 * @example shorthand - when variable - expression as identifier - name is same
 			 * ```svelte
-			 * animate:name={params}
+			 * animate:name
 			 * ```
 			 */
 			AnimateDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
-				let stringified = "animate";
-				stringified += ":";
-				stringified += name;
-				if (expression) {
-					stringified += "=";
-					stringified += "{";
-					stringified += print_es(expression).code;
-					stringified += "}";
-				}
+				const stringified = state.#stringify_directive({ directive: "animate", name, expression });
 				state.#attributes.add(stringified);
 			},
 
 			/**
 			 * @see {@link https://svelte.dev/docs/element-directives#bind-property}
 			 *
-			 * @example default pattern
+			 * @example with expression
 			 * ```svelte
-			 * bind:property={variable}
+			 * bind:name={variable}
 			 * ```
 			 *
-			 * @example shorthand - when variable name is same as property
+			 * @example shorthand - when variable - expression as identifier - name is same
 			 * ```svelte
-			 * bind:property
+			 * bind:name
 			 * ```
 			 */
 			BindDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
-				const is_shorthand = expression?.type === "Identifier" && expression.name === name;
-				let stringified = "bind";
-				stringified += ":";
-				stringified += name;
-				if (!is_shorthand) {
-					stringified += "=";
-					stringified += "{";
-					stringified += print_es(expression).code;
-					stringified += "}";
-				}
+				const stringified = state.#stringify_directive({ directive: "bind", name, expression });
 				state.#attributes.add(stringified);
 			},
 
 			/**
 			 * @see {@link https://svelte.dev/docs/element-directives#class-name}
 			 *
-			 * @example with value
+			 * @example with expression
 			 * ```svelte
-			 * class:name={value}
+			 * class:name={expression}
 			 * ```
 			 *
-			 * @example without value
+			 * @example shorthand - when variable - expression as identifier - name is same
 			 * ```svelte
 			 * class:name
 			 * ```
@@ -619,16 +652,7 @@ class Printer {
 			ClassDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
-				const is_shorthand = expression.type === "Identifier" && expression.name === name;
-				let stringified = "class";
-				stringified += ":";
-				stringified += name;
-				if (!is_shorthand) {
-					stringified += "=";
-					stringified += "{";
-					stringified += print_es(expression).code;
-					stringified += "}";
-				}
+				const stringified = state.#stringify_directive({ directive: "class", name, expression });
 				state.#attributes.add(stringified);
 			},
 
@@ -637,26 +661,18 @@ class Printer {
 			 *
 			 * @example with expression
 			 * ```svelte
-			 * let:item={expression}
+			 * let:name={expression}
 			 * ```
 			 *
-			 * @example without expression
+			 * @example shorthand - when variable - expression as identifier - name is same
 			 * ```svelte
-			 * let:item
+			 * let:name
 			 * ```
 			 */
 			LetDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
-				let stringified = "let";
-				stringified += ":";
-				stringified += name;
-				if (expression) {
-					stringified += "=";
-					stringified += "{";
-					stringified += print_es(expression).code;
-					stringified += "}";
-				}
+				const stringified = state.#stringify_directive({ directive: "let", name, expression });
 				state.#attributes.add(stringified);
 			},
 
@@ -665,30 +681,18 @@ class Printer {
 			 *
 			 * @example without modifiers
 			 * ```svelte
-			 * on:eventname={handler}
+			 * on:name={expression}
 			 * ```
 			 *
 			 * @example with modifiers
 			 * ```svelte
-			 * on:eventname|modifiers={handler}
+			 * on:name|modifiers={handler}
 			 * ```
 			 */
 			OnDirective(node, context) {
 				const { name, expression, modifiers } = node;
 				const { state } = context;
-				let stringified = "on";
-				stringified += ":";
-				stringified += name;
-				if (modifiers.length > 0) {
-					stringified += "|";
-					stringified += modifiers.join("|");
-				}
-				if (expression) {
-					stringified += "=";
-					stringified += "{";
-					stringified += print_es(expression).code;
-					stringified += "}";
-				}
+				const stringified = state.#stringify_directive({ directive: "on", name, expression, modifiers });
 				state.#attributes.add(stringified);
 			},
 
@@ -697,33 +701,28 @@ class Printer {
 			 *
 			 * @example with expression tag
 			 * ```svelte
-			 * style:property={value}
+			 * style:name={value}
 			 * ```
 			 *
 			 * @example with text expression
 			 * ```svelte
-			 * style:property="text"
+			 * style:name="text"
 			 * ```
 			 *
 			 * @example without expression
 			 * ```svelte
-			 * style:property
+			 * style:name
 			 * ```
 			 *
 			 * @example with modifiers
 			 * ```svelte
-			 * style:property|modifiers="text"
+			 * style:name|modifiers="text"
 			 */
 			StyleDirective(node, context) {
 				const { name, modifiers, value } = node;
 				const { state } = context;
-				let stringified = "style";
-				stringified += ":";
-				stringified += name;
-				if (modifiers.length > 0) {
-					stringified += "|";
-					stringified += modifiers.join("|");
-				}
+				let stringified = state.#stringify_directive_name("style", name);
+				stringified += state.#stringify_directive_modifiers(modifiers);
 				if (value !== true) {
 					for (const text_or_expression_tag of value) {
 						stringified += "=";
@@ -737,83 +736,65 @@ class Printer {
 			 * @see {@link https://svelte.dev/docs/element-directives#transition-fn}
 			 * @see {@link https://svelte.dev/docs/element-directives#in-fn-out-fn}
 			 *
-			 * @example without params
+			 * @example without expression
 			 * ```svelte
-			 * transition|in|out:fn
+			 * transition|in|out:name
 			 * ```
 			 *
-			 * @example with params
+			 * @example with expression
 			 * ```svelte
-			 * transition|in|out:fn={params}
+			 * transition|in|out:name={expression}
 			 * ```
 			 *
-			 * @example with global modifier and without params
+			 * @example with global modifier and without expression
 			 * ```svelte
-			 * transition|in|out:fn|global
+			 * transition|in|out:name|global
 			 * ```
 			 *
-			 * @example with global modifier and with params
+			 * @example with global modifier and with expression
 			 * ```svelte
-			 * transition|in|out:fn|global={params}
+			 * transition|in|out:name|global={expression}
 			 * ```
 			 *
-			 * @example with local modifier and without params
+			 * @example with local modifier and without expression
 			 * ```svelte
-			 * transition|in|out:fn|local
+			 * transition|in|out:name|local
 			 * ```
 			 *
-			 * @example with local modifier and with params
+			 * @example with local modifier and with expression
 			 * ```svelte
-			 * transition|in|out:fn|local={params}
+			 * transition|in|out:name|local={expression}
 			 * ```
 			 */
 			TransitionDirective(node, context) {
 				const { expression, intro, modifiers, name, outro } = node;
 				const { state } = context;
-				let stringified = "";
-				if (intro && !outro) stringified += "in";
-				else if (!intro && outro) stringified += "out";
-				else stringified += "transition";
-				stringified += ":";
-				stringified += name;
-				if (modifiers.length > 0) {
-					stringified += "|";
-					stringified += modifiers.join("|");
-				}
-				if (expression) {
-					stringified += "=";
-					stringified += "{";
-					stringified += print_es(expression).code;
-					stringified += "}";
-				}
+				/** @type {"in" | "out" | "transition"} */
+				let directive;
+				if (intro && !outro) directive = "in";
+				else if (!intro && outro) directive = "out";
+				else directive = "transition";
+				const stringified = state.#stringify_directive({ directive, name, expression, modifiers });
 				state.#attributes.add(stringified);
 			},
 
 			/**
 			 * @see {@link https://svelte.dev/docs/element-directives#use-action}
 			 *
-			 * @example UseDirective - without params
+			 * @example with expression
 			 * ```svelte
-			 * use:action
+			 * use:name={expression}
 			 * ```
 			 *
-			 * @example UseDirective - with parameters
+			 * @example shorthand - when variable - expression as identifier - name is same
 			 * ```svelte
-			 * use:action={parameters}
+			 * use:name
 			 * ```
 			 */
 			UseDirective(node, context) {
 				const { expression, name } = node;
 				const { state } = context;
-				let stringified = "use";
-				stringified += ":";
-				stringified += name;
-				if (expression) {
-					stringified += "=";
-					stringified += "{";
-					stringified += print_es(expression).code;
-					stringified += "}";
-				}
+				const stringified = state.#stringify_directive({ directive: "use", name, expression });
 				state.#attributes.add(stringified);
 			},
 
@@ -916,11 +897,13 @@ class Printer {
 				content += " as ";
 				content += print_es(node_context).code;
 				if (index) {
-					content += ", ";
+					content += ",";
+					content += " ";
 					content += index;
 				}
 				if (key) {
-					content += " (";
+					content += "(";
+					content += " ";
 					content += print_es(key).code;
 					content += ")";
 				}
