@@ -577,9 +577,14 @@ class Printer {
 			/**
 			 * @see {@link https://svelte.dev/docs/element-directives#bind-property}
 			 *
-			 * @example pattern
+			 * @example default pattern
 			 * ```svelte
 			 * bind:property={variable}
+			 * ```
+			 *
+			 * @example shorthand - when variable name is same as property
+			 * ```svelte
+			 * bind:property
 			 * ```
 			 */
 			BindDirective(node, context) {
