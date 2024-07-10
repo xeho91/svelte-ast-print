@@ -32,7 +32,7 @@ describe("Component", () => {
 		`;
 		const node = parse_and_extract_svelte_node<Component>(code, "Component");
 		expect(print(node)).toMatchInlineSnapshot(
-			`"<Slider bind:value={value} min={0} --rail-color="black" --track-color="rgb(0, 0, 255)" />"`,
+			`"<Slider bind:value min={0} --rail-color="black" --track-color="rgb(0, 0, 255)" />"`,
 		);
 	});
 
@@ -98,7 +98,7 @@ describe("RegularElement", () => {
 		`;
 		const node = parse_and_extract_svelte_node<RegularElement>(code, "RegularElement");
 		expect(print(node)).toMatchInlineSnapshot(
-			`"<input bind:value={value} min={0} style:--rail-color="black" style:--track-color="rgb(0, 0, 255)" />"`,
+			`"<input bind:value min={0} style:--rail-color="black" style:--track-color="rgb(0, 0, 255)" />"`,
 		);
 	});
 

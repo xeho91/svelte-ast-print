@@ -585,13 +585,16 @@ class Printer {
 			BindDirective(node, context) {
 				const { name, expression } = node;
 				const { state } = context;
+				const is_shorthand = expression?.type === "Identifier" && expression.name === name;
 				let stringified = "bind";
 				stringified += ":";
 				stringified += name;
-				stringified += "=";
-				stringified += "{";
-				stringified += print_es(expression).code;
-				stringified += "}";
+				if (!is_shorthand) {
+					stringified += "=";
+					stringified += "{";
+					stringified += print_es(expression).code;
+					stringified += "}";
+				}
 				state.#attributes.add(stringified);
 			},
 
