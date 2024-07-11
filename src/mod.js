@@ -902,8 +902,8 @@ class Printer {
 					content += index;
 				}
 				if (key) {
-					content += "(";
 					content += " ";
+					content += "(";
 					content += print_es(key).code;
 					content += ")";
 				}
