@@ -4,11 +4,7 @@
 	"version": "0.2.3",
 	"type": "module",
 	"description": "Print Svelte AST nodes as a string. Aka parse in reverse.",
-	"keywords": [
-		"svelte",
-		"ast",
-		"print"
-	],
+	"keywords": ["svelte", "ast", "print"],
 	"license": "MIT",
 	"author": {
 		"name": "Mateusz Kadlubowski",
@@ -37,10 +33,7 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"files": [
-		"src/",
-		"types/"
-	],
+	"files": ["src/", "types/"],
 	"imports": {
 		"#tests/*": {
 			"types": "./tests/*.ts",
@@ -116,8 +109,8 @@
 		"@auto-it/npm": "11.1.6",
 		"@auto-it/released": "11.1.6",
 		"@biomejs/biome": "1.8.3",
-		"@vitest/coverage-v8": "1.6.0",
-		"@vitest/ui": "1.6.0",
+		"@vitest/coverage-v8": "2.0.2",
+		"@vitest/ui": "2.0.2",
 		"all-contributors-cli": "6.26.1",
 		"auto": "11.1.6",
 		"del-cli": "5.1.0",
@@ -127,6 +120,6 @@
 		"typedoc": "0.26.3",
 		"typedoc-plugin-coverage": "3.3.0",
 		"typedoc-plugin-mdn-links": "3.2.2",
-		"vitest": "1.6.0"
+		"vitest": "2.0.2"
 	}
 }
