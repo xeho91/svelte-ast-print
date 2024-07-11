@@ -22,12 +22,12 @@ This package depends on:
 
 > [!WARNING]
 > **TypeScript isn't supported**, yet.\
-> At the moment Svelte parser skips TypeScript related syntax. Also, [`esrap`] doesn't recognize TypeScript related AST nodes.
+> See & subscribe to progress on [issue #86 - Add support for TypeScript](https://github.com/xeho91/svelte-ast-print/issues/86).
 
 ---
 
 > [!IMPORTANT]
-> **It ignores any previous formatting**.
+> **It ignores any previous formatting**.\
 > The current focus is to be able to write codemods as soon as possible - because right now, there are no alternatives.
 >
 > If you need to format modified and stringified Svelte AST, use available formatters for Svelte:
@@ -38,7 +38,7 @@ This package depends on:
 ---
 
 > [!NOTE]
-> **Is not optimized for performance**, yet.\
+> **This package is in beta stage.**\
 > See [Roadmap](https://github.com/xeho91/svelte-ast-print/discussions/2)
 
 ## Getting started
