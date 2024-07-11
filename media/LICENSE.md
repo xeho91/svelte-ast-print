@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2014-present [these people](https://github.com/xeho91/svelte-ast-print/graphs/contributors)
+Copyright (c) 2024-present [these people](https://github.com/xeho91/svelte-ast-print/graphs/contributors)
 
 Permission is hereby granted, free of charge,
 to any person obtaining a copy of this software and associated documentation files (the "Software"),
