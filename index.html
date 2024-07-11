@@ -11,12 +11,12 @@ A.k.a. <a href="https://svelte.dev/docs/svelte-compiler#parse"><code>parse</code
 <a id="md:limitations" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Limitations<a href="#md:limitations" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><blockquote>
 <p>[!WARNING]
 <strong>TypeScript isn't supported</strong>, yet.<br>
-At the moment Svelte parser skips TypeScript related syntax. Also, <a href="https://github.com/rich-harris/esrap"><code>esrap</code></a> doesn't recognize TypeScript related AST nodes.</p>
+See &amp; subscribe to progress on <a href="https://github.com/xeho91/svelte-ast-print/issues/86">issue #86 - Add support for TypeScript</a>.</p>
 </blockquote>
 <hr>
 <blockquote>
 <p>[!IMPORTANT]
-<strong>It ignores any previous formatting</strong>.
+<strong>It ignores any previous formatting</strong>.<br>
 The current focus is to be able to write codemods as soon as possible - because right now, there are no alternatives.</p>
 <p>If you need to format modified and stringified Svelte AST, use available formatters for Svelte:</p>
 <ul>
@@ -27,7 +27,7 @@ The current focus is to be able to write codemods as soon as possible - because 
 <hr>
 <blockquote>
 <p>[!NOTE]
-<strong>Is not optimized for performance</strong>, yet.<br>
+<strong>This package is in beta stage.</strong><br>
 See <a href="https://github.com/xeho91/svelte-ast-print/discussions/2">Roadmap</a></p>
 </blockquote>
 <a id="md:getting-started" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Getting started<a href="#md:getting-started" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
