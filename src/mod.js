@@ -6,7 +6,7 @@
  * @import { Node } from "./nodes.js";
  */
 
-import { print as print_es } from "esrap";
+import { print as print_es } from "recast";
 import { walk } from "zimmerframe";
 
 import { is_attribute_like_node, is_element_like_node, is_svelte_node } from "./nodes.js";
