@@ -4,13 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  recast@0.23.9:
+    hash: mz3n7u6bodxd4squxjzhzvgf6y
+    path: patches/recast@0.23.9.patch
+
 importers:
 
   .:
     dependencies:
       recast:
         specifier: ^0.23.9
-        version: 0.23.9
+        version: 0.23.9(patch_hash=mz3n7u6bodxd4squxjzhzvgf6y)
       zimmerframe:
         specifier: 1.1.2
         version: 1.1.2
@@ -6956,7 +6961,7 @@ snapshots:
 
   real-require@0.2.0: {}
 
-  recast@0.23.9:
+  recast@0.23.9(patch_hash=mz3n7u6bodxd4squxjzhzvgf6y):
     dependencies:
       ast-types: 0.16.1
       esprima: 4.0.1

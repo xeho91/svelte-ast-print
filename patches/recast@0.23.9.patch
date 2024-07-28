@@ -1,0 +1,31 @@
+diff --git a/lib/printer.js b/lib/printer.js
+index 2fcefa18d060e71489f6a480bf2f976651368e0a..f9660e28a8a4e88fae09acc791358a04cb1c087e 100644
+--- a/lib/printer.js
++++ b/lib/printer.js
+@@ -532,7 +532,7 @@ function genericPrintNoParens(path, options, print) {
+             fields.forEach(function (field) {
+                 len_1 += n[field].length;
+             });
+-            var oneLine_1 = (isTypeAnnotation_1 && len_1 === 1) || len_1 === 0;
++            var oneLine_1 = true;
+             var leftBrace = n.exact ? "{|" : "{";
+             var rightBrace = n.exact ? "|}" : "}";
+             parts.push(oneLine_1 ? leftBrace : leftBrace + "\n");
+@@ -544,7 +544,7 @@ function genericPrintNoParens(path, options, print) {
+                     if (!oneLine_1) {
+                         lines = lines.indent(options.tabWidth);
+                     }
+-                    var multiLine = !isTypeAnnotation_1 && lines.length > 1;
++                    var multiLine = false;
+                     if (multiLine && allowBreak_1) {
+                         // Similar to the logic for BlockStatement.
+                         parts.push("\n");
+@@ -553,7 +553,7 @@ function genericPrintNoParens(path, options, print) {
+                     if (i_1 < len_1 - 1) {
+                         // Add an extra line break if the previous object property
+                         // had a multi-line value.
+-                        parts.push(separator_1 + (multiLine ? "\n\n" : "\n"));
++                        parts.push(separator_1 + (multiLine ? "\n\n" : " "));
+                         allowBreak_1 = !multiLine;
+                     }
+                     else if (len_1 !== 1 && isTypeAnnotation_1) {

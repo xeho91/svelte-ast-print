@@ -6,7 +6,7 @@
  * @import { Node } from "./nodes.js";
  */
 
-import { print as print_es } from "recast";
+import { print as recastPrint } from "recast";
 import { walk } from "zimmerframe";
 
 import { is_attribute_like_node, is_element_like_node, is_svelte_node } from "./nodes.js";
@@ -70,6 +70,10 @@ export function print(node, options = {}) {
 	}
 
 	return print_es(node).code;
+}
+
+function print_es(node) {
+	return recastPrint(node, { quote: "single" })
 }
 
 class Printer {

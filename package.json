@@ -121,5 +121,10 @@
 		"typedoc-plugin-coverage": "3.3.0",
 		"typedoc-plugin-mdn-links": "3.2.2",
 		"vitest": "2.0.2"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"recast@0.23.9": "patches/recast@0.23.9.patch"
+		}
 	}
 }
