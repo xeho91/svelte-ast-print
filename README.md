@@ -105,6 +105,10 @@ This package depends on:
    fs.writeFileSync("src/App.svelte", output, { encoding: " utf-8" });
    ```
 
+    > [!IMPORTANT]
+    > When using [`parse`] from `svelte`, please remember about passing `modern: true` to options _(second argument)_.\
+    > You can omit it from Svelte `v6` - [source](https://github.com/sveltejs/svelte/blob/5a05f6371a994286626a44168cb2c02f8a2ad567/packages/svelte/src/compiler/index.js#L99-L100).
+
 ## Contributing
 
 Take a look at [contributing guide](./.github/CONTRIBUTING.md).
@@ -143,6 +147,7 @@ Mateusz "[xeho91](https://github.com/xeho91)" Kadlubowski
 This project is licensed under the [MIT License](./LICENSE.md).
 
 <!-- links -->
+
 [`esrap`]: https://github.com/rich-harris/esrap
 [`zimmerframe`]: https://github.com/rich-harris/zimmerframe
 [ESTree]: https://github.com/estree/estree
