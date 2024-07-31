@@ -6,7 +6,9 @@ import { parse_and_extract_svelte_node } from "#tests/mod";
 import { print } from "svelte-ast-print";
 
 describe("Root", () => {
-	it("it prints correctly Svelte code without TypeScript syntax", ({ expect }) => {
+	it("it prints correctly Svelte code without TypeScript syntax", ({
+		expect,
+	}) => {
 		const code = `
 			<script context="module">
 				export const FOO = "BAR";
@@ -81,22 +83,22 @@ describe("Root", () => {
 		expect(print(node)).toMatchInlineSnapshot(
 			`
 			"<script context="module">
-				export const FOO = "BAR";
+				export const FOO = 'BAR';
 			</script>
 
 			<script>
 				let todos = [
-					{ done: false, text: 'finish Svelte tutorial' },
-					{ done: false, text: 'build an app' },
-					{ done: false, text: 'world domination' }
+				    { done: false, text: 'finish Svelte tutorial' },
+				    { done: false, text: 'build an app' },
+				    { done: false, text: 'world domination' }
 				];
 
 				function add() {
-					todos = todos.concat({ done: false, text: '' });
+				    todos = todos.concat({ done: false, text: '' });
 				}
 
 				function clear() {
-					todos = todos.filter((t) => !t.done);
+				    todos = todos.filter(t => !t.done);
 				}
 
 				$: remaining = todos.filter((t) => !t.done).length;
@@ -142,11 +144,13 @@ describe("Root", () => {
 					border: none;
 				}
 			</style>"
-		`,
+		`
 		);
 	});
 
-	it.fails("it prints correctly Svelte code with TypeScript syntax", ({ expect }) => {
+	it("it prints correctly Svelte code with TypeScript syntax", ({
+		expect,
+	}) => {
 		const code = `
 			<script context="module" lang="ts">
 				import {
@@ -212,7 +216,6 @@ describe("Root", () => {
 				import { defineMeta, setTemplate, type Args, type StoryContext } from '@storybook/addon-svelte-csf';
 				import { fn } from '@storybook/test';
 				import Button from './components/Button.svelte';
-
 				const onclickFn = fn().mockName('onclick');
 
 				/**
@@ -237,6 +240,7 @@ describe("Root", () => {
 			<script lang="ts">
 				setTemplate(template);
 			</script>
+
 			{#snippet template({ children, ...args }: Args<typeof Story>, context: StoryContext<typeof Story>)}
 				<Button {...args}>{children}</Button>
 			{/snippet}
@@ -249,7 +253,7 @@ describe("Root", () => {
 			<Story name="Long content">
 				<Button onclick={onclickFn}>The very long content</Button>
 			</Story>"
-		`,
+		`
 		);
 	});
 
@@ -274,10 +278,8 @@ describe("Root", () => {
 		const node = parse_and_extract_svelte_node<Root>(code, "Root");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<script context="module">
-				import { defineMeta } from "@storybook/addon-svelte-csf";
-
-				/** This is a description for the **Button** component stories. */
-				const { Story } = defineMeta({ title: "Atoms/Button", component: Button });
+				import { defineMeta } from '@storybook/addon-svelte-csf';
+				const { Story } = defineMeta({ title: 'Atoms/Button', component: Button });
 			</script>
 
 			<!-- This is a description for the **Button** component stories. -->

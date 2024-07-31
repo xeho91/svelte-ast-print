@@ -19,7 +19,7 @@ describe("Script", () => {
 		const node = parse_and_extract_svelte_node<Root>(code, "Root");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<script context="module" lang="ts">
-				export const BUTTON_DEFAULT_VARIANT = "primary";
+				export const BUTTON_DEFAULT_VARIANT = 'primary';
 			</script>
 
 			<script lang="ts">
@@ -28,7 +28,9 @@ describe("Script", () => {
 		`);
 	});
 
-	it("prints correctly advanced content without TypeScript syntax", ({ expect }) => {
+	it("prints correctly advanced content without TypeScript syntax", ({
+		expect,
+	}) => {
 		const code = `
 			<script>
 				import Eliza from 'elizabot';
@@ -84,7 +86,6 @@ describe("Script", () => {
 			"<script>
 				import Eliza from 'elizabot';
 				import { beforeUpdate, afterUpdate } from 'svelte';
-
 				let div;
 
 				beforeUpdate(() => {}); // determine whether we should auto-scroll
@@ -92,25 +93,20 @@ describe("Script", () => {
 				afterUpdate(() => {}); // ...the DOM is now in sync with the data
 
 				const eliza = new Eliza();
-				const pause = (ms) => new Promise((fulfil) => setTimeout(fulfil, ms));
+				const pause = ms => new Promise(fulfil => setTimeout(fulfil, ms));
 				const typing = { author: 'eliza', text: '...' };
 				let comments = [];
 
 				async function handleKeydown(event) {
-					if (event.key === 'Enter' && event.target.value) {
-						const comment = { author: 'user', text: event.target.value };
-
-						const reply = {
-							author: 'eliza',
-							text: eliza.transform(comment.text)
-						};
-
+				    if (event.key === 'Enter' && event.target.value) {
+					    const comment = { author: 'user', text: event.target.value };
+						const reply = { author: 'eliza', text: eliza.transform(comment.text) };
 						event.target.value = '';
 						comments = [...comments, comment];
 						await pause(200 * (1 + Math.random()));
 						comments = [...comments, typing];
 						await pause(500 * (1 + Math.random()));
-						comments = [...comments, reply].filter((comment) => comment !== typing);
+						comments = [...comments, reply].filter(comment => comment !== typing);
 					}
 				}
 			</script>"
@@ -133,7 +129,7 @@ describe("Script", () => {
 				let name: string = 'world';
 
 				function greet(name: string) {
-					alert(\`Hello, \${name}!\`);
+				    alert(\`Hello, \${name}!\`);
 				}
 			</script>"
 		`);

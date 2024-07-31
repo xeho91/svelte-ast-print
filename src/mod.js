@@ -73,7 +73,7 @@ export function print(node, options = {}) {
 }
 
 function print_es(node) {
-	return recastPrint(node, { quote: "single" })
+	return recastPrint(node, { quote: "single", useTabs: true })
 }
 
 class Printer {
