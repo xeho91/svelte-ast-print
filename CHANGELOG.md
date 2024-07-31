@@ -22,10 +22,7 @@
 
 ---
 
-<!--markdownlint-disable no-duplicate-heading -->
-# Changelog
-
-## `v0.2.1` (Sun Jul 07 2024)
+# `v0.2.1` (Sun Jul 07 2024)
 
 ### 🐛 Bug Fix
 
@@ -37,7 +34,7 @@
 
 ---
 
-## `v0.2.0` _(Mon Jul 01 2024)_
+# `v0.2.0` _(Mon Jul 01 2024)_
 
 :tada: This release contains work from a new contributor! :tada:
 
