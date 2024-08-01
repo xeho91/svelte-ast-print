@@ -106,7 +106,8 @@ This package depends on:
    ```
 
 > [!IMPORTANT]
-> When using [`parse`] from `svelte`, please remember about passing `modern: true` to options _(second argument)_. This option is only available starting `svelte@5`\
+> When using [`parse`] from `svelte`, please remember about passing `modern: true` to options _(second argument)_.
+> This option is only available starting `svelte@5`\
 > Example:
 >
 > ```js
