@@ -14,6 +14,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/18627568?v=4",
 			"profile": "https://github.com/xeho91",
 			"contributions": ["code", "maintenance", "doc", "infra", "test"]
+		},
+		{
+			"login": "manuel3108",
+			"name": "Manuel",
+			"avatar_url": "https://avatars.githubusercontent.com/u/30698007?v=4",
+			"profile": "https://github.com/manuel3108",
+			"contributions": ["doc"]
 		}
 	],
 	"contributorsPerLine": 7,
