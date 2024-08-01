@@ -67,7 +67,8 @@ See <a href="https://github.com/xeho91/svelte-ast-print/discussions/2">Roadmap</
 </ol>
 <blockquote>
 <p>[!IMPORTANT]
-When using <a href="https://svelte.dev/docs/svelte-compiler#parse"><code>parse</code></a> from <code>svelte</code>, please remember about passing <code>modern: true</code> to options <em>(second argument)</em>.<br>
+When using <a href="https://svelte.dev/docs/svelte-compiler#parse"><code>parse</code></a> from <code>svelte</code>, please remember about passing <code>modern: true</code> to options <em>(second argument)</em>.
+This option is only available starting <code>svelte@5</code><br>
 Example:</p>
 <pre><code class="js"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">parse</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;svelte/compiler&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">parse</span><span class="hl-1">(</span><span class="hl-4">code</span><span class="hl-1">, { </span><span class="hl-4">modern:</span><span class="hl-1"> </span><span class="hl-5">true</span><span class="hl-1"> });</span><br/><span class="hl-7">//          👆 Don&#39;t forget about this</span>
 </code><button type="button">Copy</button></pre>
