@@ -34,6 +34,8 @@ This package depends on:
 >
 > - [Biome](https://github.com/biomejs/biome) - _⚠️ has partial support_
 > - [Prettier](https://github.com/prettier/prettier) with [`prettier-plugin-svelte`](https://github.com/sveltejs/prettier-plugin-svelte)
+>
+> See [Formatting](.#ormatting) section for examples.
 
 ---
 
@@ -118,6 +120,84 @@ This package depends on:
 > ```
 >
 > You can omit it from Svelte `v6` - [source](https://github.com/sveltejs/svelte/blob/5a05f6371a994286626a44168cb2c02f8a2ad567/packages/svelte/src/compiler/index.js#L99-L100).
+
+---
+
+## Formatting
+
+Until the package will support formatting feature option... below are the current and **simplified** workaround examples
+on how to get printed output formatted to your needs.
+
+### Prettier
+
+Two dependencies are required:
+
+1. [`prettier`](https://github.com/prettier/prettier)
+1. [`prettier-plugin-svelte`](https://github.com/sveltejs/prettier-plugin-svelte)
+
+Follow `prettier-plugin-svelte` [Setup guide](https://github.com/sveltejs/prettier-plugin-svelte?tab=readme-ov-file#setup)
+on how to configure Prettier for Svelte.
+
+#### Using Prettier API
+
+```js
+import { format } from "prettier";
+import { parse } from "svelte/compiler";
+import { print } from "svelte-ast-print";
+
+let code = "..." // 👈 Raw Svelte code
+let ast = parse(code, { modern: true });
+//                    👆 Don't forget about this, you can omit in Svelte v6
+
+// .. work with AST - transformations, etc. ...
+
+const output = print(ast);
+const formatted = await format(output {
+	// Two ways to provide options:
+
+	// 1. provide file path to prettier config
+	filepath: "path/to/your/prettier/config/file",
+
+	// or..
+
+	// 2. See `prettier-plugin-svelte` Setup guide for more info
+	parser: "svelte",
+	plugins: ["svelte-plugin-prettier"]
+});
+```
+
+#### Using Prettier CLI
+
+... and Node.js API.
+
+```js
+import fs from "node:fs";
+import childProcess from "node:child_process";
+
+import { parse } from "svelte/compiler";
+import { print } from "svelte-ast-print";
+
+const code = fs.readFileSync("./Button.svelte", "utf-8");
+let ast = parse(code, { modern: true });
+//                    👆 Don't forget about this, you can omit in Svelte v6
+
+// .. work with AST - transformations, etc. ...
+
+const output = print(ast);
+
+fs.writeFileSync("./Button.svelte", output, "utf-8");
+childProcess.spawnSync("prettier", ["./Button.svelte", "--write"], {
+	stdio: "inherit",
+	encoding: "utf-8",
+});
+```
+
+### Biome
+
+> [!WARNING]
+> This sub-section is incomplete. Feel free to contribute!
+
+---
 
 ## Contributing
 
