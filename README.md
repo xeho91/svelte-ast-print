@@ -35,7 +35,7 @@ This package depends on:
 > - [Biome](https://github.com/biomejs/biome) - _⚠️ has partial support_
 > - [Prettier](https://github.com/prettier/prettier) with [`prettier-plugin-svelte`](https://github.com/sveltejs/prettier-plugin-svelte)
 >
-> See [Formatting](.#ormatting) section for examples.
+> See [Formatting](#formatting) section for examples.
 
 ---
 
