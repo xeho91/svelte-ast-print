@@ -558,16 +558,23 @@ class Printer {
 				const { state } = context;
 				const is_shorthand_expression_tag =
 					value !== true &&
-					value[0]?.type === "ExpressionTag" &&
-					value[0].expression.type === "Identifier" &&
-					value[0].expression.name === name;
+					((value?.type === "Text" && value?.raw === name) ||
+						(value?.type === "ExpressionTag" &&
+							value.expression.type === "Identifier" &&
+							value.expression.name === name) ||
+						(Array.isArray(value) &&
+							value[0]?.type === "ExpressionTag" &&
+							value[0].expression.type === "Identifier" &&
+							value[0].expression.name === name));
 				let stringified = "";
-				if (!is_shorthand_expression_tag) {
-					stringified += name;
-				}
+				if (!is_shorthand_expression_tag) stringified += name;
 				// NOTE: This is e.g. `<button disabled />`,
 				// so its a shorthand - we don't need to append anything
-				if (value !== true) {
+				if (value.type === "ExpressionTag") {
+					if (!is_shorthand_expression_tag) stringified += "=";
+					stringified += state.#stringify_attribute_like_text_or_expression_tag(value);
+				}
+				if (Array.isArray(value)) {
 					// WARN: I can't find a case where it can be an array?
 					// This may be a problem in the future
 					for (const text_or_expression_tag of value) {
@@ -723,11 +730,13 @@ class Printer {
 				const { state } = context;
 				let stringified = state.#stringify_directive_name("style", name);
 				stringified += state.#stringify_directive_modifiers(modifiers);
-				if (value !== true) {
-					for (const text_or_expression_tag of value) {
-						stringified += "=";
-						stringified += state.#stringify_attribute_like_text_or_expression_tag(text_or_expression_tag);
-					}
+				if (value.type === "ExpressionTag") {
+					stringified += "=";
+					stringified += state.#stringify_attribute_like_text_or_expression_tag(value);
+				}
+				if (Array.isArray(value) && (value[0].type === "ExpressionTag" || value[0]?.type === "Text")) {
+					stringified += "=";
+					stringified += state.#stringify_attribute_like_text_or_expression_tag(value[0]);
 				}
 				state.#attributes.add(stringified);
 			},
