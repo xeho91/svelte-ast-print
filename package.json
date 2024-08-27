@@ -104,23 +104,23 @@
 		"svelte": "^5.0.0-next.164 || ^5.0.0"
 	},
 	"optionalDependencies": {
-		"@auto-it/all-contributors": "11.1.6",
-		"@auto-it/conventional-commits": "11.1.6",
-		"@auto-it/first-time-contributor": "11.1.6",
-		"@auto-it/npm": "11.1.6",
-		"@auto-it/released": "11.1.6",
+		"@auto-it/all-contributors": "11.2.0",
+		"@auto-it/conventional-commits": "11.2.0",
+		"@auto-it/first-time-contributor": "11.2.0",
+		"@auto-it/npm": "11.2.0",
+		"@auto-it/released": "11.2.0",
 		"@biomejs/biome": "1.8.3",
-		"@vitest/coverage-v8": "2.0.2",
-		"@vitest/ui": "2.0.2",
+		"@vitest/coverage-v8": "2.0.5",
+		"@vitest/ui": "2.0.5",
 		"all-contributors-cli": "6.26.1",
-		"auto": "11.1.6",
+		"auto": "11.2.0",
 		"del-cli": "5.1.0",
-		"lefthook": "1.6.18",
+		"lefthook": "1.7.14",
 		"markdownlint-cli2": "0.13.0",
 		"serve": "14.2.3",
-		"typedoc": "0.26.3",
+		"typedoc": "0.26.6",
 		"typedoc-plugin-coverage": "3.3.0",
-		"typedoc-plugin-mdn-links": "3.2.2",
-		"vitest": "2.0.2"
+		"typedoc-plugin-mdn-links": "3.2.10",
+		"vitest": "2.0.5"
 	}
 }
