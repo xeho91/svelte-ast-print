@@ -1,3 +1,32 @@
+# v0.2.4 (Tue Aug 27 2024)
+
+#### 🐛 Bug Fix
+
+- ci(scripts): Add `lint:biome` & `fix:biome` [#95](https://github.com/xeho91/svelte-ast-print/pull/95) ([@xeho91](https://github.com/xeho91))
+- fix: Attempt to resolve #92 in future... ([@xeho91](https://github.com/xeho91))
+- fix: Breaking change in Svelte on attributes AST nodes [#94](https://github.com/xeho91/svelte-ast-print/pull/94) ([@xeho91](https://github.com/xeho91))
+
+#### ⚠️ Pushed to `main`
+
+- ci: Enable package provenance with GitHub Actions ([@xeho91](https://github.com/xeho91))
+- docs: Update `README.md` [skip-ci] ([@xeho91](https://github.com/xeho91))
+- ci: Update `vitest` to `v2` ([@xeho91](https://github.com/xeho91))
+
+#### 🏠 Internal
+
+- refactor: Abstract stringifying directives [#85](https://github.com/xeho91/svelte-ast-print/pull/85) ([@xeho91](https://github.com/xeho91))
+
+#### 📝 Documentation
+
+- docs(README): Add formatting with Prettier guide [#93](https://github.com/xeho91/svelte-ast-print/pull/93) ([@xeho91](https://github.com/xeho91))
+- docs: Add important note about `modern: true` with Svelte `parse` [#91](https://github.com/xeho91/svelte-ast-print/pull/91) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.2.3 (Wed Jul 10 2024)
 
 #### 🐛 Bug Fix
