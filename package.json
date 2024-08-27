@@ -89,16 +89,16 @@
 		"zimmerframe": "1.1.2"
 	},
 	"devDependencies": {
-		"@total-typescript/ts-reset": "0.5.1",
+		"@total-typescript/ts-reset": "0.6.0",
 		"@total-typescript/tsconfig": "1.0.4",
 		"@types/estree": "1.0.5",
-		"@types/node": "20.14.9",
+		"@types/node": "22.5.0",
 		"dedent": "1.5.3",
-		"dts-buddy": "0.5.1",
+		"dts-buddy": "0.5.3",
 		"svelte": "5.0.0-next.164",
-		"tsup": "8.1.0",
-		"type-fest": "4.20.1",
-		"typescript": "5.5.3"
+		"tsup": "8.2.4",
+		"type-fest": "4.25.0",
+		"typescript": "5.5.4"
 	},
 	"peerDependencies": {
 		"svelte": "^5.0.0-next.164 || ^5.0.0"
