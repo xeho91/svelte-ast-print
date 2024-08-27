@@ -89,8 +89,8 @@ importers:
         specifier: 0.5.3
         version: 0.5.3(typescript@5.5.4)
       svelte:
-        specifier: 5.0.0-next.164
-        version: 5.0.0-next.164
+        specifier: 5.0.0-next.239
+        version: 5.0.0-next.239
       tsup:
         specifier: 8.2.4
         version: 8.2.4(@microsoft/api-extractor@7.47.7(@types/node@22.5.0))(postcss@8.4.41)(typescript@5.5.4)(yaml@2.5.0)
@@ -1361,6 +1361,10 @@ packages:
 
   axobject-query@4.0.0:
     resolution: {integrity: sha512-+60uv1hiVFhHZeO+Lz0RYzsVHy5Wr1ayX0mwda9KPDVLNJgZ1T9Ny7VmFbLDzxsH0D87I86vgj3gFrjTJUYznw==}
+
+  axobject-query@4.1.0:
+    resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
+    engines: {node: '>= 0.4'}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -3435,6 +3439,10 @@ packages:
     resolution: {integrity: sha512-e+V1dSZLCCu0Ln7RKwSl/zP9ZZFbDGW7ABfGQYU/+6sWponizQocmyHyKHzctor0ruGgJKOF7QQB+M6lE2+UrA==}
     engines: {node: '>=18'}
 
+  svelte@5.0.0-next.239:
+    resolution: {integrity: sha512-zJJlysnVl4zShMwrs6iIeQPm0bHi7eT0JR0W0U/u2naDb00azue1K5d14cbCoIh+/HA3F+tuawwSFISZsnadww==}
+    engines: {node: '>=18'}
+
   table-layout@1.0.2:
     resolution: {integrity: sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==}
     engines: {node: '>=8.0.0'}
@@ -4926,6 +4934,10 @@ snapshots:
     dependencies:
       acorn: 8.12.0
 
+  acorn-typescript@1.4.13(acorn@8.12.1):
+    dependencies:
+      acorn: 8.12.1
+
   acorn-walk@8.3.3:
     dependencies:
       acorn: 8.12.1
@@ -4933,8 +4945,7 @@ snapshots:
 
   acorn@8.12.0: {}
 
-  acorn@8.12.1:
-    optional: true
+  acorn@8.12.1: {}
 
   add-stream@1.0.0:
     optional: true
@@ -5161,6 +5172,8 @@ snapshots:
   axobject-query@4.0.0:
     dependencies:
       dequal: 2.0.3
+
+  axobject-query@4.1.0: {}
 
   balanced-match@1.0.2: {}
 
@@ -7754,6 +7767,22 @@ snapshots:
       is-reference: 3.0.2
       locate-character: 3.0.0
       magic-string: 0.30.10
+      zimmerframe: 1.1.2
+
+  svelte@5.0.0-next.239:
+    dependencies:
+      '@ampproject/remapping': 2.3.0
+      '@jridgewell/sourcemap-codec': 1.5.0
+      '@types/estree': 1.0.5
+      acorn: 8.12.1
+      acorn-typescript: 1.4.13(acorn@8.12.1)
+      aria-query: 5.3.0
+      axobject-query: 4.1.0
+      esm-env: 1.0.0
+      esrap: 1.2.2
+      is-reference: 3.0.2
+      locate-character: 3.0.0
+      magic-string: 0.30.11
       zimmerframe: 1.1.2
 
   table-layout@1.0.2:
