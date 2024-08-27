@@ -80,13 +80,17 @@ describe("Fragment", () => {
 
 	it.fails("it prints correctly fragment code with typescript syntax", ({ expect }) => {
 		const code = `
+			<script lang="ts">
+			</script>
 			{#snippet template({ children, ...args }: Args<typeof Story>, context: StoryContext<typeof Story>)}
 				<Button {...args}>{children}</Button>
 			{/snippet}
 		`;
 		const node = parse_and_extract_svelte_node<Fragment>(code, "Fragment");
 		expect(print(node)).toMatchInlineSnapshot(`
-			"{#snippet template({ children, ...args }: Args<typeof Story>, context: StoryContext<typeof Story>)}
+			"<script lang="ts">
+			</script>
+			{#snippet template({ children, ...args }: Args<typeof Story>, context: StoryContext<typeof Story>)}
 				<Button {...args}>{children}</Button>
 			{/snippet}"
 		`);
