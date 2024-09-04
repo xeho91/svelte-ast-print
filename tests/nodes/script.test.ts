@@ -42,10 +42,12 @@ describe("Script", () => {
 				beforeUpdate(() => {
 					// determine whether we should auto-scroll
 					// once the DOM is updated...
+					console.log(div);
 				});
 
 				afterUpdate(() => {
 					// ...the DOM is now in sync with the data
+					console.log(div);
 				});
 
 				const eliza = new Eliza();
@@ -87,12 +89,15 @@ describe("Script", () => {
 
 				let div;
 
-				beforeUpdate(() => {});
-				// determine whether we should auto-scroll
-				// once the DOM is updated...
-				afterUpdate(() => {});
+				beforeUpdate(() => {
+					// determine whether we should auto-scroll
+					// once the DOM is updated...
+				});
 
-				// ...the DOM is now in sync with the data
+				afterUpdate(() => {
+					// ...the DOM is now in sync with the data
+				});
+
 				const eliza = new Eliza();
 				const pause = (ms) => new Promise((fulfil) => setTimeout(fulfil, ms));
 				const typing = { author: 'eliza', text: '...' };

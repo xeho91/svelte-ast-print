@@ -22,7 +22,7 @@ describe("Attribute", () => {
 		expect(print(node)).toMatchInlineSnapshot(`"required="""`);
 	});
 
-	it("correctly prints text expression value", ({ expect }) => {
+	it("correctly prints text expression value with text", ({ expect }) => {
 		const code = `
 			<div aria-label="this is a modal box" />
 		`;
@@ -38,9 +38,25 @@ describe("Attribute", () => {
 		expect(print(node)).toMatchInlineSnapshot(`"{disabled}"`);
 	});
 
-	it("correctly prints expression tag value", ({ expect }) => {
+	it("correctly prints expression tag value with string template", ({ expect }) => {
 		const code = `
 			<Button id={\`button-\${id}\`} />
+		`;
+		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		expect(print(node)).toMatchInlineSnapshot(`"id={\`button-\${id}\`}"`);
+	});
+
+	it("correctly prints expression tag with array expression", ({ expect }) => {
+		const code = `
+			<Select values={[1, 2, 3]} />
+		`;
+		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		expect(print(node)).toMatchInlineSnapshot(`"id={\`button-\${id}\`}"`);
+	});
+
+	it("correctly prints expression tag with object expression", ({ expect }) => {
+		const code = `
+			<Container values={{ min: 1000, max: 1200, display: "grid" }} />
 		`;
 		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
 		expect(print(node)).toMatchInlineSnapshot(`"id={\`button-\${id}\`}"`);
