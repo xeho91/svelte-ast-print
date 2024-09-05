@@ -1,3 +1,15 @@
+# v0.2.6 (Thu Sep 05 2024)
+
+#### 🐛 Bug Fix
+
+- fix(dependencies): Remove `lefthook` from `optionalDependencies` [#97](https://github.com/xeho91/svelte-ast-print/pull/97) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.2.5 (Thu Sep 05 2024)
 
 #### 🐛 Bug Fix
