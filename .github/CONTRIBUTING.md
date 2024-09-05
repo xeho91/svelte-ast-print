@@ -21,6 +21,7 @@ You must have those tools installed.
 | ❗required | [Node.js]  | LTS                                                  |
 | ❗required | [pnpm]     | Use `corepack enable` to automatically setup version |
 | _optional_ | [typos]    | latest                                               |
+| _optional_ | [lefthook] | latest                                               |
 
 ---
 
@@ -30,30 +31,31 @@ You must have those tools installed.
 
 1. Setup the used Node.js package manager with [corepack]:
 
-   ```sh
-   corepack enable
-   ```
+    ```sh
+    corepack enable
+    ```
 
 1. Install project dependencies with pnpm:
 
-   ```sh
-   pnpm install
-   ```
+    ```sh
+    pnpm install
+    ```
 
 1. _(optional)_ Install Git hooks with:
 
-   ```sh
-   pnpm lefthook install
-   ```
+    ```sh
+    pnpm lefthook -g install
+    ```
 
-   > [!NOTE]
-   > This can save your time and project's CI & CD usage _(even if it's free)_
+    > [!NOTE]
+    > This can save your time and project's CI & CD usage _(even if it's free)_
 
 1. Take a look at the `"scripts"` in [`./package.json`](../package.json#scripts) to see if you can find what you need.
 
-   For the the usage convienience those scripts concurrently run related tasks:
-   - `pnpm build`
-   - `pnpm dev` <- this is for the development
+    For the the usage convienience those scripts concurrently run related tasks:
+
+    - `pnpm build`
+    - `pnpm dev` <- this is for the development
 
 1. If you intend to push changes...
    You can either rely on the optional step 4 to automatically do lint checks _(related to the changed files)_
