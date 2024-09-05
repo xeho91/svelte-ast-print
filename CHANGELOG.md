@@ -1,3 +1,19 @@
+# v0.2.5 (Thu Sep 05 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Usage & import of AST types from `svelte/compiler` [#96](https://github.com/xeho91/svelte-ast-print/pull/96) ([@xeho91](https://github.com/xeho91))
+
+#### ⚠️ Pushed to `main`
+
+- test: Fix failing edge case ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.2.4 (Tue Aug 27 2024)
 
 #### 🐛 Bug Fix
