@@ -92,10 +92,12 @@ describe("Script", () => {
 				beforeUpdate(() => {
 					// determine whether we should auto-scroll
 					// once the DOM is updated...
+					console.log(div);
 				});
 
 				afterUpdate(() => {
 					// ...the DOM is now in sync with the data
+					console.log(div);
 				});
 
 				const eliza = new Eliza();
