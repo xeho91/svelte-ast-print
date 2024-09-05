@@ -1,9 +1,9 @@
 /**
  * @import * as EstreeAST from "estree";
- * @import * as SvelteAST from "svelte/compiler";
+ * @import { AST as SvelteAST } from "svelte/compiler";
  * @import { Context } from "zimmerframe";
  *
- * @import { Node } from "./nodes.js";
+ * @import { Node, SvelteNode } from "./nodes.js";
  */
 
 import { print as print_es } from "esrap";
@@ -24,7 +24,7 @@ export {
 } from "./nodes.js";
 
 /**
- * Print AST {@link SvelteAST.SvelteNode} as a string.
+ * Print AST {@link SvelteAST.BaseNode} as a string.
  * Aka parse in reverse.
  *
  * ## How does it work under the hood?
@@ -74,7 +74,7 @@ export function print(node, options = {}) {
 
 class Printer {
 	/**
-	 * @type {Node}
+	 * @type {SvelteNode}
 	 */
 	#node;
 	/**
@@ -425,6 +425,23 @@ class Printer {
 	}
 
 	/**
+	 * @param {true | SvelteAST.ExpressionTag | (SvelteAST.Text | SvelteAST.ExpressionTag)[]} node
+	 * @param {string} name
+	 * @returns {boolean}
+	 */
+	#is_attribute_shorthand_expression_tag(node, name) {
+		if (node === true) return false;
+		if (Array.isArray(node)) {
+			if (!node[0]) return false;
+			if (node[0].type === "Text") return node[0].raw === name;
+			const { expression } = node[0];
+			return expression.type === "Identifier" && expression.name === name;
+		}
+		const { expression } = node;
+		return expression.type === "Identifier" && expression.name === name;
+	}
+
+	/**
 	 * @returns {boolean}
 	 */
 	get #is_last_output_closing_block() {
@@ -556,31 +573,22 @@ class Printer {
 			Attribute(node, context) {
 				const { name, value } = node;
 				const { state } = context;
-				const is_shorthand_expression_tag =
-					value !== true &&
-					((value?.type === "Text" && value?.raw === name) ||
-						(value?.type === "ExpressionTag" &&
-							value.expression.type === "Identifier" &&
-							value.expression.name === name) ||
-						(Array.isArray(value) &&
-							value[0]?.type === "ExpressionTag" &&
-							value[0].expression.type === "Identifier" &&
-							value[0].expression.name === name));
+				const is_shorthand_expression_tag = state.#is_attribute_shorthand_expression_tag(value, name);
 				let stringified = "";
 				if (!is_shorthand_expression_tag) stringified += name;
-				// NOTE: This is e.g. `<button disabled />`,
-				// so its a shorthand - we don't need to append anything
-				if (value.type === "ExpressionTag") {
-					if (!is_shorthand_expression_tag) stringified += "=";
-					stringified += state.#stringify_attribute_like_text_or_expression_tag(value);
-				}
-				if (Array.isArray(value)) {
+				if (value !== true && Array.isArray(value)) {
 					// WARN: I can't find a case where it can be an array?
 					// This may be a problem in the future
 					for (const text_or_expression_tag of value) {
 						if (!is_shorthand_expression_tag) stringified += "=";
 						stringified += state.#stringify_attribute_like_text_or_expression_tag(text_or_expression_tag);
 					}
+				}
+				// NOTE: This is e.g. `<button disabled />`,
+				// so its a shorthand - we don't need to append anything
+				if (value !== true && !Array.isArray(value) && value.type === "ExpressionTag") {
+					if (!is_shorthand_expression_tag) stringified += "=";
+					stringified += state.#stringify_attribute_like_text_or_expression_tag(value);
 				}
 				state.#attributes.add(stringified);
 			},
@@ -589,7 +597,7 @@ class Printer {
 			 * @see {@link https://svelte.dev/docs/basic-markup#attributes-and-props}
 			 *
 			 * @example
-			 * ```html
+			 * ```svelte
 			 * <Widget {...things} />
 			 * ```
 			 */
