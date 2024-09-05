@@ -51,7 +51,7 @@ describe("Attribute", () => {
 			<Select values={[1, 2, 3]} />
 		`;
 		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
-		expect(print(node)).toMatchInlineSnapshot(`"id={\`button-\${id}\`}"`);
+		expect(print(node)).toMatchInlineSnapshot(`"values={[1, 2, 3]}"`);
 	});
 
 	it("correctly prints expression tag with object expression", ({ expect }) => {
@@ -59,7 +59,7 @@ describe("Attribute", () => {
 			<Container values={{ min: 1000, max: 1200, display: "grid" }} />
 		`;
 		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
-		expect(print(node)).toMatchInlineSnapshot(`"id={\`button-\${id}\`}"`);
+		expect(print(node)).toMatchInlineSnapshot(`"values={{ min: 1000, max: 1200, display: "grid" }}"`);
 	});
 });
 

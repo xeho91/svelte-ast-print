@@ -4,11 +4,7 @@
 	"version": "0.2.4",
 	"type": "module",
 	"description": "Print Svelte AST nodes as a string. Aka parse in reverse.",
-	"keywords": [
-		"svelte",
-		"ast",
-		"print"
-	],
+	"keywords": ["svelte", "ast", "print"],
 	"license": "MIT",
 	"author": {
 		"name": "Mateusz Kadlubowski",
@@ -38,10 +34,7 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"files": [
-		"src/",
-		"types/"
-	],
+	"files": ["src/", "types/"],
 	"imports": {
 		"#tests/*": {
 			"types": "./tests/*.ts",
@@ -104,13 +97,13 @@
 		"@types/node": "22.5.0",
 		"dedent": "1.5.3",
 		"dts-buddy": "0.5.3",
-		"svelte": "5.0.0-next.239",
+		"svelte": "5.0.0-next.243",
 		"tsup": "8.2.4",
 		"type-fest": "4.25.0",
 		"typescript": "5.5.4"
 	},
 	"peerDependencies": {
-		"svelte": "^5.0.0-next.239 || ^5.0.0"
+		"svelte": "^5.0.0-next.243 || ^5.0.0"
 	},
 	"optionalDependencies": {
 		"@auto-it/all-contributors": "11.2.0",
