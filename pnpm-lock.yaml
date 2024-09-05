@@ -89,8 +89,8 @@ importers:
         specifier: 0.5.3
         version: 0.5.3(typescript@5.5.4)
       svelte:
-        specifier: 5.0.0-next.239
-        version: 5.0.0-next.239
+        specifier: 5.0.0-next.243
+        version: 5.0.0-next.243
       tsup:
         specifier: 8.2.4
         version: 8.2.4(@microsoft/api-extractor@7.47.7(@types/node@22.5.0))(postcss@8.4.41)(typescript@5.5.4)(yaml@2.5.0)
@@ -3439,8 +3439,8 @@ packages:
     resolution: {integrity: sha512-e+V1dSZLCCu0Ln7RKwSl/zP9ZZFbDGW7ABfGQYU/+6sWponizQocmyHyKHzctor0ruGgJKOF7QQB+M6lE2+UrA==}
     engines: {node: '>=18'}
 
-  svelte@5.0.0-next.239:
-    resolution: {integrity: sha512-zJJlysnVl4zShMwrs6iIeQPm0bHi7eT0JR0W0U/u2naDb00azue1K5d14cbCoIh+/HA3F+tuawwSFISZsnadww==}
+  svelte@5.0.0-next.243:
+    resolution: {integrity: sha512-+oXjRInUyBfZXAEY8hmpf3F0eghAVCoWasotz1iOp2G5CyH4KR7jPxWOgjbgsgpL4zlMiN32MEYU1+I+QsC+nQ==}
     engines: {node: '>=18'}
 
   table-layout@1.0.2:
@@ -7769,7 +7769,7 @@ snapshots:
       magic-string: 0.30.10
       zimmerframe: 1.1.2
 
-  svelte@5.0.0-next.239:
+  svelte@5.0.0-next.243:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@jridgewell/sourcemap-codec': 1.5.0
