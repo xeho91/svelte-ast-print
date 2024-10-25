@@ -1,3 +1,20 @@
+# v0.3.0 (Fri Oct 25 2024)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold)), for all your work!
+
+#### 🚀 Enhancement
+
+- feat: Allow Node v18 [#98](https://github.com/xeho91/svelte-ast-print/pull/98) ([@JReinhold](https://github.com/JReinhold) [@xeho91](https://github.com/xeho91))
+
+#### Authors: 2
+
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.2.6 (Thu Sep 05 2024)
 
 #### 🐛 Bug Fix
