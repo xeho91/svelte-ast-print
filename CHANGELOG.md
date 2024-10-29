@@ -1,3 +1,15 @@
+# v0.3.1 (Tue Oct 29 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Crash caused by indentation logic inside `IfBlock` [#99](https://github.com/xeho91/svelte-ast-print/pull/99) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.3.0 (Fri Oct 25 2024)
 
 :tada: This release contains work from a new contributor! :tada:
