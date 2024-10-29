@@ -4,11 +4,7 @@
 	"version": "0.3.0",
 	"type": "module",
 	"description": "Print Svelte AST nodes as a string. Aka parse in reverse.",
-	"keywords": [
-		"svelte",
-		"ast",
-		"print"
-	],
+	"keywords": ["svelte", "ast", "print"],
 	"license": "MIT",
 	"author": {
 		"name": "Mateusz Kadlubowski",
@@ -38,10 +34,7 @@
 	"engines": {
 		"node": ">=18"
 	},
-	"files": [
-		"src/",
-		"types/"
-	],
+	"files": ["src/", "types/"],
 	"imports": {
 		"#tests/*": {
 			"types": "./tests/*.ts",

@@ -1,47 +1,35 @@
 {
-  "projectName": "svelte-ast-print",
-  "projectOwner": "xeho91",
-  "repoType": "github",
-  "repoHost": "https://github.com",
-  "files": [
-    "README.md"
-  ],
-  "imageSize": 100,
-  "commit": false,
-  "commitConvention": "none",
-  "contributors": [
-    {
-      "login": "xeho91",
-      "name": "Mateusz Kadlubowski",
-      "avatar_url": "https://avatars.githubusercontent.com/u/18627568?v=4",
-      "profile": "https://github.com/xeho91",
-      "contributions": [
-        "code",
-        "maintenance",
-        "doc",
-        "infra",
-        "test"
-      ]
-    },
-    {
-      "login": "manuel3108",
-      "name": "Manuel",
-      "avatar_url": "https://avatars.githubusercontent.com/u/30698007?v=4",
-      "profile": "https://github.com/manuel3108",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
-      "login": "JReinhold",
-      "name": "Jeppe Reinhold",
-      "avatar_url": "https://avatars.githubusercontent.com/u/5678122?v=4",
-      "profile": "https://reinhold.is/",
-      "contributions": [
-        "code"
-      ]
-    }
-  ],
-  "contributorsPerLine": 7,
-  "linkToUsage": false
+	"projectName": "svelte-ast-print",
+	"projectOwner": "xeho91",
+	"repoType": "github",
+	"repoHost": "https://github.com",
+	"files": ["README.md"],
+	"imageSize": 100,
+	"commit": false,
+	"commitConvention": "none",
+	"contributors": [
+		{
+			"login": "xeho91",
+			"name": "Mateusz Kadlubowski",
+			"avatar_url": "https://avatars.githubusercontent.com/u/18627568?v=4",
+			"profile": "https://github.com/xeho91",
+			"contributions": ["code", "maintenance", "doc", "infra", "test"]
+		},
+		{
+			"login": "manuel3108",
+			"name": "Manuel",
+			"avatar_url": "https://avatars.githubusercontent.com/u/30698007?v=4",
+			"profile": "https://github.com/manuel3108",
+			"contributions": ["doc"]
+		},
+		{
+			"login": "JReinhold",
+			"name": "Jeppe Reinhold",
+			"avatar_url": "https://avatars.githubusercontent.com/u/5678122?v=4",
+			"profile": "https://reinhold.is/",
+			"contributions": ["code"]
+		}
+	],
+	"contributorsPerLine": 7,
+	"linkToUsage": false
 }
