@@ -1,3 +1,15 @@
+# v0.4.0 (Tue Oct 29 2024)
+
+#### 🚀 Enhancement
+
+- chore(dependencies): Use `svelte@^5.0.0` [#101](https://github.com/xeho91/svelte-ast-print/pull/101) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.3.2 (Tue Oct 29 2024)
 
 #### 🐛 Bug Fix
