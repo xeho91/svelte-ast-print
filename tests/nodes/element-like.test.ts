@@ -1,19 +1,4 @@
-import type {
-	Component,
-	RegularElement,
-	Root,
-	SlotElement,
-	SvelteBody,
-	SvelteComponent,
-	SvelteDocument,
-	SvelteElement,
-	SvelteFragment,
-	SvelteHead,
-	SvelteOptionsRaw,
-	SvelteSelf,
-	SvelteWindow,
-	TitleElement,
-} from "svelte/compiler";
+import type { AST } from "svelte/compiler";
 import { describe, it } from "vitest";
 
 import { parse_and_extract_svelte_node } from "#tests/mod";
@@ -30,7 +15,7 @@ describe("Component", () => {
 				--track-color="rgb(0, 0, 255)"
 			/>
 		`;
-		const node = parse_and_extract_svelte_node<Component>(code, "Component");
+		const node = parse_and_extract_svelte_node<AST.Component>(code, "Component");
 		expect(print(node)).toMatchInlineSnapshot(
 			`"<Slider bind:value min={0} --rail-color="black" --track-color="rgb(0, 0, 255)" />"`,
 		);
@@ -62,7 +47,7 @@ describe("Component", () => {
 				</NavUl>
 			</Navbar>
 		`;
-		const node = parse_and_extract_svelte_node<Component>(code, "Component");
+		const node = parse_and_extract_svelte_node<AST.Component>(code, "Component");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<Navbar let:hidden let:toggle>
 				<NavBrand href="/">
@@ -96,7 +81,7 @@ describe("RegularElement", () => {
 				style:--track-color="rgb(0, 0, 255)"
 			/>
 		`;
-		const node = parse_and_extract_svelte_node<RegularElement>(code, "RegularElement");
+		const node = parse_and_extract_svelte_node<AST.RegularElement>(code, "RegularElement");
 		expect(print(node)).toMatchInlineSnapshot(
 			`"<input bind:value min={0} style:--rail-color="black" style:--track-color="rgb(0, 0, 255)" />"`,
 		);
@@ -106,10 +91,18 @@ describe("RegularElement", () => {
 		const code = `
 			<button on:click={increment}>Clicked {count} {count === 1 ? 'time' : 'times'}</button>
 		`;
-		const node = parse_and_extract_svelte_node<RegularElement>(code, "RegularElement");
+		const node = parse_and_extract_svelte_node<AST.RegularElement>(code, "RegularElement");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<button on:click={increment}>Clicked {count} {count === 1 ? 'time' : 'times'}</button>"
 		`);
+	});
+
+	it("prints class attribute with string containing expression tags correctly", ({ expect }) => {
+		const code = `
+			<span class="{name} primary">test</span>
+		`;
+		const node = parse_and_extract_svelte_node<AST.RegularElement>(code, "RegularElement");
+		expect(print(node)).toMatchInlineSnapshot(`"<span class="{name} primary">test</span>"`);
 	});
 });
 
@@ -118,7 +111,7 @@ describe("SlotElement", () => {
 		const code = `
 			<slot name="description" />
 		`;
-		const node = parse_and_extract_svelte_node<SlotElement>(code, "SlotElement");
+		const node = parse_and_extract_svelte_node<AST.SlotElement>(code, "SlotElement");
 		expect(print(node)).toMatchInlineSnapshot(`"<slot name="description" />"`);
 	});
 
@@ -129,7 +122,7 @@ describe("SlotElement", () => {
 				<p>Some content between header and footer</p>
 			</div>
 		`;
-		const node = parse_and_extract_svelte_node<SlotElement>(code, "SlotElement");
+		const node = parse_and_extract_svelte_node<AST.SlotElement>(code, "SlotElement");
 		expect(print(node)).toMatchInlineSnapshot(`"<slot name="header">No header was provided</slot>"`);
 	});
 });
@@ -139,7 +132,7 @@ describe("SvelteBody", () => {
 		const code = `
 			<svelte:body on:mouseenter={handleMouseenter} on:mouseleave={handleMouseleave} use:someAction />
 		`;
-		const node = parse_and_extract_svelte_node<SvelteBody>(code, "SvelteBody");
+		const node = parse_and_extract_svelte_node<AST.SvelteBody>(code, "SvelteBody");
 		expect(print(node)).toMatchInlineSnapshot(
 			`"<svelte:body on:mouseenter={handleMouseenter} on:mouseleave={handleMouseleave} use:someAction />"`,
 		);
@@ -151,7 +144,7 @@ describe("SvelteComponent", () => {
 		const code = `
 			<svelte:component this={currentSelection.component} foo={bar} />
 		`;
-		const node = parse_and_extract_svelte_node<SvelteComponent>(code, "SvelteComponent");
+		const node = parse_and_extract_svelte_node<AST.SvelteComponent>(code, "SvelteComponent");
 		expect(print(node)).toMatchInlineSnapshot(`"<svelte:component foo={bar} />"`);
 	});
 });
@@ -161,7 +154,7 @@ describe("SvelteDocument", () => {
 		const code = `
 				<svelte:document on:visibilitychange={handleVisibilityChange} use:someAction />
 			`;
-		const node = parse_and_extract_svelte_node<SvelteDocument>(code, "SvelteDocument");
+		const node = parse_and_extract_svelte_node<AST.SvelteDocument>(code, "SvelteDocument");
 		expect(print(node)).toMatchInlineSnapshot(
 			`"<svelte:document on:visibilitychange={handleVisibilityChange} use:someAction />"`,
 		);
@@ -173,7 +166,7 @@ describe("SvelteElement", () => {
 		const code = `
 			<svelte:element this={tag} on:click={handler}>Foo</svelte:element>
 		`;
-		const node = parse_and_extract_svelte_node<SvelteElement>(code, "SvelteElement");
+		const node = parse_and_extract_svelte_node<AST.SvelteElement>(code, "SvelteElement");
 		expect(print(node)).toMatchInlineSnapshot(
 			`"<svelte:element this={tag} on:click={handler}>Foo</svelte:element>"`,
 		);
@@ -188,7 +181,7 @@ describe("SvelteFragment", () => {
 				<p>Copyright (c) 2019 Svelte Industries</p>
 			</svelte:fragment>
 		`;
-		const node = parse_and_extract_svelte_node<SvelteFragment>(code, "SvelteFragment");
+		const node = parse_and_extract_svelte_node<AST.SvelteFragment>(code, "SvelteFragment");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<svelte:fragment slot="footer">
 				<p>All rights reserved.</p>
@@ -206,7 +199,7 @@ describe("SvelteHead", () => {
 				<meta name="description" content="This is where the description goes for SEO" />
 			</svelte:head>
 		`;
-		const node = parse_and_extract_svelte_node<SvelteHead>(code, "SvelteHead");
+		const node = parse_and_extract_svelte_node<AST.SvelteHead>(code, "SvelteHead");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<svelte:head>
 				<title>Hello world!</title>
@@ -247,8 +240,8 @@ describe("SvelteOptions", () => {
 				}}
 			/>
 		`;
-		const node = parse_and_extract_svelte_node<Root>(code, "Root");
-		expect(print(node as unknown as SvelteOptionsRaw)).toMatchInlineSnapshot(`
+		const node = parse_and_extract_svelte_node<AST.Root>(code, "Root");
+		expect(print(node as unknown as AST.SvelteOptionsRaw)).toMatchInlineSnapshot(`
 			"<svelte:options customElement={{
 				tag: 'custom-element',
 				shadow: 'none',
@@ -292,7 +285,7 @@ describe("SvelteSelf", () => {
 				<p>lift-off!</p>
 			{/if}
 		`;
-		const node = parse_and_extract_svelte_node<SvelteSelf>(code, "SvelteSelf");
+		const node = parse_and_extract_svelte_node<AST.SvelteSelf>(code, "SvelteSelf");
 		expect(print(node)).toMatchInlineSnapshot(`"<svelte:self count={count - 1} />"`);
 	});
 });
@@ -309,7 +302,7 @@ describe("SvelteWindow", () => {
 
 			<svelte:window on:keydown={handleKeydown} />
 		`;
-		const node = parse_and_extract_svelte_node<SvelteWindow>(code, "SvelteWindow");
+		const node = parse_and_extract_svelte_node<AST.SvelteWindow>(code, "SvelteWindow");
 		expect(print(node)).toMatchInlineSnapshot(`"<svelte:window on:keydown={handleKeydown} />"`);
 	});
 });
@@ -325,7 +318,7 @@ describe("TitleElement", () => {
 				<title>Svelte is optimized for {reason}</title>
 			</svelte:head>
 		`;
-		const node = parse_and_extract_svelte_node<TitleElement>(code, "TitleElement");
+		const node = parse_and_extract_svelte_node<AST.TitleElement>(code, "TitleElement");
 		expect(print(node)).toMatchInlineSnapshot(`"<title>Svelte is optimized for {reason}</title>"`);
 	});
 });

@@ -1,4 +1,4 @@
-import type { Root, Script } from "svelte/compiler";
+import type { AST } from "svelte/compiler";
 import { describe, it } from "vitest";
 
 import { parse_and_extract_svelte_node } from "#tests/mod";
@@ -16,7 +16,7 @@ describe("Script", () => {
 				export let variant = BUTTON_DEFAULT_VARIANT;
 			</script>
 		`;
-		const node = parse_and_extract_svelte_node<Root>(code, "Root");
+		const node = parse_and_extract_svelte_node<AST.Root>(code, "Root");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<script context="module" lang="ts">
 				export const BUTTON_DEFAULT_VARIANT = "primary";
@@ -81,7 +81,7 @@ describe("Script", () => {
 				}
 			</script>
 		`;
-		const node = parse_and_extract_svelte_node<Script>(code, "Script");
+		const node = parse_and_extract_svelte_node<AST.Script>(code, "Script");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<script>
 				import Eliza from 'elizabot';
@@ -136,7 +136,7 @@ describe("Script", () => {
 				}
 			</script>
 		`;
-		const node = parse_and_extract_svelte_node<Script>(code, "Script");
+		const node = parse_and_extract_svelte_node<AST.Script>(code, "Script");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"<script lang="ts">
 				let name: string = 'world';

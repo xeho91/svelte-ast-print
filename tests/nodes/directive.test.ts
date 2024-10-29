@@ -1,13 +1,4 @@
-import type {
-	AnimateDirective,
-	BindDirective,
-	ClassDirective,
-	LetDirective,
-	OnDirective,
-	StyleDirective,
-	TransitionDirective,
-	UseDirective,
-} from "svelte/compiler";
+import type { AST } from "svelte/compiler";
 import { describe, it } from "vitest";
 
 import { parse_and_extract_svelte_node } from "#tests/mod";
@@ -21,7 +12,7 @@ describe("AnimateDirective", () => {
 				<li animate:flip>{item}</li>
 			{/each}
 		`;
-		const node = parse_and_extract_svelte_node<AnimateDirective>(code, "AnimateDirective");
+		const node = parse_and_extract_svelte_node<AST.AnimateDirective>(code, "AnimateDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"animate:flip"`);
 	});
 
@@ -31,7 +22,7 @@ describe("AnimateDirective", () => {
 				<li animate:flip={{ delay: 500 }}>{item}</li>
 			{/each}
 		`;
-		const node = parse_and_extract_svelte_node<AnimateDirective>(code, "AnimateDirective");
+		const node = parse_and_extract_svelte_node<AST.AnimateDirective>(code, "AnimateDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"animate:flip={{ delay: 500 }}"`);
 	});
 });
@@ -45,7 +36,7 @@ describe("BindDirective", () => {
 
 			<input type="text" bind:value />
 		`;
-		const node = parse_and_extract_svelte_node<BindDirective>(code, "BindDirective");
+		const node = parse_and_extract_svelte_node<AST.BindDirective>(code, "BindDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"bind:value"`);
 	});
 
@@ -53,7 +44,7 @@ describe("BindDirective", () => {
 		const code = `
 			<input bind:value={name} />
 		`;
-		const node = parse_and_extract_svelte_node<BindDirective>(code, "BindDirective");
+		const node = parse_and_extract_svelte_node<AST.BindDirective>(code, "BindDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"bind:value={name}"`);
 	});
 
@@ -61,7 +52,7 @@ describe("BindDirective", () => {
 		const code = `
 			<input type="checkbox" bind:checked={yes} />
 		`;
-		const node = parse_and_extract_svelte_node<BindDirective>(code, "BindDirective");
+		const node = parse_and_extract_svelte_node<AST.BindDirective>(code, "BindDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"bind:checked={yes}"`);
 	});
 });
@@ -71,7 +62,7 @@ describe("ClassDirective", () => {
 		const code = `
 			<div class:active={isActive}>...</div>
 		`;
-		const node = parse_and_extract_svelte_node<ClassDirective>(code, "ClassDirective");
+		const node = parse_and_extract_svelte_node<AST.ClassDirective>(code, "ClassDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"class:active={isActive}"`);
 	});
 
@@ -79,7 +70,7 @@ describe("ClassDirective", () => {
 		const code = `
 			<div class:active>...</div>
 		`;
-		const node = parse_and_extract_svelte_node<ClassDirective>(code, "ClassDirective");
+		const node = parse_and_extract_svelte_node<AST.ClassDirective>(code, "ClassDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"class:active"`);
 	});
 });
@@ -91,7 +82,7 @@ describe("LetDirective", () => {
 				<div>{thing.text}</div>
 			</FancyList>
 		`;
-		const node = parse_and_extract_svelte_node<LetDirective>(code, "LetDirective");
+		const node = parse_and_extract_svelte_node<AST.LetDirective>(code, "LetDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"let:prop={thing}"`);
 	});
 
@@ -101,7 +92,7 @@ describe("LetDirective", () => {
 				<Button {...args} />
 			</Story>
 		`;
-		const node = parse_and_extract_svelte_node<LetDirective>(code, "LetDirective");
+		const node = parse_and_extract_svelte_node<AST.LetDirective>(code, "LetDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"let:args"`);
 	});
 });
@@ -113,7 +104,7 @@ describe("OnDirective", () => {
 				count: {count}
 			</button>
 		`;
-		const node = parse_and_extract_svelte_node<OnDirective>(code, "OnDirective");
+		const node = parse_and_extract_svelte_node<AST.OnDirective>(code, "OnDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"on:click={() => count += 1}"`);
 	});
 
@@ -123,7 +114,7 @@ describe("OnDirective", () => {
 				...
 			</form>
 		`;
-		const node = parse_and_extract_svelte_node<OnDirective>(code, "OnDirective");
+		const node = parse_and_extract_svelte_node<AST.OnDirective>(code, "OnDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"on:submit|preventDefault={handleSubmit}"`);
 	});
 });
@@ -133,7 +124,7 @@ describe("StyleDirective", () => {
 		const code = `
 			<div style:color={myColor}>...</div>
 		`;
-		const node = parse_and_extract_svelte_node<StyleDirective>(code, "StyleDirective");
+		const node = parse_and_extract_svelte_node<AST.StyleDirective>(code, "StyleDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"style:color={myColor}"`);
 	});
 
@@ -141,7 +132,7 @@ describe("StyleDirective", () => {
 		const code = `
 			<div style:color>...</div>
 		`;
-		const node = parse_and_extract_svelte_node<StyleDirective>(code, "StyleDirective");
+		const node = parse_and_extract_svelte_node<AST.StyleDirective>(code, "StyleDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"style:color"`);
 	});
 
@@ -149,7 +140,7 @@ describe("StyleDirective", () => {
 		const code = `
 			<div style:color="red">...</div>
 		`;
-		const node = parse_and_extract_svelte_node<StyleDirective>(code, "StyleDirective");
+		const node = parse_and_extract_svelte_node<AST.StyleDirective>(code, "StyleDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"style:color="red""`);
 	});
 
@@ -157,7 +148,7 @@ describe("StyleDirective", () => {
 		const code = `
 			<div style:color|important="red">...</div>
 		`;
-		const node = parse_and_extract_svelte_node<StyleDirective>(code, "StyleDirective");
+		const node = parse_and_extract_svelte_node<AST.StyleDirective>(code, "StyleDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"style:color|important="red""`);
 	});
 });
@@ -169,7 +160,7 @@ describe("TransitionDirective", () => {
 				<div transition:scale>scales in, scales out</div>
 			{/if}
 		`;
-		const node = parse_and_extract_svelte_node<TransitionDirective>(code, "TransitionDirective");
+		const node = parse_and_extract_svelte_node<AST.TransitionDirective>(code, "TransitionDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"transition:scale"`);
 	});
 
@@ -179,7 +170,7 @@ describe("TransitionDirective", () => {
 				<div in:fly>flies in</div>
 			{/if}
 		`;
-		const node = parse_and_extract_svelte_node<TransitionDirective>(code, "TransitionDirective");
+		const node = parse_and_extract_svelte_node<AST.TransitionDirective>(code, "TransitionDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"in:fly"`);
 	});
 
@@ -189,7 +180,7 @@ describe("TransitionDirective", () => {
 				<div out:fade>fades out</div>
 			{/if}
 		`;
-		const node = parse_and_extract_svelte_node<TransitionDirective>(code, "TransitionDirective");
+		const node = parse_and_extract_svelte_node<AST.TransitionDirective>(code, "TransitionDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"out:fade"`);
 	});
 
@@ -201,7 +192,7 @@ describe("TransitionDirective", () => {
 				</p>
 			{/if}
 		`;
-		const node = parse_and_extract_svelte_node<TransitionDirective>(code, "TransitionDirective");
+		const node = parse_and_extract_svelte_node<AST.TransitionDirective>(code, "TransitionDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"transition:fly={{ y: 200, duration: 2000 }}"`);
 	});
 
@@ -211,7 +202,7 @@ describe("TransitionDirective", () => {
 				<p transition:fade|global>fades in and out when x or y change</p>
 			{/if}
 		`;
-		const node = parse_and_extract_svelte_node<TransitionDirective>(code, "TransitionDirective");
+		const node = parse_and_extract_svelte_node<AST.TransitionDirective>(code, "TransitionDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"transition:fade|global"`);
 	});
 
@@ -221,7 +212,7 @@ describe("TransitionDirective", () => {
 				<p transition:fade|local={{ y: 200, duration: 2000 }}>fades in and out when x or y change</p>
 			{/if}
 		`;
-		const node = parse_and_extract_svelte_node<TransitionDirective>(code, "TransitionDirective");
+		const node = parse_and_extract_svelte_node<AST.TransitionDirective>(code, "TransitionDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"transition:fade|local={{ y: 200, duration: 2000 }}"`);
 	});
 });
@@ -231,7 +222,7 @@ describe("UseDirective", () => {
 		const code = `
 			<div use:foo={bar} />
 		`;
-		const node = parse_and_extract_svelte_node<UseDirective>(code, "UseDirective");
+		const node = parse_and_extract_svelte_node<AST.UseDirective>(code, "UseDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"use:foo={bar}"`);
 	});
 
@@ -239,7 +230,7 @@ describe("UseDirective", () => {
 		const code = `
 			<div use:foo />
 		`;
-		const node = parse_and_extract_svelte_node<UseDirective>(code, "UseDirective");
+		const node = parse_and_extract_svelte_node<AST.UseDirective>(code, "UseDirective");
 		expect(print(node)).toMatchInlineSnapshot(`"use:foo"`);
 	});
 });

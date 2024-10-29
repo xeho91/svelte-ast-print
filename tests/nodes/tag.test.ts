@@ -1,4 +1,4 @@
-import type { ConstTag, DebugTag, ExpressionTag, HtmlTag, RenderTag } from "svelte/compiler";
+import type { AST } from "svelte/compiler";
 import { describe, it } from "vitest";
 
 import { parse_and_extract_svelte_node } from "#tests/mod";
@@ -13,7 +13,7 @@ describe("ConstTag", () => {
 				{box.width} * {box.height} = {area}
 			{/each}
 		`;
-		const node = parse_and_extract_svelte_node<ConstTag>(code, "ConstTag");
+		const node = parse_and_extract_svelte_node<AST.ConstTag>(code, "ConstTag");
 		expect(print(node)).toMatchInlineSnapshot(`"{@const area = box.width * box.height}"`);
 	});
 });
@@ -32,7 +32,7 @@ describe("DebugTag", () => {
 
 			<h1>Hello {user.firstname}!</h1>
 		`;
-		const node = parse_and_extract_svelte_node<DebugTag>(code, "DebugTag");
+		const node = parse_and_extract_svelte_node<AST.DebugTag>(code, "DebugTag");
 		expect(print(node)).toMatchInlineSnapshot(`"{@debug user}"`);
 	});
 });
@@ -40,19 +40,19 @@ describe("DebugTag", () => {
 describe("ExpressionTag", () => {
 	it("correctly prints an reactive and simple Svelte expression in template", ({ expect }) => {
 		const code = "{name}";
-		const node = parse_and_extract_svelte_node<ExpressionTag>(code, "ExpressionTag");
+		const node = parse_and_extract_svelte_node<AST.ExpressionTag>(code, "ExpressionTag");
 		expect(print(node)).toMatchInlineSnapshot(`"{name}"`);
 	});
 
 	it("supports dot notation", ({ expect }) => {
 		const code = "{svelte.is.the.best.framework}";
-		const node = parse_and_extract_svelte_node<ExpressionTag>(code, "ExpressionTag");
+		const node = parse_and_extract_svelte_node<AST.ExpressionTag>(code, "ExpressionTag");
 		expect(print(node)).toMatchInlineSnapshot(`"{svelte.is.the.best.framework}"`);
 	});
 
 	it("supports brackets notation and question mark", ({ expect }) => {
 		const code = "{svelte[5].release?.date}";
-		const node = parse_and_extract_svelte_node<ExpressionTag>(code, "ExpressionTag");
+		const node = parse_and_extract_svelte_node<AST.ExpressionTag>(code, "ExpressionTag");
 		expect(print(node)).toMatchInlineSnapshot(`"{svelte[5].release?.date}"`);
 	});
 });
@@ -65,7 +65,7 @@ describe("HtmlTag", () => {
 					{@html post.content}
 				</div>
 			`;
-		const node = parse_and_extract_svelte_node<HtmlTag>(code, "HtmlTag");
+		const node = parse_and_extract_svelte_node<AST.HtmlTag>(code, "HtmlTag");
 		expect(print(node)).toMatchInlineSnapshot(`"{@html post.content}"`);
 	});
 });
@@ -79,7 +79,7 @@ describe("RenderTag", () => {
 
 			{@render hello('alice')}
 		`;
-		const node = parse_and_extract_svelte_node<RenderTag>(code, "RenderTag");
+		const node = parse_and_extract_svelte_node<AST.RenderTag>(code, "RenderTag");
 		expect(print(node)).toMatchInlineSnapshot(`"{@render hello('alice')}"`);
 	});
 });

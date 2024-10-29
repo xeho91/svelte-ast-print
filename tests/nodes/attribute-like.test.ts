@@ -1,4 +1,4 @@
-import type { Attribute, SpreadAttribute } from "svelte/compiler";
+import type { AST } from "svelte/compiler";
 import { describe, it } from "vitest";
 
 import { parse_and_extract_svelte_node } from "#tests/mod";
@@ -10,7 +10,7 @@ describe("Attribute", () => {
 		const code = `
 			<input required />
 		`;
-		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
 		expect(print(node)).toMatchInlineSnapshot(`"required"`);
 	});
 
@@ -18,7 +18,7 @@ describe("Attribute", () => {
 		const code = `
 			<input required="" />
 		`;
-		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
 		expect(print(node)).toMatchInlineSnapshot(`"required="""`);
 	});
 
@@ -26,7 +26,7 @@ describe("Attribute", () => {
 		const code = `
 			<div aria-label="this is a modal box" />
 		`;
-		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
 		expect(print(node)).toMatchInlineSnapshot(`"aria-label="this is a modal box""`);
 	});
 
@@ -34,7 +34,7 @@ describe("Attribute", () => {
 		const code = `
 			<button {disabled} />
 		`;
-		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
 		expect(print(node)).toMatchInlineSnapshot(`"{disabled}"`);
 	});
 
@@ -42,7 +42,7 @@ describe("Attribute", () => {
 		const code = `
 			<Button id={\`button-\${id}\`} />
 		`;
-		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
 		expect(print(node)).toMatchInlineSnapshot(`"id={\`button-\${id}\`}"`);
 	});
 
@@ -50,7 +50,7 @@ describe("Attribute", () => {
 		const code = `
 			<Select values={[1, 2, 3]} />
 		`;
-		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
 		expect(print(node)).toMatchInlineSnapshot(`"values={[1, 2, 3]}"`);
 	});
 
@@ -58,7 +58,7 @@ describe("Attribute", () => {
 		const code = `
 			<Container values={{ min: 1000, max: 1200, display: "grid" }} />
 		`;
-		const node = parse_and_extract_svelte_node<Attribute>(code, "Attribute");
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
 		expect(print(node)).toMatchInlineSnapshot(`"values={{ min: 1000, max: 1200, display: "grid" }}"`);
 	});
 });
@@ -68,7 +68,7 @@ describe("SpreadAttribute", () => {
 		const code = `
 			<Widget {...things} />
 		`;
-		const node = parse_and_extract_svelte_node<SpreadAttribute>(code, "SpreadAttribute");
+		const node = parse_and_extract_svelte_node<AST.SpreadAttribute>(code, "SpreadAttribute");
 		expect(print(node)).toMatchInlineSnapshot(`"{...things}"`);
 	});
 
@@ -76,7 +76,7 @@ describe("SpreadAttribute", () => {
 		const code = `
 			<Widget {...$$props} />
 		`;
-		const node = parse_and_extract_svelte_node<SpreadAttribute>(code, "SpreadAttribute");
+		const node = parse_and_extract_svelte_node<AST.SpreadAttribute>(code, "SpreadAttribute");
 		expect(print(node)).toMatchInlineSnapshot(`"{...$$props}"`);
 	});
 
@@ -84,7 +84,7 @@ describe("SpreadAttribute", () => {
 		const code = `
 			<Widget {...$$restProps} />
 		`;
-		const node = parse_and_extract_svelte_node<SpreadAttribute>(code, "SpreadAttribute");
+		const node = parse_and_extract_svelte_node<AST.SpreadAttribute>(code, "SpreadAttribute");
 		expect(print(node)).toMatchInlineSnapshot(`"{...$$restProps}"`);
 	});
 });
