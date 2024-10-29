@@ -308,7 +308,7 @@ describe("IfBlock", () => {
 		`);
 	});
 
-	it("correctly prints {#if} block with multiple {:else if} and {:else}", ({ expect }) => {
+	it("correctly prints {#if} block with multiple {:else if} and {:else} - case with element-likes", ({ expect }) => {
 		const code = `
 			{#if test1}
 				<span>if body</span>
@@ -330,6 +330,31 @@ describe("IfBlock", () => {
 				<span>else if body2</span>
 			{:else}
 				<span>else body</span>
+			{/if}"
+		`);
+	});
+	it("correctly prints {#if} block with multiple {:else if} and {:else} - case with text only", ({ expect }) => {
+		const code = `
+			{#if test1}
+				if body
+			{:else if test2}
+				1else if body
+			{:else if test3}
+				2else if body
+			{:else}
+				else body
+			{/if}
+		`;
+		const node = parse_and_extract_svelte_node<IfBlock>(code, "IfBlock");
+		expect(print(node)).toMatchInlineSnapshot(`
+			"{#if test1}
+				if body
+			{:else if test2}
+				1else if body
+			{:else if test3}
+				2else if body
+			{:else}
+				else body
 			{/if}"
 		`);
 	});

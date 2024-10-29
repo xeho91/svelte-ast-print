@@ -968,21 +968,39 @@ class Printer {
 				/** @param {SvelteAST.Fragment} node */
 				const has_alternate_else_if = (node) => node.nodes.some((n) => n.type === "IfBlock");
 				if (elseif) {
-					if (state.#depth > 0) state.#depth--;
+					state.#depth--;
 					state.#print_block_middle_tag("else if", print_es(test).code);
+					// FIXME: Temporary workaround - needs refactor when working on formatting features
+					if (consequent.nodes.length === 1 && consequent.nodes[0].type === "Text") {
+						consequent.nodes[0].raw = consequent.nodes[0].raw.replace(/\n/g, "");
+					}
+					state.#print_block_fragment(consequent, context);
+					if (alternate) {
+						if (!has_alternate_else_if(alternate)) {
+							// FIXME: Temporary workaround - needs refactor when working on formatting features
+							state.#print_new_line();
+							state.#print_block_middle_tag("else");
+						}
+						// FIXME: Temporary workaround - needs refactor when working on formatting features
+						if (alternate.nodes.length === 1 && alternate.nodes[0].type === "Text") {
+							alternate.nodes[0].raw = alternate.nodes[0].raw.replace(/\n/g, "");
+						}
+						state.#print_block_fragment(alternate, context);
+					}
+					state.#depth++;
+				} else {
+					state.#print_block_opening_tag("if", print_es(test).code);
+					// FIXME: Temporary workaround - needs refactor when working on formatting features
+					if (consequent.nodes.length === 1 && consequent.nodes[0].type === "Text") {
+						consequent.nodes[0].raw = consequent.nodes[0].raw.replace(/\n/g, "");
+					}
 					state.#print_block_fragment(consequent, context);
 					if (alternate) {
 						if (!has_alternate_else_if(alternate)) {
 							state.#print_block_middle_tag("else");
 						}
-						state.#print_block_fragment(alternate, context);
-					}
-				} else {
-					state.#print_block_opening_tag("if", print_es(test).code);
-					state.#print_block_fragment(consequent, context);
-					if (alternate) {
-						if (!has_alternate_else_if(alternate)) {
-							state.#print_block_middle_tag("else");
+						if (alternate.nodes.length === 1 && alternate.nodes[0].type === "Text") {
+							alternate.nodes[0].raw = alternate.nodes[0].raw.replace(/\n/g, "");
 						}
 						state.#print_block_fragment(alternate, context);
 					}
