@@ -1,3 +1,15 @@
+# v0.3.2 (Tue Oct 29 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Serialization of attribute-like with `(Text | ExpressionTag)[]` value [#100](https://github.com/xeho91/svelte-ast-print/pull/100) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.3.1 (Tue Oct 29 2024)
 
 #### 🐛 Bug Fix
