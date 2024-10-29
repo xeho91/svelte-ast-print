@@ -46,6 +46,22 @@ describe("Attribute", () => {
 		expect(print(node)).toMatchInlineSnapshot(`"id={\`button-\${id}\`}"`);
 	});
 
+	it("correctly prints expression tag with string", ({ expect }) => {
+		const code = `
+			<Tab name={"Home"} />
+		`;
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
+		expect(print(node)).toMatchInlineSnapshot(`"name={"Home"}"`);
+	});
+
+	it("correctly prints string with expression tags inside", ({ expect }) => {
+		const code = `
+			<Button class="{variant} small" />
+		`;
+		const node = parse_and_extract_svelte_node<AST.Attribute>(code, "Attribute");
+		expect(print(node)).toMatchInlineSnapshot(`"class="{variant} small""`);
+	});
+
 	it("correctly prints expression tag with array expression", ({ expect }) => {
 		const code = `
 			<Select values={[1, 2, 3]} />

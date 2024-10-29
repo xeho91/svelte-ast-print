@@ -364,16 +364,24 @@ class Printer {
 	}
 
 	/**
+	 * @param {SvelteAST.ExpressionTag} node
+	 * @returns {string}
+	 */
+	#serialize_expression_tag(node) {
+		const { expression } = node;
+		return `{${print_es(expression).code}}`;
+	}
+
+	/**
 	 * @param {SvelteAST.Text | SvelteAST.ExpressionTag} node
 	 * @returns {string}
 	 */
-	#stringify_attribute_like_text_or_expression_tag(node) {
+	#serialize_attribute_like_text_or_expression_tag(node) {
 		if (node.type === "Text") {
 			const { raw } = node;
 			return `"${raw}"`;
 		}
-		const { expression } = node;
-		return `{${print_es(expression).code}}`;
+		return this.#serialize_expression_tag(node);
 	}
 
 	/**
@@ -577,18 +585,20 @@ class Printer {
 				let stringified = "";
 				if (!is_shorthand_expression_tag) stringified += name;
 				if (value !== true && Array.isArray(value)) {
-					// WARN: I can't find a case where it can be an array?
-					// This may be a problem in the future
+					if (!is_shorthand_expression_tag) stringified += "=";
+					const is_single_expression_tag = value.length === 1 && value[0].type === "ExpressionTag";
+					if (!is_single_expression_tag) stringified += '"';
 					for (const text_or_expression_tag of value) {
-						if (!is_shorthand_expression_tag) stringified += "=";
-						stringified += state.#stringify_attribute_like_text_or_expression_tag(text_or_expression_tag);
+						if (text_or_expression_tag.type === "Text") stringified += text_or_expression_tag.raw;
+						else stringified += state.#serialize_expression_tag(text_or_expression_tag);
 					}
+					if (!is_single_expression_tag) stringified += '"';
 				}
 				// NOTE: This is e.g. `<button disabled />`,
 				// so its a shorthand - we don't need to append anything
 				if (value !== true && !Array.isArray(value) && value.type === "ExpressionTag") {
 					if (!is_shorthand_expression_tag) stringified += "=";
-					stringified += state.#stringify_attribute_like_text_or_expression_tag(value);
+					stringified += state.#serialize_expression_tag(value);
 				}
 				state.#attributes.add(stringified);
 			},
@@ -740,11 +750,11 @@ class Printer {
 				stringified += state.#stringify_directive_modifiers(modifiers);
 				if (value.type === "ExpressionTag") {
 					stringified += "=";
-					stringified += state.#stringify_attribute_like_text_or_expression_tag(value);
+					stringified += state.#serialize_attribute_like_text_or_expression_tag(value);
 				}
 				if (Array.isArray(value) && (value[0].type === "ExpressionTag" || value[0]?.type === "Text")) {
 					stringified += "=";
-					stringified += state.#stringify_attribute_like_text_or_expression_tag(value[0]);
+					stringified += state.#serialize_attribute_like_text_or_expression_tag(value[0]);
 				}
 				state.#attributes.add(stringified);
 			},
