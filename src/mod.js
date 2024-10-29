@@ -968,7 +968,7 @@ class Printer {
 				/** @param {SvelteAST.Fragment} node */
 				const has_alternate_else_if = (node) => node.nodes.some((n) => n.type === "IfBlock");
 				if (elseif) {
-					if (state.#depth > 0) state.#depth--;
+					state.#depth--;
 					state.#print_block_middle_tag("else if", print_es(test).code);
 					state.#print_block_fragment(consequent, context);
 					if (alternate) {
@@ -977,6 +977,7 @@ class Printer {
 						}
 						state.#print_block_fragment(alternate, context);
 					}
+					state.#depth++;
 				} else {
 					state.#print_block_opening_tag("if", print_es(test).code);
 					state.#print_block_fragment(consequent, context);
