@@ -1,3 +1,16 @@
+# v0.4.1 (Fri Nov 01 2024)
+
+#### 🐛 Bug Fix
+
+- fix(dependencies): move optionalDependencies to devDependencies [#102](https://github.com/xeho91/svelte-ast-print/pull/102) ([@JReinhold](https://github.com/JReinhold) [@xeho91](https://github.com/xeho91))
+
+#### Authors: 2
+
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.4.0 (Tue Oct 29 2024)
 
 #### 🚀 Enhancement
