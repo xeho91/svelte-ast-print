@@ -94,6 +94,10 @@ class Printer {
 	 * @type {Set<string>}
 	 */
 	#attributes = new Set();
+	/**
+	 * @type {boolean}
+	 */
+	#has_template_literal = false;
 
 	/**
 	 * @param {Node} node - Svelte or ESTree AST node
@@ -187,9 +191,15 @@ class Printer {
 	 */
 	#print_es_node(node, options = {}) {
 		const { skip_indent = false } = options;
-		const { code } = print_es(node);
+		let { code } = print_es(node);
 		if (skip_indent) this.#output += code;
-		else this.#output += code.replace(/^(?=.+)/gm, this.#indent);
+		else {
+			code = code.replace(/^(?=.+)/gm, this.#indent);
+			const rex = /`[^`].*[^`]*`/g;
+			this.#output += code.replace(rex, (match) => {
+				return match.replace(new RegExp(this.#indent, "g"), "");
+			});
+		}
 	}
 
 	/**
@@ -516,7 +526,7 @@ class Printer {
 				stop();
 			},
 
-			Script(node, context) {
+			Script(/** @type {SvelteAST.Script} */ node, context) {
 				const { attributes, content } = node;
 				const { state, visit } = context;
 				state.#print_opening_new_line();
