@@ -1,3 +1,15 @@
+# v0.4.2 (Wed Nov 06 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Auto-identation inside `TemplateLiteral` [#103](https://github.com/xeho91/svelte-ast-print/pull/103) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.4.1 (Fri Nov 01 2024)
 
 #### 🐛 Bug Fix
