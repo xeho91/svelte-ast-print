@@ -195,10 +195,15 @@ class Printer {
 		if (skip_indent) this.#output += code;
 		else {
 			code = code.replace(/^(?=.+)/gm, this.#indent);
-			const rex = /`[^`].*[^`]*`/g;
-			this.#output += code.replace(rex, (match) => {
-				return match.replace(new RegExp(this.#indent, "g"), "");
-			});
+			this.#output += code.replace(
+				// NOTE: This temporary solution is supposed to remove auto-indentation from the content inside
+				// `TemplateLiteral`.
+				// Reference: https://github.com/storybookjs/addon-svelte-csf/issues/227
+				/`[^`].*[^`]*`/g,
+				(match) => {
+					return match.replace(new RegExp(this.#indent, "g"), "");
+				},
+			);
 		}
 	}
 
