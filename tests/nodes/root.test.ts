@@ -288,4 +288,37 @@ describe("Root", () => {
 			<Story name="Default" />"
 		`);
 	});
+
+	it("template literals indentation is left untouched", ({ expect }) => {
+		const code = `
+			<script>
+				const text = \`
+I am just a story.
+Hello world.
+How are you?
+
+I am good.
+			\`;
+			console.log(text);
+			</script>
+
+			hello world
+		`;
+		const node = parse_and_extract_svelte_node<AST.Root>(code, "Root");
+		expect(print(node)).toMatchInlineSnapshot(`
+			"<script>
+				const text = \`
+			I am just a story.
+			Hello world.
+			How are you?
+
+			I am good.
+			\`;
+
+				console.log(text);
+			</script>
+
+			hello world"
+		`);
+	});
 });

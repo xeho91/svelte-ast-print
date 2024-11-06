@@ -94,6 +94,10 @@ class Printer {
 	 * @type {Set<string>}
 	 */
 	#attributes = new Set();
+	/**
+	 * @type {boolean}
+	 */
+	#has_template_literal = false;
 
 	/**
 	 * @param {Node} node - Svelte or ESTree AST node
@@ -187,9 +191,20 @@ class Printer {
 	 */
 	#print_es_node(node, options = {}) {
 		const { skip_indent = false } = options;
-		const { code } = print_es(node);
+		let { code } = print_es(node);
 		if (skip_indent) this.#output += code;
-		else this.#output += code.replace(/^(?=.+)/gm, this.#indent);
+		else {
+			code = code.replace(/^(?=.+)/gm, this.#indent);
+			this.#output += code.replace(
+				// NOTE: This temporary solution is supposed to remove auto-indentation from the content inside
+				// `TemplateLiteral`.
+				// Reference: https://github.com/storybookjs/addon-svelte-csf/issues/227
+				/`[^`].*[^`]*`/g,
+				(match) => {
+					return match.replace(new RegExp(this.#indent, "g"), "");
+				},
+			);
+		}
 	}
 
 	/**
@@ -516,7 +531,7 @@ class Printer {
 				stop();
 			},
 
-			Script(node, context) {
+			Script(/** @type {SvelteAST.Script} */ node, context) {
 				const { attributes, content } = node;
 				const { state, visit } = context;
 				state.#print_opening_new_line();
