@@ -3,7 +3,7 @@
  * @import { AST as SvelteAST } from "svelte/compiler";
  * @import { Context } from "zimmerframe";
  *
- * @import { Node, SvelteNode } from "./nodes.js";
+ * @import { Node } from "./nodes.js";
  */
 
 import { print as print_es } from "esrap";
@@ -74,7 +74,7 @@ export function print(node, options = {}) {
 
 class Printer {
 	/**
-	 * @type {SvelteNode}
+	 * @type {SvelteAST.SvelteNode}
 	 */
 	#node;
 	/**
@@ -1108,6 +1108,24 @@ class Printer {
 			 * ```
 			 */
 			SvelteBody(node, context) {
+				const { state } = context;
+				state.#print_element_like(node, context);
+			},
+
+			/**
+			 * @see {@link https://svelte.dev/docs/svelte/svelte-boundary}
+			 *
+			 * @example
+			 * ```svelte
+			 * <svelte:boundary>
+			 *     <FlakyComponent />
+			 *     {#snippet failed(error, reset)}
+			 *         <button onclick={reset}>oops! try again</button>
+			 *     {/snippet}
+			 * </svelte:boundary>
+			 * ```
+			 */
+			SvelteBoundary(node, context) {
 				const { state } = context;
 				state.#print_element_like(node, context);
 			},

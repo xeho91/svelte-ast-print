@@ -2,7 +2,7 @@
 
 #### 🐛 Bug Fix
 
-- fix: Auto-identation inside `TemplateLiteral` [#103](https://github.com/xeho91/svelte-ast-print/pull/103) ([@xeho91](https://github.com/xeho91))
+- fix: Auto-indentation inside `TemplateLiteral` [#103](https://github.com/xeho91/svelte-ast-print/pull/103) ([@xeho91](https://github.com/xeho91))
 
 #### Authors: 1
 
