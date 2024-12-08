@@ -70,8 +70,8 @@ importers:
         specifier: 14.2.4
         version: 14.2.4
       svelte:
-        specifier: 5.8.1
-        version: 5.8.1
+        specifier: https://pkg.pr.new/svelte@3bfe875
+        version: https://pkg.pr.new/svelte@3bfe875
       type-fest:
         specifier: 4.30.0
         version: 4.30.0
@@ -2946,8 +2946,9 @@ packages:
     resolution: {integrity: sha512-e+V1dSZLCCu0Ln7RKwSl/zP9ZZFbDGW7ABfGQYU/+6sWponizQocmyHyKHzctor0ruGgJKOF7QQB+M6lE2+UrA==}
     engines: {node: '>=18'}
 
-  svelte@5.8.1:
-    resolution: {integrity: sha512-tqJY46Xoe+KiKvD4/guNlqpE+jco4IBcuaM6Ei9SEMETtsbLMfbak9XjTacqd6aGMmWXh7uFInfFTd4yES5r0A==}
+  svelte@https://pkg.pr.new/svelte@3bfe875:
+    resolution: {tarball: https://pkg.pr.new/svelte@3bfe875}
+    version: 5.9.0
     engines: {node: '>=18'}
 
   table-layout@1.0.2:
@@ -6265,7 +6266,7 @@ snapshots:
       magic-string: 0.30.10
       zimmerframe: 1.1.2
 
-  svelte@5.8.1:
+  svelte@https://pkg.pr.new/svelte@3bfe875:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@jridgewell/sourcemap-codec': 1.5.0

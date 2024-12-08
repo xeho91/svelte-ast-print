@@ -109,7 +109,7 @@
 		"dts-buddy": "0.5.4",
 		"markdownlint-cli2": "0.15.0",
 		"serve": "14.2.4",
-		"svelte": "5.8.1",
+		"svelte": "https://pkg.pr.new/svelte@3bfe875",
 		"type-fest": "4.30.0",
 		"typedoc": "0.27.3",
 		"typedoc-plugin-coverage": "3.4.0",
