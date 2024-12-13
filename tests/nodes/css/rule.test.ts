@@ -1,11 +1,11 @@
-import type { Css } from "svelte/compiler";
+import type { AST } from "svelte/compiler";
 import { describe, it } from "vitest";
 
 import { parse_and_extract_svelte_node } from "#tests/mod";
 
 import { print } from "svelte-ast-print";
 
-describe("Css.Atrule", () => {
+describe("AST.CSS.Atrule", () => {
 	it("prints correctly", ({ expect }) => {
 		const code = `
 			<style>
@@ -16,7 +16,7 @@ describe("Css.Atrule", () => {
 				}
 			</style>
 		`;
-		const node = parse_and_extract_svelte_node<Css.Atrule>(code, "Atrule");
+		const node = parse_and_extract_svelte_node<AST.CSS.Atrule>(code, "Atrule");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"@media screen and (max-width: 1000px) {
 				p {
@@ -27,7 +27,7 @@ describe("Css.Atrule", () => {
 	});
 });
 
-describe("Css.Block", () => {
+describe("AST.CSS.Block", () => {
 	it("prints correctly", ({ expect }) => {
 		const code = `
 			<style>
@@ -37,7 +37,7 @@ describe("Css.Block", () => {
 				}
 			</style>
 		`;
-		const node = parse_and_extract_svelte_node<Css.Block>(code, "Block");
+		const node = parse_and_extract_svelte_node<AST.CSS.Block>(code, "Block");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"{
 				color: red;
@@ -47,7 +47,7 @@ describe("Css.Block", () => {
 	});
 });
 
-describe("Css.Declaration", () => {
+describe("AST.CSS.Declaration", () => {
 	it("prints correctly", ({ expect }) => {
 		const code = `
 			<style>
@@ -56,12 +56,12 @@ describe("Css.Declaration", () => {
 				}
 			</style>
 		`;
-		const node = parse_and_extract_svelte_node<Css.Declaration>(code, "Declaration");
+		const node = parse_and_extract_svelte_node<AST.CSS.Declaration>(code, "Declaration");
 		expect(print(node)).toMatchInlineSnapshot(`"background-color: orange;"`);
 	});
 });
 
-describe("Css.Rule", () => {
+describe("AST.CSS.Rule", () => {
 	it("prints correctly", ({ expect }) => {
 		const code = `
 			<style>
@@ -70,7 +70,7 @@ describe("Css.Rule", () => {
 				}
 			</style>
 		`;
-		const node = parse_and_extract_svelte_node<Css.Rule>(code, "Rule");
+		const node = parse_and_extract_svelte_node<AST.CSS.Rule>(code, "Rule");
 		expect(print(node)).toMatchInlineSnapshot(`
 			"p {
 				color: red;

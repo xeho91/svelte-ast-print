@@ -2,7 +2,8 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": "@total-typescript/tsconfig/tsc/dom/library",
 	"compilerOptions": {
-		"customConditions": ["development"]
+		"customConditions": ["development"],
+		"declaration": false
 	},
 	"include": ["src/"]
 }

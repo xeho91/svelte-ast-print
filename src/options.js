@@ -1,5 +1,5 @@
 /**
- * @import { Css, Fragment, Root, Script, SvelteOptionsRaw } from "svelte/compiler";
+ * @import { AST } from "svelte/compiler";
  * @import { IterableElement, ReadonlyTuple } from "type-fest";
  *
  * @import { print } from "./mod.js";
@@ -10,7 +10,7 @@
  *
  * @typedef PrintOptions
  * @property {Partial<FormatOptions>} [format] - formatting options
- * @property {Partial<RootOptions>} [root] - Svelte AST node {@link Root} based options
+ * @property {Partial<RootOptions>} [root] - Svelte AST node {@link AST.Root} based options
  */
 
 /**
@@ -40,11 +40,11 @@ export const DEFAULT_INDENT = "tab";
  *
  * ## Legend
  *
- * - `"options"` - {@link SvelteOptionsRaw}
- * - `"module"` - {@link Script}
- * - `"instance"` - {@link Script}
- * - `"fragment"` - {@link Fragment}
- * - `"css"` - {@link Css.StyleSheet}
+ * - `"options"` - {@link AST.SvelteOptionsRaw}
+ * - `"module"` - {@link AST.Script}
+ * - `"instance"` - {@link AST.Script}
+ * - `"fragment"` - {@link AST.Fragment}
+ * - `"css"` - {@link AST.CSS.StyleSheet}
  *
  * @typedef {ReadonlyTuple<RootNode, 5>} RootOrder
  */
