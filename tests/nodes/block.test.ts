@@ -108,6 +108,26 @@ describe("EachBlock", () => {
 		`);
 	});
 
+	it("supports without `as` item ", ({ expect }) => {
+		const code = `
+			<div class="chess-board">
+				{#each { length: 8 }, rank}
+					{#each { length: 8 }, file}
+						<div class:black={(rank + file) % 2 === 1}></div>
+					{/each}
+				{/each}
+			</div>
+		`;
+		const node = parse_and_extract_svelte_node<AST.EachBlock>(code, "EachBlock");
+		expect(print(node)).toMatchInlineSnapshot(`
+			"{#each { length: 8 }, rank}
+				{#each { length: 8 }, file}
+					<div class:black={(rank + file) % 2 === 1} />
+				{/each}
+			{/each}"
+		`);
+	});
+
 	it("correctly prints example with index", ({ expect }) => {
 		const code = `
 			{#each items as item, i}

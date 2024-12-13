@@ -911,6 +911,16 @@ class Printer {
 			 * {#each expression as name}...{/each}
 			 * ```
 			 *
+			 * @example without `as` item
+			 * ```svelte
+			 * {#each expression}...{/each}
+			 * ```
+			 *
+			 * @example without `as` item, but with index
+			 * ```svelte
+			 * {#each expression, index}...{/each}
+			 * ```
+			 *
 			 * @example with index
 			 * ```svelte
 			 * {#each expression as name, index}...{/each}
@@ -931,13 +941,15 @@ class Printer {
 			 * {#each expression as name}...{:else}...{/each}
 			 * ```
 			 */
-			EachBlock(node, context) {
+			EachBlock(node, ctx) {
 				const name = "each";
-				const { body, context: node_context, expression, fallback, index, key } = node;
-				const { state } = context;
+				const { body, context, expression, fallback, index, key } = node;
+				const { state } = ctx;
 				let content = print_es(expression).code;
-				content += " as ";
-				content += print_es(node_context).code;
+				if (context) {
+					content += " as ";
+					content += print_es(context).code;
+				}
 				if (index) {
 					content += ",";
 					content += " ";
@@ -950,10 +962,10 @@ class Printer {
 					content += ")";
 				}
 				state.#print_block_opening_tag(name, content);
-				state.#print_block_fragment(body, context);
+				state.#print_block_fragment(body, ctx);
 				if (fallback) {
 					state.#print_block_middle_tag("else");
-					state.#print_block_fragment(fallback, context);
+					state.#print_block_fragment(fallback, ctx);
 				}
 				state.#print_block_closing_tag(name);
 			},
