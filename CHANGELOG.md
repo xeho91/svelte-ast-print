@@ -1,3 +1,16 @@
+# v0.5.0 (Fri Dec 13 2024)
+
+#### 🚀 Enhancement
+
+- feat: Add support for `EachBlock` without `as` item [#107](https://github.com/xeho91/svelte-ast-print/pull/107) ([@xeho91](https://github.com/xeho91))
+- feat: Add support for `SvelteBoundary` [#105](https://github.com/xeho91/svelte-ast-print/pull/105) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.4.2 (Wed Nov 06 2024)
 
 #### 🐛 Bug Fix
