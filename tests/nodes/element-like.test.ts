@@ -139,6 +139,30 @@ describe("SvelteBody", () => {
 	});
 });
 
+describe("SvelteBoundary", () => {
+	it("works on basic example", ({ expect }) => {
+		const code = `
+			 <svelte:boundary>
+				<FlakyComponent />
+				{#snippet failed(error, reset)}
+					<button onclick={reset}>oops! try again</button>
+				{/snippet}
+			 </svelte:boundary>
+		`;
+		const node = parse_and_extract_svelte_node<AST.SvelteBoundary>(code, "SvelteBoundary");
+		expect(print(node)).toMatchInlineSnapshot(
+			`
+			"<svelte:boundary>
+				<FlakyComponent />
+				{#snippet failed(error, reset)}
+					<button onclick={reset}>oops! try again</button>
+				{/snippet}
+			</svelte:boundary>"
+		`,
+		);
+	});
+});
+
 describe("SvelteComponent", () => {
 	it("works when is valid (has no children)", ({ expect }) => {
 		const code = `
