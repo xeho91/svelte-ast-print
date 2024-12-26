@@ -202,13 +202,11 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/xeho91"><img src="https://avatars.githubusercontent.com/u/18627568?v=4?s=100" width="100px;" alt="Mateusz Kadlubowski"/><br /><sub><b>Mateusz Kadlubowski</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Code">💻</a> <a href="#maintenance-xeho91" title="Maintenance">🚧</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Documentation">📖</a> <a href="#infra-xeho91" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Tests">⚠️</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/manuel3108"><img src="https://avatars.githubusercontent.com/u/30698007?v=4?s=100" width="100px;" alt="Manuel"/><br /><sub><b>Manuel</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=manuel3108" title="Documentation">📖</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=manuel3108" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://reinhold.is/"><img src="https://avatars.githubusercontent.com/u/5678122?v=4?s=100" width="100px;" alt="Jeppe Reinhold"/><br /><sub><b>Jeppe Reinhold</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=JReinhold" title="Code">💻</a></td>
-    </tr>
-  </tbody>
+  <tr>
+    <td align="center"><a href="https://github.com/xeho91"><img src="https://avatars.githubusercontent.com/u/18627568?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mateusz Kadlubowski</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Code">💻</a> <a href="#maintenance-xeho91" title="Maintenance">🚧</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Documentation">📖</a> <a href="#infra-xeho91" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/manuel3108"><img src="https://avatars.githubusercontent.com/u/30698007?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Manuel</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=manuel3108" title="Documentation">📖</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=manuel3108" title="Code">💻</a></td>
+    <td align="center"><a href="https://reinhold.is/"><img src="https://avatars.githubusercontent.com/u/5678122?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jeppe Reinhold</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=JReinhold" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
