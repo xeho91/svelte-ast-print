@@ -1,3 +1,15 @@
+# v0.6.0 (Thu Dec 26 2024)
+
+#### 🚀 Enhancement
+
+- feat: Update `esrap` & add support for TypeScript [#108](https://github.com/xeho91/svelte-ast-print/pull/108) ([@xeho91](https://github.com/xeho91))
+
+#### Authors: 1
+
+- Mateusz Kadlubowski ([@xeho91](https://github.com/xeho91))
+
+---
+
 # v0.5.0 (Fri Dec 13 2024)
 
 #### 🚀 Enhancement
