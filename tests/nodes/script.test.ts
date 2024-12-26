@@ -126,7 +126,7 @@ describe("Script", () => {
 		`);
 	});
 
-	it.fails("prints content with TypeScript syntax", ({ expect }) => {
+	it("prints content with TypeScript syntax", ({ expect }) => {
 		const code = `
 			<script lang="ts">
 				let name: string = 'world';

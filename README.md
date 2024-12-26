@@ -7,6 +7,9 @@ A.k.a. [`parse`] in reverse.
 
 This is what you need to create [codemods] - e.g. for migration between Svelte versions syntaxes.
 
+> [!NOTE] > **This package is in beta stage.**\
+> See [Roadmap](https://github.com/xeho91/svelte-ast-print/discussions/2)
+
 ## Documentation
 
 <https://xeho91.github.io/svelte-ast-print>
@@ -20,92 +23,79 @@ This package depends on:
 
 ## Limitations
 
-> [!WARNING]
-> **TypeScript isn't supported**, yet.\
-> See & subscribe to progress on [issue #86 - Add support for TypeScript](https://github.com/xeho91/svelte-ast-print/issues/86).
-
----
-
-> [!IMPORTANT]
-> **It ignores any previous formatting**.\
+> [!IMPORTANT] > **It ignores any previous formatting**.\
 > The current focus is to be able to write codemods as soon as possible - because right now, there are no alternatives.
 >
 > If you need to format modified and stringified Svelte AST, use available formatters for Svelte:
 >
-> - [Biome](https://github.com/biomejs/biome) - _⚠️ has partial support_
-> - [Prettier](https://github.com/prettier/prettier) with [`prettier-plugin-svelte`](https://github.com/sveltejs/prettier-plugin-svelte)
+> -   [Biome](https://github.com/biomejs/biome) - _⚠️ has partial support_
+> -   [Prettier](https://github.com/prettier/prettier) with [`prettier-plugin-svelte`](https://github.com/sveltejs/prettier-plugin-svelte)
 >
 > See [Formatting](#formatting) section for examples.
-
----
-
-> [!NOTE]
-> **This package is in beta stage.**\
-> See [Roadmap](https://github.com/xeho91/svelte-ast-print/discussions/2)
 
 ## Getting started
 
 1. Use the package manager of your choice to install this package:
 
-   <details>
-       <summary>npm</summary>
+    <details>
+        <summary>npm</summary>
 
-   ```sh
-   npm install svelte-ast-print
-   ```
+    ```sh
+    npm install svelte-ast-print
+    ```
 
-   </details>
+    </details>
 
-   <details>
-       <summary>yarn</summary>
+    <details>
+        <summary>yarn</summary>
 
-   ```sh
-   yarn add svelte-ast-print
-   ```
+    ```sh
+    yarn add svelte-ast-print
+    ```
 
-   </details>
+    </details>
 
-   <details>
-       <summary>pnpm</summary>
+    <details>
+        <summary>pnpm</summary>
 
-   ```sh
-   pnpm add svelte-ast-print
-   ```
+    ```sh
+    pnpm add svelte-ast-print
+    ```
 
-   </details>
+    </details>
 
-   <details>
-       <summary>bun</summary>
+    <details>
+        <summary>bun</summary>
 
-   ```sh
-   bun add svelte-ast-print
-   ```
+    ```sh
+    bun add svelte-ast-print
+    ```
 
-   </details>
+    </details>
 
 1. Incorporate it into your project, for example using Node.js and with the Svelte [`parse`] method:
 
-   ```ts
-   import fs from "node:fs";
+    ```ts
+    import fs from "node:fs";
 
-   import { print } from "svelte-ast-print";
-   import { parse } from "svelte/compiler";
+    import { print } from "svelte-ast-print";
+    import { parse } from "svelte/compiler";
 
-   const originalSvelteCode = fs.readFileSync("src/App.svelte", "utf-8");
-   let svelteAST = parse(originalSvelteCode, { modern: true });
-   //                                          👆 For now, only modern is supported.
-   //                                             By default is 'false'.
-   //                                             Is it planned to be 'true' from Svelte v6+
+    const originalSvelteCode = fs.readFileSync("src/App.svelte", "utf-8");
+    let svelteAST = parse(originalSvelteCode, { modern: true });
+    //                                          👆 For now, only modern is supported.
+    //                                             By default is 'false'.
+    //                                             Is it planned to be 'true' from Svelte v6+
 
-   // ...
-   // Do some modifications on this AST...
-   // e.g. transform `<slot />` to `{@render children()}`
-   // ...
+    // ...
+    // Do some modifications on this AST...
+    // e.g. transform `<slot />` to `{@render children()}`
+    // ...
 
-   const output = print(svelteAST); // AST is now a stringified code output! 🎉
+    const output = print(svelteAST); // AST is now a stringified code output! 🎉
 
-   fs.writeFileSync("src/App.svelte", output, { encoding: " utf-8" });
-   ```
+    fs.writeFileSync("src/App.svelte", output, { encoding: " utf-8" });
+    ```
 
 > [!IMPORTANT]
 > When using [`parse`] from `svelte`, please remember about passing `modern: true` to options _(second argument)_.
@@ -212,11 +202,13 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://github.com/xeho91"><img src="https://avatars.githubusercontent.com/u/18627568?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mateusz Kadlubowski</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Code">💻</a> <a href="#maintenance-xeho91" title="Maintenance">🚧</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Documentation">📖</a> <a href="#infra-xeho91" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://github.com/manuel3108"><img src="https://avatars.githubusercontent.com/u/30698007?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Manuel</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=manuel3108" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://reinhold.is/"><img src="https://avatars.githubusercontent.com/u/5678122?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jeppe Reinhold</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=JReinhold" title="Code">💻</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/xeho91"><img src="https://avatars.githubusercontent.com/u/18627568?v=4?s=100" width="100px;" alt="Mateusz Kadlubowski"/><br /><sub><b>Mateusz Kadlubowski</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Code">💻</a> <a href="#maintenance-xeho91" title="Maintenance">🚧</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Documentation">📖</a> <a href="#infra-xeho91" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=xeho91" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/manuel3108"><img src="https://avatars.githubusercontent.com/u/30698007?v=4?s=100" width="100px;" alt="Manuel"/><br /><sub><b>Manuel</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=manuel3108" title="Documentation">📖</a> <a href="https://github.com/xeho91/svelte-ast-print/commits?author=manuel3108" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://reinhold.is/"><img src="https://avatars.githubusercontent.com/u/5678122?v=4?s=100" width="100px;" alt="Jeppe Reinhold"/><br /><sub><b>Jeppe Reinhold</b></sub></a><br /><a href="https://github.com/xeho91/svelte-ast-print/commits?author=JReinhold" title="Code">💻</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
@@ -226,7 +218,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## Support
 
-If you don't have time, but you need this project to work, or resolve an existing issue, consider sponsorship.
+If you don't have time, but you need this project to work, or resolve an existing issue, consider [sponsorship](https://github.com/sponsors/xeho91).
 
 ## Author
 
