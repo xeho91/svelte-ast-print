@@ -146,7 +146,7 @@ describe("Root", () => {
 		);
 	});
 
-	it.fails("it prints correctly Svelte code with TypeScript syntax", ({ expect }) => {
+	it("it prints correctly Svelte code with TypeScript syntax", ({ expect }) => {
 		const code = `
 			<script context="module" lang="ts">
 				import {
@@ -209,7 +209,13 @@ describe("Root", () => {
 		expect(print(node)).toMatchInlineSnapshot(
 			`
 			"<script context="module" lang="ts">
-				import { defineMeta, setTemplate, type Args, type StoryContext } from '@storybook/addon-svelte-csf';
+				import {
+					defineMeta,
+					setTemplate,
+					type Args,
+					type StoryContext
+				} from '@storybook/addon-svelte-csf';
+
 				import { fn } from '@storybook/test';
 				import Button from './components/Button.svelte';
 
@@ -237,6 +243,7 @@ describe("Root", () => {
 			<script lang="ts">
 				setTemplate(template);
 			</script>
+
 			{#snippet template({ children, ...args }: Args<typeof Story>, context: StoryContext<typeof Story>)}
 				<Button {...args}>{children}</Button>
 			{/snippet}
